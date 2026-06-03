@@ -1,0 +1,89 @@
+/* Sidebar Container */
+.category-sidebar {
+  position: fixed;
+  top: 0;
+  
+  /* משנים מ-right ל-left כדי להחביא אותו משמאל */
+  left: -320px; 
+  right: auto; /* מבטל הגדרות קודמות של ימין אם היו */
+  
+  width: 320px;
+  height: 100%;
+  background-color: #F7F7F4; 
+  
+  /* משנים את כיוון הצל כך שיזרוק צל עדין ימינה */
+  box-shadow: 4px 0px 24px rgba(0, 0, 0, 0.05);
+  
+  z-index: 200; 
+  
+  /* משנים את האנימציה שתתבסס על המיקום השמאלי */
+  transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+  
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+/* Class added dynamically via JavaScript when open */
+.category-sidebar.open {
+  /* כשהוא נפתח, הוא נצמד לקיר השמאלי של המסך */
+  left: 0;
+  right: auto;
+}
+
+/* Sidebar Header Layout */
+.sidebar-header {
+  display: flex;
+  
+  /* משנים ל-row-reverse אם רוצים שהאיקס יהיה בצד שמאל והכותרת בימין, או משאירים ככה */
+  justify-content: space-between; 
+  align-items: center;
+  border-bottom: 1px solid rgba(96, 102, 93, 0.12);
+  padding-bottom: 16px;
+  margin-bottom: 20px;
+}
+
+.sidebar-header h3 {
+  margin: 0;
+  margin-right: 20px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #222222;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: #60665D;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+
+.close-btn:hover {
+  background-color: rgba(96, 102, 93, 0.08);
+  color: #222222;
+}
+
+/* Content Area inside Sidebar */
+.sidebar-content {
+  flex: 1;
+  overflow-y: auto; 
+}
+
+/* Darkened Transparent Overlay Screen */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(34, 34, 34, 0.2); 
+  backdrop-filter: blur(2px); 
+  z-index: 150; 
+}

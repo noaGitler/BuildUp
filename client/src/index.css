@@ -1,0 +1,32 @@
+/* 1. Import the fonts globally from Google Fonts (Comfortaa + Assistant) */
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700;900&family=Assistant:wght@300;400;500;600;700;800&display=swap');
+
+/* 2. Base resets and global variables */
+:root {
+  --primary-color: #557A61;    /* Sage Green */
+  --secondary-color: #60665D;  /* Olive Gray */
+  --bg-color: #F7F7F4;         /* Off-white */
+  --card-bg: #FFFFFF;          /* Pure White */
+  --text-main: #222222;        /* Charcoal Black */
+}
+
+/* 3. Apply the brand font family globally across the whole application */
+body {
+  margin: 0;
+  font-family: 'Comfortaa', 'Assistant', sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Ensure all UI interaction components inherit the layout font standard */
+input, select, textarea, button {
+  font-family: 'Comfortaa', 'Assistant', sans-serif;
+}
+
+/* Global selector override to fully catch independent components */
+* {
+  font-family: 'Comfortaa', 'Assistant', sans-serif;
+  box-sizing: border-box;
+}

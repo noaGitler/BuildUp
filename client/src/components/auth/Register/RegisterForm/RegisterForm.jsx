@@ -73,7 +73,6 @@ const RegisterForm = ({ onStepComplete }) => {
         const result = await registerStep1(formData.email, formData.password);
 
         if (result.success) {
-            // navigate('/register/info');
             onStepComplete();
 
         } else {

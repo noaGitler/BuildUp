@@ -1,0 +1,25 @@
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #F7F7F4; /* Core natural earth background color */
+}
+
+/* Main Content Area Layout Container */
+.main-content-area {
+  flex: 1;
+  margin-top: 70px; /* Offset exactly by the exact height of the Navbar */
+  padding: 32px 24px;
+  width: 100%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+}
+
+/* Responsive adjustements */
+@media (max-width: 768px) {
+  .main-content-area {
+    padding: 20px 16px;
+  }
+}

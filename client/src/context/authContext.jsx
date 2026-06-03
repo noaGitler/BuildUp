@@ -59,7 +59,6 @@ export const AuthProvider = ({ children }) => {
 
 
     const loginUser = async (email, password) => {
-        dispatch({ type: 'SET_LOADING', payload: true });
         try {
             const data = await authService.login(email, password);
             if (data.success && data.user) {
@@ -92,13 +91,14 @@ export const AuthProvider = ({ children }) => {
 
     // Registration Step 1: Validates email availability. 
     const registerStep1 = async (email, password) => {
-        dispatch({ type: 'SET_LOADING', payload: true });
         try {
             const data = await authService.registerStep1(email, password);
             if (data.success) {
                 // Instantly commit the temporary access values into our context registry
                 localStorage.setItem('draft_email', email);
+                console.log("registerStep1 2:", state.tempRegistration);
                 dispatch({ type: 'SET_REGISTRATION_DATA', payload: { email, password } });
+                console.log("registerStep1 2:", state.tempRegistration);
                 return { success: true };
             }
         } catch (error) {
@@ -110,7 +110,6 @@ export const AuthProvider = ({ children }) => {
 
     // Registration Step 2: Profile Updates: Executes final database transaction parameters.
     const registerStep2 = async (userData) => {
-        dispatch({ type: 'SET_LOADING', payload: true });
         try {
             const data = await authService.registerStep2(userData);
             if (data.success && data.user) {
