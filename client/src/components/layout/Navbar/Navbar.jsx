@@ -6,7 +6,7 @@ import Logo from '../../UI/logo.jsx';
 import './Navbar.css';
 
 const Navbar = ({ onToggleSidebar }) => {
-  const { user, logout } = useAuth();
+  const { user, logoutUser } = useAuth();
 
   return (
     <nav className="main-navbar">
@@ -55,7 +55,7 @@ const Navbar = ({ onToggleSidebar }) => {
                 <span className="navbar-username">{user.name}</span>
               </Link>
               
-              <button onClick={logout} className="btn-logout-isolated" title="Logout">
+              <button onClick={() => logoutUser()} className="btn-logout-isolated" title="Logout">
                 <FiLogOut size={18} />
               </button>
 

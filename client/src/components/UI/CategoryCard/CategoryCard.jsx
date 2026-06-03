@@ -1,6 +1,7 @@
 import React from 'react';
 import { useCategories } from '../../../context/CategoryContext';
 import * as MdIcons from 'react-icons/md';
+import * as FaIcons from "react-icons/fa6";
 import { FiLayers } from 'react-icons/fi';
 import './CategoryCard.css';
 
@@ -11,7 +12,12 @@ const CategoryCard = ({ categoryId, isSelected, onClick }) => {
 
     if (!category) return null;
 
-    const IconComponent = MdIcons[category.icon_url];
+    let IconComponent = null;
+    if (category.icon_url && category.icon_url.startsWith('Md')) {
+        IconComponent = MdIcons[category.icon_url];
+    } else if (category.icon_url && category.icon_url.startsWith('Fa')) {
+        IconComponent = FaIcons[category.icon_url];
+    }
 
     const activeColor = isSelected ? '#557A61' : (category.color_hex || '#60665D');
 
@@ -28,7 +34,6 @@ const CategoryCard = ({ categoryId, isSelected, onClick }) => {
                     backgroundColor: isSelected ? '#557A61' : '#F7F7F4'
                 }}
             >
-                {/* Fallback to wireframe layer icon if the key does not match perfectly */}
                 {IconComponent ? <IconComponent /> : <FiLayers />}
             </div>
             <span 

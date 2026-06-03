@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthProvider } from './context/AuthContext.jsx';
 import { CategoryProvider } from './context/CategoryContext.jsx';
 
+import PublicRoute from './components/auth/PublicRoute.jsx';
 import LoginForm from './components/auth/Login/LoginForm';
 import Register from './components/auth/Register/Register.jsx';
 
@@ -18,27 +19,27 @@ function App() {
       <AuthProvider>
         <CategoryProvider>
           {/* <div className="App"> */}
-            <Routes>
-              {/* Home Feed Base */}
+          <Routes>
+            {/* Home Feed Base */}
 
-              {/* Auth Routes */}
-              <Route path="/login" element={<LoginForm />} />
-              <Route path="/register" element={<Register />} />
+            {/* Auth Routes */}
+            <Route path="/login" element={<PublicRoute> <LoginForm /> </PublicRoute>} />
+            <Route path="/register" element={<PublicRoute> <Register /> </PublicRoute>} />
 
-              <Route path="/" element={<MainLayout />}>
-                {/* <Route path="/" element={<></>} /> */}
+            <Route path="/" element={<MainLayout />}>
+              {/* <Route path="/" element={<></>} /> */}
 
-               {/* Core feature views routes */}
-               <Route path="/projects" element={<></>} />
-               <Route path="/jobs" element={<></>} />
-               <Route path="/favorites" element={<></>} />
-               <Route path="/users" element={<></>} />
+              {/* Core feature views routes */}
+              <Route path="/projects" element={<></>} />
+              <Route path="/jobs" element={<></>} />
+              <Route path="/favorites" element={<></>} />
+              <Route path="/users" element={<></>} />
 
-             </Route>
+            </Route>
 
-              {/* Default Route */}
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
+            {/* Default Route */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
           {/* </div> */}
         </CategoryProvider>
       </AuthProvider>
