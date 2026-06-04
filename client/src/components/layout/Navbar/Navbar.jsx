@@ -6,19 +6,19 @@ import Logo from '../../UI/logo.jsx';
 import './Navbar.css';
 
 const Navbar = ({ onToggleSidebar }) => {
-  const { user, logout } = useAuth();
+  const { user, logoutUser } = useAuth();
 
   return (
     <nav className="main-navbar">
       <div className="navbar-container">
-        
+
         {/* Right Zone: Hamburger Menu + Logo */}
         <div className="navbar-right-zone">
           <button className="hamburger-btn" onClick={onToggleSidebar}>
             <FiMenu size={24} />
           </button>
           <div className="navbar-logo">
-            <Link to="/"><Logo width={120} height={40}/></Link>
+            <Link to="/"><Logo width={120} height={40} /></Link>
           </div>
         </div>
 
@@ -45,7 +45,7 @@ const Navbar = ({ onToggleSidebar }) => {
         <div className="navbar-actions">
           {user ? (
             <div className="logged-in-wrapper">
-              
+
               <Link to={`/profile/${user.id}`} className="user-profile-card" title="Go to Profile">
                 {user.profile_image_url ? (
                   <img src={user.profile_image_url} alt={user.name} className="navbar-avatar" />
@@ -54,8 +54,8 @@ const Navbar = ({ onToggleSidebar }) => {
                 )}
                 <span className="navbar-username">{user.name}</span>
               </Link>
-              
-              <button onClick={logout} className="btn-logout-isolated" title="Logout">
+
+              <button onClick={logoutUser} className="btn-logout-isolated" title="Logout">
                 <FiLogOut size={18} />
               </button>
 
