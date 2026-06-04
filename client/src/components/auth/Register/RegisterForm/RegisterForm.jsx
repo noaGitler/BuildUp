@@ -154,9 +154,19 @@ const RegisterForm = ({ onStepComplete }) => {
                 </form>
 
                 {/* הוספת שורת הפוטר הקהילתית עם הקישור החסר */}
+                {/* <p className="register-fields-footer">
+                    Already have an account? <Link to="/login" className="register-fields-link">Log in here</Link>
+                </p> */}
                 <p className="register-fields-footer">
                     Already have an account? <Link to="/login" className="register-fields-link">Log in here</Link>
                 </p>
+
+                <p className="register-fields-footer" style={{ marginTop: '12px' }}>
+                    <Link to="/" className="register-fields-link" style={{ color: '#60665D', fontWeight: '500', fontSize: '13px', textDecoration: 'underline' }}>
+                        Continue without connecting
+                    </Link>
+                </p>
+
             </div>
         </div>
     );

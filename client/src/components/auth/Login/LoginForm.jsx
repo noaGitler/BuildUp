@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { FiMail, FiLock } from 'react-icons/fi';
 
 import { useAuth } from '../../../context/authContext.jsx';
+import Modal from '../../UI/Modal/Modal.jsx';
 import Logo from '../../UI/Logo.jsx'
 
 import './LoginForm.css';
@@ -21,6 +22,12 @@ const LoginForm = () => {
         try {
             const result = await loginUser(email, password);
             if (result.success) {
+                sessionStorage.setItem('welcomeConfig',
+                    JSON.stringify({
+                        shouldShow: true,
+                        title: "Look who's back!",
+                        message: "Great to have you with us again. Let's build something beautiful today."
+                    }));
                 navigate('/');
             } else {
                 setLocalError(result.message || 'Invalid email or password.');
@@ -38,8 +45,6 @@ const LoginForm = () => {
             <div className="login-card-standard">
                 <h2 className="login-fields-title">Welcome to <Logo onClick={() => navigate('/')} width="120" height="50"></Logo></h2>
                 <p className="login-fields-subtitle">Log in to discover inspiration and home design professionals</p>
-
-                {activeError && <div className="login-error-left">{activeError}</div>}
 
                 <form onSubmit={handleSubmit} className="login-form-left">
 
@@ -75,12 +80,25 @@ const LoginForm = () => {
                         </div>
                     </div>
 
+                    {activeError && <div className="login-error-left">{activeError}</div>}
+
                     <button type="submit" className="login-button-full">Log In</button>
                 </form>
+
+                {/* <p className="login-fields-footer">
+                    Don't have an account? <Link to="/register" className="login-fields-link">Sign up for free</Link>
+                </p> */}
 
                 <p className="login-fields-footer">
                     Don't have an account? <Link to="/register" className="login-fields-link">Sign up for free</Link>
                 </p>
+
+                <p className="login-fields-footer" style={{ marginTop: '12px' }}>
+                    <Link to="/" className="login-fields-link" style={{ color: '#60665D', fontWeight: '500', fontSize: '13px', textDecoration: 'underline' }}>
+                        Continue without connecting
+                    </Link>
+                </p>
+
             </div>
         </div>
     );
