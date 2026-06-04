@@ -1,34 +1,3 @@
-// import React from 'react';
-// import './Modal.css';
-
-// const Modal = ({ isOpen, title, message, onConfirm, onCancel, confirmText = "Confirm", cancelText = "Cancel" }) => {
-//     if (!isOpen) return null;
-
-//     return (
-//         <div className="custom-modal-overlay">
-//             <div className="custom-modal-card">
-//                 <h3 className="custom-modal-title">{title}</h3>
-//                 <p className="custom-modal-message">{message}</p>
-//                 <div className="custom-modal-actions">
-//                     <button onClick={onConfirm} className="custom-modal-btn modal-btn-confirm">
-//                         {confirmText}
-//                     </button>
-//                     {onCancel && (
-//                         <button onClick={onCancel} className="custom-modal-btn modal-btn-cancel">
-//                             {cancelText}
-//                         </button>
-//                     )}
-//                 </div>
-//             </div>
-//         </div>
-//     );
-// };
-
-// export default Modal;
-
-
-
-
 import React from 'react';
 import './Modal.css';
 

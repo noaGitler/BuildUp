@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { FiMenu, FiHome, FiFolder, FiHeart, FiUsers, FiBriefcase, FiLogOut, FiUser } from 'react-icons/fi';
-import { useAuth } from '../../../context/AuthContext.jsx';
-import Logo from '../../UI/logo.jsx';
+import { useAuth } from '../../../context/authContext.jsx';
+import Logo from '../../UI/Logo.jsx';
 import './Navbar.css';
 
 const Navbar = ({ onToggleSidebar }) => {
@@ -54,8 +54,8 @@ const Navbar = ({ onToggleSidebar }) => {
                 )}
                 <span className="navbar-username">{user.name}</span>
               </Link>
-
-              <button onClick={logoutUser} className="btn-logout-isolated" title="Logout">
+              
+              <button onClick={() => logoutUser()} className="btn-logout-isolated" title="Logout">
                 <FiLogOut size={18} />
               </button>
 
