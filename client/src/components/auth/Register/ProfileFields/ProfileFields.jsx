@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiUser, FiPhone, FiImage, FiMapPin, FiAlignLeft, FiType } from 'react-icons/fi';
 
-import { useAuth } from '../../../../context/AuthContext';
+import { useAuth } from '../../../../context/authContext.jsx';
 import CategoryList from '../../../UI/CategoryList/CategoryList.jsx';
 
 import './ProfileFields.css';
@@ -149,7 +149,7 @@ const ProfileFields = () => {
                     <div className="input-group-left categories-onboarding-section">
                         <p className="categories-onboarding-subtitle">Choose fields that match your focus, or select None if you are a regular user</p>
 
-                        <div className="categories-onboarding-wrapper" style={{ display: 'flex', alignItems: 'flex-start', gap: '24px', marginTop: '12px' }}>
+                        <div className="categories-onboarding-wrapper" >
 
                             {/* Handcrafted standalone None option card */}
                             <div

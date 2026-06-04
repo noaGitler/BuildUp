@@ -1,5 +1,5 @@
 import React from 'react';
-import { useCategories } from '../../../context/CategoryContext';
+import { useCategories } from '../../../context/categoryContext';
 import * as MdIcons from 'react-icons/md';
 import * as FaIcons from "react-icons/fa6";
 import { FiLayers } from 'react-icons/fi';
@@ -31,7 +31,7 @@ const CategoryCard = ({ categoryId, isSelected, onClick }) => {
                 style={{
                     color: isSelected ? '#FFFFFF' : activeColor,
                     borderColor: isSelected ? '#557A61' : 'transparent',
-                    backgroundColor: isSelected ? '#557A61' : '#F7F7F4'
+                    backgroundColor: isSelected ? '#557A61' : '#ffffff'
                 }}
             >
                 {IconComponent ? <IconComponent /> : <FiLayers />}

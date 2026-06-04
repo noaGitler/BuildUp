@@ -143,3 +143,8 @@
 .auth-button-full:hover {
     background-color: #43614D;
 }
+
+.categories-onboarding-wrapper {
+    gap: '24px';
+    margin-top: '12px';
+}
