@@ -24,6 +24,8 @@ const authReducer = (state, action) => {
             return { ...state, loading: action.payload };
         case 'SET_REGISTRATION_DATA':
             return { ...state, tempRegistration: action.payload, loading: false, error: null };
+        case 'CLEAR_ERROR':
+            return { ...state, error: null };
         default:
             return state;
     }
@@ -130,6 +132,10 @@ export const AuthProvider = ({ children }) => {
         dispatch({ type: 'LOGOUT' });
     };
 
+    const clearErrors = () => {
+        dispatch({ type: 'CLEAR_ERROR', payload: null });
+    };
+
     return (
         <AuthContext.Provider
             value={{
@@ -143,7 +149,8 @@ export const AuthProvider = ({ children }) => {
                 cancelRestore,
                 registerStep1,
                 registerStep2,
-                logoutUser
+                logoutUser,
+                clearErrors
             }}>
             {!state.loading && children}
         </AuthContext.Provider>

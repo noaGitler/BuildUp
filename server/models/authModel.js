@@ -8,6 +8,16 @@ class authModel {
         return rows[0];
     }
 
+    static async createPendingRegistration (email, password) {
+        const query = `
+            INSERT INTO pending_registrations (email, password) 
+            VALUES (?, ?) 
+            ON DUPLICATE KEY UPDATE password = ?, created_at = CURRENT_TIMESTAMP
+        `;
+        const [rows] = await pool.query(query, [email, password, password]);
+        return rows;
+    }
+
     static async registerFullUser(userData) {
         const { email, password, name, role, phone, profile_image_url, tag_line, bio, city, categoryIds } = userData;
         
@@ -16,6 +26,21 @@ class authModel {
         
         try {
             await connection.beginTransaction();
+
+            // Retrieving from the temporary table
+            const pendingQuery = 'SELECT * FROM pending_registrations WHERE email = ? FOR UPDATE';
+            const [pendingRows] = await connection.query(pendingQuery, [email]);
+            const pendingData = pendingRows[0];
+
+            if (!pendingData) {
+                throw new Error("Temporary registration record missing or expired.");
+            }
+
+            // Cross-checking passwords
+            let finalPassword = password;
+            if (!finalPassword) {
+                finalPassword = pendingData.password;
+            }
 
             // Insert core entity row into 'users' table
             const userQuery = `
@@ -44,6 +69,10 @@ class authModel {
                     await connection.query(bulkCategoryQuery, [categoryValues]);
                 }
             }
+
+            // After inserting the values, delete from the temporary table
+            const deletePendingQuery = 'DELETE FROM pending_registrations WHERE email = ?';
+            await connection.query(deletePendingQuery, [email]);
 
             // Commit transaction parameters permanently to persistent storage disk rows
             await connection.commit();

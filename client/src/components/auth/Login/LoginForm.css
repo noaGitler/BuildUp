@@ -129,3 +129,10 @@
     font-weight: 600;
     text-decoration: none;
 }
+
+.login-fields-link-out {
+    color: #60665D;
+    font-weight: 500;
+    font-size: 13px;
+    text-decoration: underline;
+}
