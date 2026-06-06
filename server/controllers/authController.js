@@ -4,7 +4,7 @@ class UserController {
 
     // Check if email is available
     static async registerStep1(req, res) {
-        const { email } = req.body;
+        const { email, password } = req.body;
         try {
             const existingUser = await authModel.checkEmailExists(email);
             if (existingUser) {
@@ -13,6 +13,8 @@ class UserController {
                     message: "Email is already registered."
                 });
             }
+
+            await authModel.createPendingRegistration(email, password);
 
             // Success response without database insertion
             res.status(200).json({

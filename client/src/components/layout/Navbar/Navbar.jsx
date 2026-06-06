@@ -1,26 +1,30 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { FiMenu, FiHome, FiFolder, FiHeart, FiUsers, FiBriefcase, FiLogOut, FiUser } from 'react-icons/fi';
+
 import { useAuth } from '../../../context/authContext.jsx';
 import Logo from '../../UI/Logo.jsx';
+import Modal from '../../UI/Modal/Modal.jsx';
 import './Navbar.css';
 
-const Navbar = ({ onToggleSidebar }) => {
+const Navbar = () => {
   const { user, logoutUser } = useAuth();
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  
+  const handleConfirmLogout = () => {
+    logoutUser();
+    setIsLogoutModalOpen(false);
+  };
 
   return (
     <nav className="main-navbar">
       <div className="navbar-container">
-
-        {/* Right Zone: Hamburger Menu + Logo */}
-        <div className="navbar-right-zone">
-          <button className="hamburger-btn" onClick={onToggleSidebar}>
-            <FiMenu size={24} />
-          </button>
+        
+        {/* Right Zone: Logo */}
           <div className="navbar-logo">
             <Link to="/"><Logo width={120} height={40} /></Link>
           </div>
-        </div>
+
 
         {/* Center Zone: Core Navigation Links */}
         <div className="navbar-links">
@@ -36,8 +40,8 @@ const Navbar = ({ onToggleSidebar }) => {
           <NavLink to="/favorites" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
             <FiHeart size={18} /> <span>Favorites</span>
           </NavLink>
-          <NavLink to="/users" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
-            <FiUsers size={18} /> <span>Users</span>
+          <NavLink to="/professionals" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
+            <FiUsers size={18} /> <span>Professionals</span>
           </NavLink>
         </div>
 
@@ -55,7 +59,12 @@ const Navbar = ({ onToggleSidebar }) => {
                 <span className="navbar-username">{user.name}</span>
               </Link>
               
-              <button onClick={() => logoutUser()} className="btn-logout-isolated" title="Logout">
+              <button 
+                type="button" 
+                onClick={() => setIsLogoutModalOpen(true)} 
+                className="btn-logout-isolated" 
+                title="Logout"
+              >
                 <FiLogOut size={18} />
               </button>
 
@@ -69,6 +78,24 @@ const Navbar = ({ onToggleSidebar }) => {
         </div>
 
       </div>
+
+      {/* Interactive Modal overlay block layer for termination security */}
+      <Modal
+        isOpen={isLogoutModalOpen}
+        title="Logging Out"
+        message="Are you sure you want to log out of your BuildUp account?"
+        confirmText="Log Out"
+        cancelText="Cancel"
+        onConfirm={handleConfirmLogout}
+        onCancel={() => setIsLogoutModalOpen(false)}
+      />
+
+      {/* Interactive autonomous welcome celebration toast block context */}
+      {/* <Modal
+        isOpen={isWelcomeModalOpen}
+        title={welcomeConfig.title}
+        message={welcomeConfig.message}
+      /> */}
     </nav>
   );
 };

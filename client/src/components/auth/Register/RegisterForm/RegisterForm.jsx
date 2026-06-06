@@ -10,13 +10,7 @@ import './RegisterForm.css';
 
 const RegisterForm = ({ onStepComplete }) => {
 
-    const { registerStep1,
-        error: globalError,
-        checkDraftEmail,
-        confirmRestore,
-        cancelRestore,
-        tempRegistration
-    } = useAuth();
+    const { registerStep1, error: globalError, clearErrors, checkDraftEmail, confirmRestore, cancelRestore, tempRegistration } = useAuth();
 
     const navigate = useNavigate();
     const [localError, setLocalError] = useState('');
@@ -96,10 +90,8 @@ const RegisterForm = ({ onStepComplete }) => {
             />
 
             <div className="register-card-wide">
-                <h2 className="register-fields-title">Create New Account at <Logo onClick={() => navigate('/')} width="120" height="50"></Logo></h2>
+                <h2 className="register-fields-title">Create New Account at <Logo width="120" height="50"></Logo></h2>
                 <p className="register-fields-subtitle">Step 1 of 2: Account credentials</p>
-
-                {activeError && <div className="register-error-left">{activeError}</div>}
 
                 <form onSubmit={handleNextStep} className="register-form-left">
                     <div className="register-input-group-left">
@@ -150,13 +142,21 @@ const RegisterForm = ({ onStepComplete }) => {
                         </div>
                     </div>
 
+                    {activeError && <div className="register-error-left">{activeError}</div>}
+
                     <button type="submit" className="register-button-full">Next Step</button>
                 </form>
 
-                {/* הוספת שורת הפוטר הקהילתית עם הקישור החסר */}
                 <p className="register-fields-footer">
-                    Already have an account? <Link to="/login" className="register-fields-link">Log in here</Link>
+                    Already have an account? <Link to="/login" onClick={() => clearErrors()} className="register-fields-link">Log in here</Link>
                 </p>
+
+                <p className="register-fields-footer-out">
+                    <Link to="/" className="register-fields-link-out">
+                        Continue without connecting
+                    </Link>
+                </p>
+
             </div>
         </div>
     );

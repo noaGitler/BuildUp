@@ -134,8 +134,15 @@
     color: #60665D;
 }
 
+.register-fields-footer-out {
+    margin-top: 12px;
+    font-size: 13px;
+    color: #60665D;
+    text-decoration: underline;
+}
+
 .register-fields-link {
-    color: #557A61; /* צבע ירוק מרווה תואם */
+    color: #557A61;
     font-weight: 600;
     text-decoration: none;
     transition: color 0.2s;
@@ -145,4 +152,12 @@
     color: #557A61;
     font-weight: 600;
     text-decoration: none;
+}
+
+.register-fields-link-out {
+    color: #60665D;
+    font-weight: 500;
+    font-size: 13px;
+    text-decoration: underline;
+    transition: color 0.2s;
 }

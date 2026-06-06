@@ -24,6 +24,8 @@ const authReducer = (state, action) => {
             return { ...state, loading: action.payload };
         case 'SET_REGISTRATION_DATA':
             return { ...state, tempRegistration: action.payload, loading: false, error: null };
+        case 'CLEAR_ERROR':
+            return { ...state, error: null };
         default:
             return state;
     }
@@ -96,9 +98,7 @@ export const AuthProvider = ({ children }) => {
             if (data.success) {
                 // Instantly commit the temporary access values into our context registry
                 localStorage.setItem('draft_email', email);
-                console.log("registerStep1 2:", state.tempRegistration);
                 dispatch({ type: 'SET_REGISTRATION_DATA', payload: { email, password } });
-                console.log("registerStep1 2:", state.tempRegistration);
                 return { success: true };
             }
         } catch (error) {
@@ -130,6 +130,10 @@ export const AuthProvider = ({ children }) => {
         dispatch({ type: 'LOGOUT' });
     };
 
+    const clearErrors = () => {
+        dispatch({ type: 'CLEAR_ERROR', payload: null });
+    };
+
     return (
         <AuthContext.Provider
             value={{
@@ -143,7 +147,8 @@ export const AuthProvider = ({ children }) => {
                 cancelRestore,
                 registerStep1,
                 registerStep2,
-                logoutUser
+                logoutUser,
+                clearErrors
             }}>
             {!state.loading && children}
         </AuthContext.Provider>

@@ -76,6 +76,12 @@ const ProfileFields = () => {
 
         const result = await registerStep2(completePayload);
         if (result.success) {
+            sessionStorage.setItem('welcomeConfig',
+                JSON.stringify({
+                    shouldShow: true,
+                    title: "You're officially in!",
+                    message: "Welcome to BuildUp. Your space is ready, your profile is live, let's start creating."
+                }));
             navigate('/');
         } else {
             setLocalError(result.message || 'Profile configuration failed.');
