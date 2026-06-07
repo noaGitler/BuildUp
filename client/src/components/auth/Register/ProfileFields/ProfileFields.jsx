@@ -67,7 +67,7 @@ const ProfileFields = () => {
             name: formData.name,
             role: isProfessional ? 'professional' : 'client',
             phone: formData.phone || null,
-            profile_image_url: formData.profileImage || null,
+            profile_image_url: formData.profileImage || 'anonymous.png',
             tag_line: isProfessional ? formData.tagLine : null,
             bio: isProfessional ? formData.bio : null,
             city: isProfessional ? formData.city : null,
@@ -141,12 +141,12 @@ const ProfileFields = () => {
                         <div className="input-wrapper">
                             <FiImage className="input-icon-left" />
                             <input
-                                type="url"
+                                type="text"
                                 name="profileImage"
                                 value={formData.profileImage}
                                 onChange={handleChange}
                                 className="auth-input-left"
-                                placeholder="https://example.com/image.jpg"
+                                placeholder="image.jpg"
                             />
                         </div>
                     </div>

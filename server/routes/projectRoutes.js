@@ -4,8 +4,9 @@ import { validateProjectCreation } from '../middleware/projectValidation.js';
 
 const router = express.Router();
 
-router.post('/create', validateProjectCreation, ProjectController.createProject);
-router.get('/:id', ProjectController.getProjectById);
 router.get('/', ProjectController.getProjectsFiles);
+router.get('/:id', ProjectController.getProjectById);
+router.post('/create', validateProjectCreation, ProjectController.createProject);
+router.delete('/:id', ProjectController.deleteProject);
 
 export default router;

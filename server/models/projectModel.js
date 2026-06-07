@@ -4,63 +4,6 @@ import pool from '../config/db.js';
 class projectModel {
 
     // Get projects with optional filters and sorting
-    // static async getProjectsFiles(filters) {
-    //     const { search, category_id, sort, limit } = filters;
-    //     const connection = await pool.getConnection();
-
-    //     try {
-    //         let query = `
-    //             SELECT p.id, p.professional_id, p.category_id, p.title, p.description, p.cover_image_id, p.created_at, m.media_url AS cover_image_url
-    //             FROM projects p
-    //             LEFT JOIN project_media m ON p.cover_image_id = m.id
-    //         `;
-
-    //         const queryParams = [];
-    //         const whereConditions = [];
-
-    //         // Dynamic Filtering by Category ID
-    //         if (category_id) {
-    //             whereConditions.push("p.category_id = ?");
-    //             queryParams.push(Number(category_id));
-    //         }
-
-    //         // Dynamic Filtering by Title Search Text
-    //         if (search) {
-    //             whereConditions.push("p.title LIKE ?");
-    //             queryParams.push(`%${search}%`);
-    //         }
-
-    //         // Append WHERE clause if any conditions exist
-    //         if (whereConditions.length > 0) {
-    //             query += " WHERE " + whereConditions.join(" AND ");
-    //         }
-
-    //         // Dynamic Sorting Configuration
-    //         if (sort === 'oldest') {
-    //             query += " ORDER BY p.created_at ASC";
-    //         } else if (sort === 'title') {
-    //             query += " ORDER BY p.title ASC";
-    //         } else {
-    //             query += " ORDER BY p.created_at DESC";
-    //         }
-
-    //         // Pagination / Limit Configuration
-    //         const parsedLimit = Number(limit) > 0 ? Number(limit) : 10;
-    //         query += " LIMIT ?";
-    //         queryParams.push(parsedLimit);
-
-    //         // Execute the compiled dynamic query safely
-    //         const [rows] = await connection.query(query, queryParams);
-    //         return rows;
-
-    //     } catch (error) {
-    //         throw error;
-    //     } finally {
-    //         connection.release();
-    //     }
-    // }
-
-
     static async getProjectsFiles(filters) {
         const { search, category_id, sort, limit } = filters;
         const connection = await pool.getConnection();
@@ -75,7 +18,7 @@ class projectModel {
                     m.media_url AS cover_image_url,
                     u.name AS professional_name,
                     u.profile_image_url AS professional_image,
-                    pp.tagline AS professional_tagline,
+                    pp.tagline AS professional_tagline
                 FROM projects p
                 LEFT JOIN project_media m ON p.cover_image_id = m.id
                 LEFT JOIN users u ON p.professional_id = u.id
@@ -126,67 +69,6 @@ class projectModel {
         }
     }
 
-    // Create a new project with media assets
-    static async createProjectWithMedia(projectData, mediaFiles) {
-        const { professional_id, category_id, title, description } = projectData;
-        const connection = await pool.getConnection();
-
-        try {
-            await connection.beginTransaction();
-
-            // Insert initial project records into the projects table
-            const projectQuery = `
-                INSERT INTO projects (professional_id, category_id, title, description, cover_image_id, created_at) 
-                VALUES (?, ?, ?, ?, NULL, NOW())
-            `;
-            const [projectResult] = await connection.query(projectQuery, [
-                professional_id, category_id, title, description || null
-            ]);
-            const projectId = projectResult.insertId;
-
-            let coverImageId = null;
-            const folderMap = { image: 'images', video: 'videos', audio: 'audio', document: 'documents' };
-
-            for (let i = 0; i < mediaFiles.length; i++) {
-                const file = mediaFiles[i];
-
-                let mediaType = 'document';
-                if (file.mimetype.startsWith('image/')) mediaType = 'image';
-                else if (file.mimetype.startsWith('video/')) mediaType = 'video';
-                else if (file.mimetype.startsWith('audio/')) mediaType = 'audio';
-
-                const targetFolder = folderMap[mediaType];
-
-                // Construct the clean relative URL exactly as it rests on the server
-                const relativePath = `/uploads/projects/${targetFolder}/${file.originalName}`;
-
-                const mediaQuery = `
-                    INSERT INTO project_media (project_id, media_type, media_url) 
-                    VALUES (?, ?, ?)
-                `;
-                const [mediaResult] = await connection.query(mediaQuery, [projectId, mediaType, relativePath]);
-
-                // Assign the first inserted record ID as the cover image ID
-                if (i === 0) {
-                    coverImageId = mediaResult.insertId;
-                }
-            }
-
-            // Finalize transaction by linking the compiled cover image ID back to the project
-            const updateCoverQuery = 'UPDATE projects SET cover_image_id = ? WHERE id = ?';
-            await connection.query(updateCoverQuery, [coverImageId, projectId]);
-
-            await connection.commit();
-            return projectId;
-
-        } catch (error) {
-            await connection.rollback();
-            throw error;
-        } finally {
-            connection.release();
-        }
-    }
-
     // Get complete project details
     static async getProjectById(projectId) {
         const connection = await pool.getConnection();
@@ -220,6 +102,208 @@ class projectModel {
             return project;
 
         } catch (error) {
+            throw error;
+        } finally {
+            connection.release();
+        }
+    }
+
+    // Create a new project with media assets
+    // static async createProjectWithMedia(projectData, mediaFiles) {
+    //     const { professional_id, category_id, title, description } = projectData;
+    //     const connection = await pool.getConnection();
+
+    //     try {
+    //         await connection.beginTransaction();
+
+    //         // Insert initial project records into the projects table
+    //         const projectQuery = `
+    //             INSERT INTO projects (professional_id, category_id, title, description, cover_image_id, created_at) 
+    //             VALUES (?, ?, ?, ?, NULL, NOW())
+    //         `;
+    //         const [projectResult] = await connection.query(projectQuery, [
+    //             professional_id, category_id, title, description || null
+    //         ]);
+    //         const projectId = projectResult.insertId;
+
+    //         let coverImageId = null;
+    //         const folderMap = { image: 'images', video: 'videos', audio: 'audio', document: 'documents' };
+
+    //         for (let i = 0; i < mediaFiles.length; i++) {
+    //             const file = mediaFiles[i];
+
+    //             let mediaType = 'document';
+    //             if (file.mimetype.startsWith('image/')) mediaType = 'image';
+    //             else if (file.mimetype.startsWith('video/')) mediaType = 'video';
+    //             else if (file.mimetype.startsWith('audio/')) mediaType = 'audio';
+
+    //             const targetFolder = folderMap[mediaType];
+
+    //             // Construct the clean relative URL exactly as it rests on the server
+    //             const relativePath = `/uploads/projects/${targetFolder}/${file.originalName}`;
+
+    //             const mediaQuery = `
+    //                 INSERT INTO project_media (project_id, media_type, media_url) 
+    //                 VALUES (?, ?, ?)
+    //             `;
+    //             const [mediaResult] = await connection.query(mediaQuery, [projectId, mediaType, relativePath]);
+
+    //             // Assign the first inserted record ID as the cover image ID
+    //             if (i === 0) {
+    //                 coverImageId = mediaResult.insertId;
+    //             }
+    //         }
+
+    //         // Finalize transaction by linking the compiled cover image ID back to the project
+    //         const updateCoverQuery = 'UPDATE projects SET cover_image_id = ? WHERE id = ?';
+    //         await connection.query(updateCoverQuery, [coverImageId, projectId]);
+
+    //         await connection.commit();
+    //         return projectId;
+
+    //     } catch (error) {
+    //         await connection.rollback();
+    //         throw error;
+    //     } finally {
+    //         connection.release();
+    //     }
+    // }
+    static async createProjectWithMedia(projectData, processedMedia) {
+        const { professional_id, category_id, title, description } = projectData;
+        const connection = await pool.getConnection();
+
+        try {
+            const categoryCheckQuery = `
+                SELECT 1 FROM professional_categories 
+                WHERE user_id = ? AND category_id = ?
+            `;
+            const [categoryRows] = await connection.query(categoryCheckQuery, [professional_id, category_id]);
+
+            // If no match is found, reject the operation immediately to preserve database integrity
+            if (categoryRows.length === 0) {
+                throw new Error(`Unauthorized operation: Professional ID ${professional_id} is not mapped to Category ID ${category_id}.`);
+            }
+
+            await connection.beginTransaction();
+
+            // Insert initial project records into the projects table
+            const projectQuery = `
+                INSERT INTO projects (professional_id, category_id, title, description, cover_image_id, created_at) 
+                VALUES (?, ?, ?, ?, NULL, NOW())
+            `;
+            const [projectResult] = await connection.query(projectQuery, [
+                professional_id, category_id, title, description || null
+            ]);
+            const projectId = projectResult.insertId;
+
+            let coverImageId = null;
+
+            for (let i = 0; i < processedMedia.length; i++) {
+                const file = processedMedia[i];
+
+                const mediaQuery = `
+                    INSERT INTO project_media (project_id, media_type, media_url) 
+                    VALUES (?, ?, ?)
+                `;
+                const [mediaResult] = await connection.query(mediaQuery, [projectId, file.media_type, file.media_url]);
+
+                // Assign the first inserted record ID as the cover image ID
+                if (i === 0) {
+                    coverImageId = mediaResult.insertId;
+                }
+            }
+
+            // Finalize transaction by linking the compiled cover image ID back to the project
+            const updateCoverQuery = 'UPDATE projects SET cover_image_id = ? WHERE id = ?';
+            await connection.query(updateCoverQuery, [coverImageId, projectId]);
+
+            await connection.commit();
+            return projectId;
+
+        } catch (error) {
+            await connection.rollback();
+            throw error;
+        } finally {
+            connection.release();
+        }
+    }
+
+    // Update the text part of the project + cover image
+    static async updateProjectText(projectId, textData) {
+        const { title, description, category_id, cover_image_id, cover_url, cover_type } = textData;
+        const connection = await pool.getConnection();
+        try {
+            const updateProjectQuery = `
+                UPDATE projects 
+                SET title = ?, description = ?, category_id = ?, cover_image_id = ?
+                WHERE id = ?
+            `;
+            await connection.query(updateProjectQuery, [title, description || null, category_id, cover_image_id, projectId]);
+
+            if (cover_image_id && cover_url) {
+                const updateMediaQuery = `
+                    UPDATE project_media 
+                    SET media_url = ?, media_type = ? 
+                    WHERE id = ? AND project_id = ?
+                `;
+                await connection.query(updateMediaQuery, [cover_url, cover_type, cover_image_id, projectId]);
+            }
+            return true;
+        } catch (error) {
+            throw error;
+        } finally {
+            connection.release();
+        }
+    }
+
+    // Update the media part of the project
+    static async updateProjectMedia(projectId, processedMedia) {
+        const connection = await pool.getConnection();
+        try {
+            await connection.beginTransaction();
+
+            const clearMediaQuery = "DELETE FROM project_media WHERE project_id = ?";
+            await connection.query(clearMediaQuery, [projectId]);
+
+            for (let i = 0; i < processedMedia.length; i++) {
+                const file = processedMedia[i];
+
+                const insertMediaQuery = `
+                    INSERT INTO project_media (project_id, media_type, media_url) 
+                    VALUES (?, ?, ?)
+                `;
+                await connection.query(insertMediaQuery, [projectId, file.media_type, file.media_url]);
+            }
+
+            await connection.commit();
+            return true;
+        } catch (error) {
+            await connection.rollback();
+            throw error;
+        } finally {
+            connection.release();
+        }
+    }
+
+    // Delete a project and all its associated media
+    static async deleteProject(projectId) {
+        const connection = await pool.getConnection();
+        try {
+            await connection.beginTransaction();
+
+            // Delete all attached media pieces first
+            const deleteMediaQuery = "DELETE FROM project_media WHERE project_id = ?";
+            await connection.query(deleteMediaQuery, [projectId]);
+
+            // Delete the primary project record
+            const deleteProjectQuery = "DELETE FROM projects WHERE id = ?";
+            const [result] = await connection.query(deleteProjectQuery, [projectId]);
+
+            await connection.commit();
+            return result.affectedRows > 0;
+
+        } catch (error) {
+            await connection.rollback();
             throw error;
         } finally {
             connection.release();
