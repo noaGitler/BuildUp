@@ -5,7 +5,10 @@ import { FiMenu, FiHome, FiFolder, FiHeart, FiUsers, FiBriefcase, FiLogOut, FiUs
 import { useAuth } from '../../../context/authContext.jsx';
 import Logo from '../../UI/Logo.jsx';
 import Modal from '../../UI/Modal/Modal.jsx';
+
 import './Navbar.css';
+
+const BACKEND_URL = 'http://localhost:5000';
 
 const Navbar = () => {
   const { user, logoutUser } = useAuth();
@@ -52,7 +55,7 @@ const Navbar = () => {
 
               <Link to={`/profile/${user.id}`} className="user-profile-card" title="Go to Profile">
                 {user.profile_image_url ? (
-                  <img src={user.profile_image_url} alt={user.name} className="navbar-avatar" />
+                  <img src={`${BACKEND_URL}${user.profile_image_url}`} alt={user.name} className="navbar-avatar" />
                 ) : (
                   <FiUser size={18} className="default-avatar-icon" />
                 )}
@@ -90,12 +93,6 @@ const Navbar = () => {
         onCancel={() => setIsLogoutModalOpen(false)}
       />
 
-      {/* Interactive autonomous welcome celebration toast block context */}
-      {/* <Modal
-        isOpen={isWelcomeModalOpen}
-        title={welcomeConfig.title}
-        message={welcomeConfig.message}
-      /> */}
     </nav>
   );
 };

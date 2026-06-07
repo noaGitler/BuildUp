@@ -34,14 +34,6 @@ class UserController {
         try {
             const { email, password, name, role, phone, profile_image_url, tag_line, bio, city, categoryIds } = req.body;
 
-            // Validation guard to ensure baseline fields are populated
-            if (!email || !password || !name || !role) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Missing mandatory fields for account compilation."
-                });
-            }
-
             // Ensure the email wasn't taken while the user was typing
             const isEmailTaken = await authModel.checkEmailExists(email);
             if (isEmailTaken) {
@@ -51,9 +43,14 @@ class UserController {
                 });
             }
 
+            let finalProfileImageUrl = profile_image_url || null;
+            if (finalProfileImageUrl && !finalProfileImageUrl.startsWith('/uploads/')) {
+                finalProfileImageUrl = `/uploads/profiles/${finalProfileImageUrl}`;
+            }
+
             // Execute the atomic multi-table transaction in the model layer
             const userId = await authModel.registerFullUser({
-                email, password, name, role, phone, profile_image_url, tag_line, bio, city, categoryIds
+                email, password, name, role, phone, profile_image_url: finalProfileImageUrl, tag_line, bio, city, categoryIds
             });
 
             return res.status(201).json({
@@ -63,7 +60,7 @@ class UserController {
                     id: userId,
                     name,
                     role,
-                    profile_image_url: profile_image_url || null
+                    profile_image_url: finalProfileImageUrl || null
                 }
             });
         } catch (error) {

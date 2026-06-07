@@ -3,34 +3,6 @@ import projectModel from '../models/projectModel.js';
 class ProjectController {
 
     // Get projects with optional filters and sorting
-    // static async getProjectsFiles(req, res) {
-    //     try {
-    //         const { search, category_id, sort, limit } = req.query;
-
-    //         const projects = await projectModel.getProjectsFiles({
-    //             search: search || null,
-    //             category_id: category_id || null,
-    //             sort: sort || 'newest',
-    //             limit: limit || 12
-    //         });
-
-    //         return res.status(200).json({
-    //             success: true,
-    //             message: "Filtered projects ecosystem batch catalog compiled successfully.",
-    //             count: projects.length,
-    //             data: projects
-    //         });
-
-    //     } catch (error) {
-    //         console.error("Error inside getProjectsFiles controller node:", error);
-    //         return res.status(500).json({
-    //             success: false,
-    //             message: "Failed to retrieve compiled feed data compilation records.",
-    //             error: error.message
-    //         });
-    //     }
-    // }
-
     static async getProjectsFiles(req, res) {
         try {
             const { search, category_id, sort, limit } = req.query;
@@ -55,31 +27,6 @@ class ProjectController {
             return res.status(500).json({
                 success: false,
                 message: "Failed to compile lightweight project catalog list.",
-                error: error.message
-            });
-        }
-    }
-
-    // Create a new project with media assets
-    static async createProject(req, res) {
-        try {
-            const { professional_id, category_id, title, description, mediaFiles } = req.body;
-
-            const projectId = await projectModel.createProjectWithMedia({
-                professional_id, category_id, title, description
-            }, mediaFiles);
-
-            return res.status(201).json({
-                success: true,
-                message: "Project created successfully and all media records compiled.",
-                projectId: projectId
-            });
-
-        } catch (error) {
-            console.error("Error inside createProject controller node:", error);
-            return res.status(500).json({
-                success: false,
-                message: "Project creation transaction failed due to an internal server error.",
                 error: error.message
             });
         }
@@ -113,6 +60,138 @@ class ProjectController {
                 error: error.message
             });
         }
+    }
+
+    // Create a new project with media assets
+    static async createProject(req, res) {
+        try {
+            const { professional_id, category_id, title, description, mediaFiles } = req.body;
+
+            const processedMedia = ProjectController._prepareMediaFiles(mediaFiles || []);
+            const projectId = await projectModel.createProjectWithMedia({
+                professional_id, category_id, title, description
+            }, processedMedia);
+
+            return res.status(201).json({
+                success: true,
+                message: "Project created successfully and all media records compiled.",
+                projectId: projectId
+            });
+
+        } catch (error) {
+            console.error("Error inside createProject controller node:", error);
+            return res.status(500).json({
+                success: false,
+                message: "Project creation transaction failed due to an internal server error.",
+                error: error.message
+            });
+        }
+    }
+
+    // Update the text part of the project + cover image
+    static async updateProjectText(req, res) {
+        try {
+            const projectId = req.params.id;
+            const { title, description, category_id, cover_image_id, cover_file } = req.body;
+
+            let processedCover = null;
+            if (cover_file && cover_file.originalName && cover_file.mimetype) {
+                const prepared = ProjectController._prepareMediaFiles([cover_file]);
+                processedCover = prepared[0];
+            }
+
+            await projectModel.updateProjectText(projectId, {
+                title,
+                description,
+                category_id,
+                cover_image_id,
+                cover_url: processedCover ? processedCover.media_url : null,
+                cover_type: processedCover ? processedCover.media_type : null
+            });
+
+            return res.status(200).json({
+                success: true,
+                message: "Project specifications and cover image layout updated successfully."
+            });
+        } catch (error) {
+            console.error("Error inside updateProjectText controller:", error);
+            return res.status(500).json({
+                success: false,
+                message: "Failed to apply project textual modifications.",
+                error: error.message
+            });
+        }
+    }
+
+    // Update the media part of the project
+    static async updateProjectMedia(req, res) {
+        try {
+            const projectId = req.params.id;
+            const { mediaFiles } = req.body;
+
+            const processedMedia = ProjectController._prepareMediaFiles(mediaFiles || []);
+
+            await projectModel.updateProjectMedia(projectId, processedMedia);
+
+            return res.status(200).json({
+                success: true,
+                message: "Project media records catalog synchronized successfully."
+            });
+        } catch (error) {
+            console.error("Error inside updateProjectMedia controller:", error);
+            return res.status(500).json({
+                success: false,
+                message: "Failed to synchronize project media tracking tables.",
+                error: error.message
+            });
+        }
+    }
+
+    // Delete a project and all its associated media records
+    static async deleteProject(req, res) {
+        try {
+            const projectId = req.params.id;
+            const success = await projectModel.deleteProject(projectId);
+
+            if (!success) {
+                return res.status(404).json({
+                    success: false,
+                    message: `Project with ID ${projectId} does not exist.`
+                });
+            }
+
+            return res.status(200).json({
+                success: true,
+                message: "Project and all compiled media were completely deleted."
+            });
+        } catch (error) {
+            console.error("Error inside deleteProject controller:", error);
+            return res.status(500).json({
+                success: false,
+                message: "Internal server error during project removal process.",
+                error: error.message
+            });
+        }
+    }
+
+    // private helper method to prepare media file data for database insertion
+    static _prepareMediaFiles(mediaFiles) {
+        const folderMap = { image: 'images', video: 'videos', audio: 'audio', document: 'documents' };
+
+        return mediaFiles.map(file => {
+            let mediaType = 'document';
+            if (file.mimetype.startsWith('image/')) mediaType = 'image';
+            else if (file.mimetype.startsWith('video/')) mediaType = 'video';
+            else if (file.mimetype.startsWith('audio/')) mediaType = 'audio';
+
+            const targetFolder = folderMap[mediaType];
+            const mediaUrl = `/uploads/projects/${targetFolder}/${file.originalName}`;
+
+            return {
+                media_type: mediaType,
+                media_url: mediaUrl
+            };
+        });
     }
 }
 

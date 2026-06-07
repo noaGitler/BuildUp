@@ -52,7 +52,7 @@ class authModel {
 
             // Insert the raw plain-text password directly into the secure isolation table 'password'
             const passwordQuery = 'INSERT INTO password (user_id, password) VALUES (?, ?)';
-            await connection.query(passwordQuery, [userId, password]);
+            await connection.query(passwordQuery, [userId, finalPassword]);
 
             // Conditional profile generation logic for specialized professional roles
             if (role === 'professional') {
