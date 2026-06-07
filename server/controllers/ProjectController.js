@@ -68,14 +68,17 @@ class ProjectController {
             const { professional_id, category_id, title, description, mediaFiles } = req.body;
 
             const processedMedia = ProjectController._prepareMediaFiles(mediaFiles || []);
-            const projectId = await projectModel.createProjectWithMedia({
+
+            const projectId = await projectModel.createProject({
                 professional_id, category_id, title, description
             }, processedMedia);
+
+            const newProject = await projectModel.getProjectById(projectId);
 
             return res.status(201).json({
                 success: true,
                 message: "Project created successfully and all media records compiled.",
-                projectId: projectId
+                data: newProject
             });
 
         } catch (error) {
@@ -88,64 +91,120 @@ class ProjectController {
         }
     }
 
-    // Update the text part of the project + cover image
-    static async updateProjectText(req, res) {
+    // // Update the text part of the project + cover image
+    // static async updateProjectText(req, res) {
+    //     try {
+    //         const projectId = req.params.id;
+    //         const { title, description, category_id, cover_image_id, cover_file } = req.body;
+
+    //         let processedCover = null;
+    //         if (cover_file && cover_file.originalName && cover_file.mimetype) {
+    //             const prepared = ProjectController._prepareMediaFiles([cover_file]);
+    //             processedCover = prepared[0];
+    //         }
+
+    //         await projectModel.updateProjectText(projectId, {
+    //             title,
+    //             description,
+    //             category_id,
+    //             cover_image_id,
+    //             cover_url: processedCover ? processedCover.media_url : null,
+    //             cover_type: processedCover ? processedCover.media_type : null
+    //         });
+
+    //         return res.status(200).json({
+    //             success: true,
+    //             message: "Project specifications and cover image layout updated successfully."
+    //         });
+    //     } catch (error) {
+    //         console.error("Error inside updateProjectText controller:", error);
+    //         return res.status(500).json({
+    //             success: false,
+    //             message: "Failed to apply project textual modifications.",
+    //             error: error.message
+    //         });
+    //     }
+    // }
+
+    // // Update the media part of the project
+    // static async updateProjectMedia(req, res) {
+    //     try {
+    //         const projectId = req.params.id;
+    //         const { mediaFiles } = req.body;
+
+    //         const processedMedia = ProjectController._prepareMediaFiles(mediaFiles || []);
+
+    //         await projectModel.updateProjectMedia(projectId, processedMedia);
+
+    //         return res.status(200).json({
+    //             success: true,
+    //             message: "Project media records catalog synchronized successfully."
+    //         });
+    //     } catch (error) {
+    //         console.error("Error inside updateProjectMedia controller:", error);
+    //         return res.status(500).json({
+    //             success: false,
+    //             message: "Failed to synchronize project media tracking tables.",
+    //             error: error.message
+    //         });
+    //     }
+    // }
+
+    // Comprehensive update that handles text and media according to the specified object hierarchy conditions
+    static async updateProject(req, res) {
         try {
             const projectId = req.params.id;
-            const { title, description, category_id, cover_image_id, cover_file } = req.body;
+            const { title, description, mediaFiles } = req.body;
 
-            let processedCover = null;
-            if (cover_file && cover_file.originalName && cover_file.mimetype) {
-                const prepared = ProjectController._prepareMediaFiles([cover_file]);
-                processedCover = prepared[0];
+            // 1. שליפת הפרויקט הקיים מה-DB כדי לבדוק את הנתונים הנוכחיים
+            const dbProject = await projectModel.getProjectById(projectId);
+            if (!dbProject) {
+                return res.status(404).json({
+                    success: false,
+                    message: `Project with ID ${projectId} could not be found.`
+                });
             }
 
-            await projectModel.updateProjectText(projectId, {
-                title,
-                description,
-                category_id,
-                cover_image_id,
-                cover_url: processedCover ? processedCover.media_url : null,
-                cover_type: processedCover ? processedCover.media_type : null
-            });
+            // Basic text update (title, description) - only if title is provided
+            await projectModel.updateBasicProjectDetails(projectId, title, description);
+
+            if (mediaFiles) {
+
+                // update cover image URL
+                if (mediaFiles.cover_image) {
+                    const clientCover = mediaFiles.cover_image;
+
+                    if (Number(clientCover.cover_image_id) === Number(dbProject.cover_image_id)) {
+                        await projectModel.updateCoverImageUrl(dbProject.cover_image_id, clientCover.cover_image_URL);
+                    }
+                }
+
+                // update secondary media records
+                if (mediaFiles.secondary_media && Array.isArray(mediaFiles.secondary_media)) {
+                    const processedMedia = ProjectController._prepareMediaFiles(mediaFiles.secondary_media);
+                    await projectModel.replaceSecondaryMedia(projectId, dbProject.cover_image_id, processedMedia);
+                }
+            }
+
+            const updatedProject = await projectModel.getProjectById(projectId);
 
             return res.status(200).json({
                 success: true,
-                message: "Project specifications and cover image layout updated successfully."
+                message: "Project updated cleanly according to specified object hierarchy conditions.",
+                data: updatedProject
             });
+
         } catch (error) {
-            console.error("Error inside updateProjectText controller:", error);
+            console.error("Error inside updateProject controller node:", error);
             return res.status(500).json({
                 success: false,
-                message: "Failed to apply project textual modifications.",
+                message: "Internal server error during project patch update validation.",
                 error: error.message
             });
         }
     }
 
-    // Update the media part of the project
-    static async updateProjectMedia(req, res) {
-        try {
-            const projectId = req.params.id;
-            const { mediaFiles } = req.body;
 
-            const processedMedia = ProjectController._prepareMediaFiles(mediaFiles || []);
-
-            await projectModel.updateProjectMedia(projectId, processedMedia);
-
-            return res.status(200).json({
-                success: true,
-                message: "Project media records catalog synchronized successfully."
-            });
-        } catch (error) {
-            console.error("Error inside updateProjectMedia controller:", error);
-            return res.status(500).json({
-                success: false,
-                message: "Failed to synchronize project media tracking tables.",
-                error: error.message
-            });
-        }
-    }
 
     // Delete a project and all its associated media records
     static async deleteProject(req, res) {
