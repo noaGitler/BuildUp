@@ -6,6 +6,8 @@ import authRoutes from './routes/authRoutes.js';
 import categoryRoutes from './routes/categoryRoutes.js';
 import projectRoutes from './routes/projectRoutes.js';
 import favoriteRoutes from './routes/favoriteRoutes.js'
+import commentRouter from './routes/commentRouter.js';
+
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -25,6 +27,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/favorites', favoriteRoutes);
+app.use('/api/comments', commentRouter);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
