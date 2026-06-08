@@ -4,9 +4,8 @@ import favoriteValidation from'../middleware/FavoriteValidation.js';
 
 const router = express.Router();
 
-// Route configurations utilizing express structural validation nodes
+router.get('/', favoriteValidation.validateFetchQuery, favoriteController.getFavoriteProjects);
 router.post('/add', favoriteValidation.validateActionBody, favoriteController.addFavorite);
 router.delete('/remove', favoriteValidation.validateActionBody, favoriteController.removeFavorite);
-router.get('/', favoriteValidation.validateFetchQuery, favoriteController.getFavoriteProjects);
 
 export default router;

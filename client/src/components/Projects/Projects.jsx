@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { ProjectProvider, useProjects } from '../../context/ProjectContext';
+import { FavoriteProvider } from '../../context/FavoriteContext';
 import { useAuth } from '../../context/authContext';
 
 const ProjectsGuard = () => {
@@ -9,7 +10,7 @@ const ProjectsGuard = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const { id } = useParams();
-    
+
     const [canRender, setCanRender] = useState(false);
 
     useEffect(() => {
@@ -46,7 +47,7 @@ const ProjectsGuard = () => {
         // Attempted editing access to a project that does not belong to the logged in user
         if (isEditRoute) {
             const currentProject = projects.find(p => p.id === Number(id));
-            
+
             if (!currentProject) {
                 setCanRender(false);
                 navigate(-1);
@@ -76,7 +77,9 @@ const ProjectsGuard = () => {
 const Projects = () => {
     return (
         <ProjectProvider>
-            <ProjectsGuard />
+            <FavoriteProvider>
+                <ProjectsGuard />
+            </FavoriteProvider>
         </ProjectProvider>
     );
 };

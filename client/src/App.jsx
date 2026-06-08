@@ -11,6 +11,7 @@ import Register from './components/Auth/Register/Register.jsx';
 
 import MainLayout from './components/Layout/MainLayout/MainLayout';
 
+import Favorites from './components/Projects/Favorites.jsx'
 import Projects from './components/Projects/Projects.jsx'
 import ProjectsPage from './components/Projects/ProjectsPage/ProjectsPage.jsx';
 import ProjectDetails from './components/Projects/ProjectDetails/ProjectDetails.jsx';
@@ -41,8 +42,11 @@ function App() {
                 <Route path=":id/edit" element={<EditProjectPage />} />
               </Route>
 
+              <Route path="/favorites" element={<Favorites />}>
+                <Route index element={<ProjectsPage />} />
+              </Route>
+
               <Route path="/jobs" element={<></>} />
-              <Route path="/favorites" element={<></>} />
               <Route path="/professionals" element={<></>} />
 
             </Route>
