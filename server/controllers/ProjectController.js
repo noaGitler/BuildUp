@@ -91,65 +91,6 @@ class ProjectController {
         }
     }
 
-    // // Update the text part of the project + cover image
-    // static async updateProjectText(req, res) {
-    //     try {
-    //         const projectId = req.params.id;
-    //         const { title, description, category_id, cover_image_id, cover_file } = req.body;
-
-    //         let processedCover = null;
-    //         if (cover_file && cover_file.originalName && cover_file.mimetype) {
-    //             const prepared = ProjectController._prepareMediaFiles([cover_file]);
-    //             processedCover = prepared[0];
-    //         }
-
-    //         await projectModel.updateProjectText(projectId, {
-    //             title,
-    //             description,
-    //             category_id,
-    //             cover_image_id,
-    //             cover_url: processedCover ? processedCover.media_url : null,
-    //             cover_type: processedCover ? processedCover.media_type : null
-    //         });
-
-    //         return res.status(200).json({
-    //             success: true,
-    //             message: "Project specifications and cover image layout updated successfully."
-    //         });
-    //     } catch (error) {
-    //         console.error("Error inside updateProjectText controller:", error);
-    //         return res.status(500).json({
-    //             success: false,
-    //             message: "Failed to apply project textual modifications.",
-    //             error: error.message
-    //         });
-    //     }
-    // }
-
-    // // Update the media part of the project
-    // static async updateProjectMedia(req, res) {
-    //     try {
-    //         const projectId = req.params.id;
-    //         const { mediaFiles } = req.body;
-
-    //         const processedMedia = ProjectController._prepareMediaFiles(mediaFiles || []);
-
-    //         await projectModel.updateProjectMedia(projectId, processedMedia);
-
-    //         return res.status(200).json({
-    //             success: true,
-    //             message: "Project media records catalog synchronized successfully."
-    //         });
-    //     } catch (error) {
-    //         console.error("Error inside updateProjectMedia controller:", error);
-    //         return res.status(500).json({
-    //             success: false,
-    //             message: "Failed to synchronize project media tracking tables.",
-    //             error: error.message
-    //         });
-    //     }
-    // }
-
     // Comprehensive update that handles text and media according to the specified object hierarchy conditions
     static async updateProject(req, res) {
         try {
@@ -235,12 +176,11 @@ class ProjectController {
 
     // private helper method to prepare media file data for database insertion
     static _prepareMediaFiles(mediaFiles) {
-        const folderMap = { image: 'images', video: 'videos', audio: 'audio', document: 'documents' };
+        const folderMap = { image: 'images', video: 'videos', audio: 'audio' };
 
         return mediaFiles.map(file => {
-            let mediaType = 'document';
-            if (file.mimetype.startsWith('image/')) mediaType = 'image';
-            else if (file.mimetype.startsWith('video/')) mediaType = 'video';
+            let mediaType = 'image';
+            if (file.mimetype.startsWith('video/')) mediaType = 'video';
             else if (file.mimetype.startsWith('audio/')) mediaType = 'audio';
 
             const targetFolder = folderMap[mediaType];

@@ -67,7 +67,7 @@ const ProfileFields = () => {
             name: formData.name,
             role: isProfessional ? 'professional' : 'client',
             phone: formData.phone || null,
-            profile_image_url: formData.profileImage || 'anonymous.png',
+            profile_image_url: formData.profileImage || null,
             tag_line: isProfessional ? formData.tagLine : null,
             bio: isProfessional ? formData.bio : null,
             city: isProfessional ? formData.city : null,

@@ -93,7 +93,8 @@ class UserController {
                     id: user.id,
                     name: user.name,
                     role: user.role,
-                    profile_image_url: user.profile_image_url
+                    profile_image_url: user.profile_image_url,
+                    categoryIds: user.categoryIds
                 }
             });
         } catch (error) {
@@ -122,7 +123,8 @@ class UserController {
                     id: user.id,
                     name: user.name,
                     role: user.role,
-                    profile_image_url: user.profile_image_url
+                    profile_image_url: user.profile_image_url,
+                    categoryIds: user.categoryIds
                 }
             });
         } catch (error) {

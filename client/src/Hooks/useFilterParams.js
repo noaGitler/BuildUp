@@ -1,4 +1,3 @@
-// client/src/hooks/useFilterParams.js
 import { useSearchParams } from 'react-router-dom';
 
 export const useFilterParams = () => {
@@ -27,7 +26,7 @@ export const useFilterParams = () => {
 
   return {
     search: searchParams.get('search') || '',
-    sort: searchParams.get('sortBy') || 'newest',
+    sortBy: searchParams.get('sortBy') || 'newest',
     category: searchParams.get('category') || '',
     page: parseInt(searchParams.get('page'), 10) || 1,
     updateFilters

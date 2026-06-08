@@ -13,6 +13,7 @@ class projectModel {
             let query = `SELECT 
                     p.id, 
                     p.category_id, 
+                    p.professional_id,
                     p.title, 
                     p.created_at,
                     m.media_url AS cover_image_url,
@@ -75,9 +76,15 @@ class projectModel {
         try {
             // Fetch main project metadata details
             const projectQuery = `
-                SELECT id, professional_id, category_id, title, description, cover_image_id, created_at 
-                FROM projects 
-                WHERE id = ?
+            SELECT 
+                p.*,
+                u.name AS professional_name,
+                u.profile_image_url AS professional_image,
+                pp.tagline AS professional_tagline
+            FROM projects p
+            LEFT JOIN users u ON p.professional_id = u.id
+            LEFT JOIN professional_profiles pp ON u.id = pp.user_id
+            WHERE p.id = ?
             `;
             const [projectRows] = await connection.query(projectQuery, [projectId]);
 
@@ -224,7 +231,7 @@ class projectModel {
         }
     }
 
-    
+
 
     // Delete a project and all its associated media
     static async deleteProject(projectId) {

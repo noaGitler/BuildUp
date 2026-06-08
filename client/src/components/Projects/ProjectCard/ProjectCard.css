@@ -1,0 +1,130 @@
+.project-feed-card {
+    background-color: #FFFFFF;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.03);
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    transition: transform 0.25s cubic-bezier(0.165, 0.84, 0.44, 1), 
+                box-shadow 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.project-feed-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.06);
+}
+
+.card-media-box {
+    position: relative;
+    width: 100%;
+    height: 230px;
+    background-color: #F7F7F4; /* Base earth-tone warm foundation texture placeholder */
+    overflow: hidden;
+}
+
+.card-cover-asset-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.project-feed-card:hover .card-cover-asset-img {
+    transform: scale(1.03);
+}
+
+/* Hover dynamic details layout mask overlay overlay section */
+.card-media-hover-mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(85, 122, 97, 0.15); /* Integrated safe sage green overlay color matrix tint */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+
+.project-feed-card:hover .card-media-hover-mask {
+    opacity: 1;
+}
+
+.mask-action-trigger-badge {
+    background-color: #FFFFFF;
+    color: #222222; /* Charcoal grey primary dark color variant text styling */
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.card-body-wrapper {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex-grow: 1;
+}
+
+.card-display-title {
+    color: #222222; /* Pure charcoal primary header text track font metrics */
+    font-size: 1.15rem;
+    font-weight: 700; /* Bold/Black weight configurations rules styles */
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* Footer Section Creator Info Attributes Blocks Row Layout styles template */
+.card-creator-profile-footer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: auto;
+    padding-top: 14px;
+    border-top: 1px solid #F7F7F4; /* Thin separation layer line design */
+}
+
+.creator-profile-avatar-img, .creator-avatar-icon-fallback-box {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%; /* Rounded standard circle frames tracking profiles assets images */
+    object-fit: cover;
+}
+
+.creator-avatar-icon-fallback-box {
+    background-color: #F7F7F4;
+    color: #60665D; /* Standard secondary gray-olive / deep khaki palette definitions color selection */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    border: 1px solid rgba(0, 0, 0, 0.02);
+}
+
+.creator-metadata-text-group {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.creator-display-profile-name {
+    color: #222222;
+    font-size: 0.95rem;
+    font-weight: 500; /* Medium weight identifier setup profile titles names fields */
+    margin: 0;
+}
+
+.creator-display-profile-tagline {
+    color: #60665D; /* Olive-gray text configurations parameters */
+    font-size: 0.8rem;
+    font-weight: 400; /* Standard regular weight value mapping variables tracking systems description layout fields */
+    margin: 0;
+}
