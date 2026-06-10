@@ -5,14 +5,15 @@ class ProjectController {
     // Get projects with optional filters and sorting
     static async getProjectsFiles(req, res) {
         try {
-            const { search, category_id, sort, limit } = req.query;
+            const { search, category_id, sort, limit, professional_id } = req.query;
 
             // Request the optimized card layout structure from data model
             const projects = await projectModel.getProjectsFiles({
                 search: search || null,
                 category_id: category_id || null,
                 sort: sort || 'newest',
-                limit: limit || 12
+                limit: limit || 12,
+                professional_id: professional_id || null
             });
 
             return res.status(200).json({

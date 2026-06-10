@@ -6,18 +6,18 @@ import { FaHeart } from "react-icons/fa";
 import { useFilterParams } from '../../../Hooks/useFilterParams.js';
 import { useCategories } from '../../../context/categoryContext.jsx';
 import { useProjects } from '../../../context/ProjectContext';
-import { useFavorites } from '../../../context/FavoriteContext'; // Our new dynamic integration hook
+import { useFavorites } from '../../../context/FavoriteContext';
 import { useAuth } from '../../../context/authContext.jsx';
 
 import FilterBar from '../../UI/FilterBar/FilterBar.jsx';
-import ProjectCard from '../ProjectCard/ProjectCard.jsx';
+import ProjectsGrid from '../ProjectsGrid/ProjectsGrid.jsx';
 import './ProjectsPage.css';
 
 const ProjectsPage = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    // Check if the current URL view is targetting the favorites interface panel
+    // בדיקה האם הניתוב הנוכחי הוא עמוד המועדפים
     const isFavoritesPage = location.pathname.includes('/favorites');
 
     const { search, sortBy, category, updateFilters } = useFilterParams();
@@ -28,10 +28,10 @@ const ProjectsPage = () => {
 
     const [limit, setLimit] = useState(12);
 
-    // Checks if logged in user is a verified professional creator profile
+    // בדיקה האם המשתמש המחובר הוא בעל מקצוע מורשה או מנהל
     const isProfessional = user && (user.role === 'professional' || user.role === 'admin');
 
-    // Dynamic layout state variables resolution mapping based on location paths
+    // השמת הנתונים הדינמיים בהתאם לסוג העמוד (מועדפים או כללי)
     const activeProjectsArray = isFavoritesPage ? favoriteProjects : projects;
     const activeLoadingState = isFavoritesPage ? loadingFavorites : loading;
     const activeErrorState = isFavoritesPage ? favoritesError : error;
@@ -43,7 +43,7 @@ const ProjectsPage = () => {
         { id: 'title', name: 'A-Z', icon: <FiCheck /> }
     ];
 
-    // Triggers a filter request whenever there is a change in one of the parameters.
+    // שליפת נתונים דינמית מה-Context המתאים בכל שינוי של פילטר או ניתוב
     useEffect(() => {
         const activeCompiledQuery = {
             search: search || null,
@@ -52,7 +52,6 @@ const ProjectsPage = () => {
             limit: limit
         };
 
-        // Dynamically switch data routing pipelines without breaking functional interfaces
         if (isFavoritesPage) {
             fetchFavoriteProjects(activeCompiledQuery);
         } else {
@@ -60,12 +59,11 @@ const ProjectsPage = () => {
         }
     }, [search, sortBy, category, limit, isFavoritesPage, fetchProjects, fetchFavoriteProjects]);
 
-    // Automatic layout template reset function
+    // איפוס מגבלת הכמות בכל שינוי סינון
     useEffect(() => {
         setLimit(12);
     }, [search, sortBy, category]);
 
-    // Increments query batch limit window parameters variables values
     const handleLoadMore = () => {
         setLimit(prevLimit => prevLimit + 12);
     };
@@ -80,14 +78,6 @@ const ProjectsPage = () => {
 
     return (
         <div className="projects-page-container">
-
-            {/* {!isFavoritesPage &&
-                // <div className="professionals-page-container">
-                <div className="creators-hero-header">
-                    <h1>Project Gallery</h1>
-                    <p>A comprehensive look at our latest developments. Witness the fusion of structural integrity and aesthetic vision.</p>
-                </div>
-            } */}
 
             {isFavoritesPage ?
                 <div className="creators-hero-header">
@@ -138,22 +128,18 @@ const ProjectsPage = () => {
             )}
 
             {/* Dynamic catalog response content core grid renderer block flow */}
-            {activeProjectsArray.length === 0 && !activeLoadingState ? (
-                <div className="projects-empty-feed">
-                    <p className="empty-feed-text">
-                        {isFavoritesPage
-                            ? "Your personalized inspiration board is empty. Start adding design assets to track them here."
-                            : "No architecture matching design assets compiled your query search scope."
-                        }
-                    </p>
-                </div>
-            ) : (
-                <div className="projects-grid-layout">
-                    {activeProjectsArray.map(project => (
-                        <ProjectCard key={project.id} {...project} />
-                    ))}
-                </div>
-            )}
+            <ProjectsGrid
+                projects={activeProjectsArray}
+                isLoading={activeLoadingState}
+                error={activeErrorState}
+                emptyMessage={isFavoritesPage
+                    ? "Your personalized inspiration board is empty. Start adding design assets to track them here."
+                    : "No architecture matching design assets compiled your query search scope."
+                }
+                showLoadMore={true}
+                onLoadMore={handleLoadMore}
+                limit={limit}
+            />
 
             {/* Loading background sequence visual cues layout tracker hooks placeholder */}
             {activeLoadingState && (
@@ -162,14 +148,6 @@ const ProjectsPage = () => {
                 </div>
             )}
 
-            {/* Functional load pagination interaction button interface rendering block execution */}
-            {!activeLoadingState && !activeErrorState && activeProjectsArray.length >= limit && (
-                <div className="load-more-action-wrapper">
-                    <button className="btn-feed-load-more" onClick={handleLoadMore}>
-                        Load More Designs
-                    </button>
-                </div>
-            )}
         </div>
     );
 };

@@ -60,7 +60,7 @@ const ProjectForm = ({ initialValues = null, onSubmitAction }) => {
         e.preventDefault();
         setSubmissionError(null);
 
-        if (!title.trim() || !categoryId) {
+        if (!title.trim() || !description.trim()|| !categoryId) {
             setSubmissionError("Core specifications configuration parameters cannot remain blank. Please pick a workspace category section.");
             return;
         }

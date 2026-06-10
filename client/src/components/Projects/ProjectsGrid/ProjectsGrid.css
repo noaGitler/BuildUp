@@ -1,0 +1,62 @@
+.projects-empty-feed, .projects-error-message, .projects-feed-spinner {
+    width: 100%;
+    background-color: #FFFFFF; /* Pure card background separation layer color scheme */
+    border-radius: 20px;
+    padding: 60px 20px;
+    text-align: center;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.03); /* Soft dimmed drop elevation rule shadow mapping */
+}
+
+.empty-feed-text {
+    color: #60665D;
+    font-size: 1.05rem;
+    margin: 0;
+}
+
+.projects-grid-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    width: 100%;
+}
+
+.load-more-action-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 16px 0;
+}
+
+/* Minimalist primary CTA component style design rule guides definitions */
+.btn-feed-load-more {
+    background-color: #557A61;
+    color: #FFFFFF;
+    border: none;
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 14px 36px;
+    border-radius: 24px;
+    cursor: pointer;
+    box-shadow: 0px 4px 12px rgba(85, 122, 97, 0.15);
+    transition: background-color 0.25s ease, transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.btn-feed-load-more:hover {
+    background-color: #44634E;
+}
+
+.btn-feed-load-more:active {
+    transform: scale(0.97);
+}
+
+@media (min-width: 768px) {
+    .projects-grid-layout {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1200px) {
+    .projects-grid-layout {
+        grid-template-columns: repeat(3, 1fr); /* 3 column responsive catalog setup */
+    }
+}

@@ -8,25 +8,6 @@
     gap: 32px;
 }
 
-.projects-grid-layout {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 24px;
-    width: 100%;
-}
-
-@media (min-width: 768px) {
-    .projects-grid-layout {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (min-width: 1200px) {
-    .projects-grid-layout {
-        grid-template-columns: repeat(3, 1fr); /* 3 column responsive catalog setup */
-    }
-}
-
 .secondary-action-btn {
     background-color: transparent !important;
     border: 1px solid #557A61 !important;
@@ -35,51 +16,6 @@
 
 .secondary-action-btn:hover {
     background-color: #F7F7F4 !important;
-}
-
-/* System messaging layout wrappers styling options */
-.projects-empty-feed, .projects-error-message, .projects-feed-spinner {
-    width: 100%;
-    background-color: #FFFFFF; /* Pure card background separation layer color scheme */
-    border-radius: 20px;
-    padding: 60px 20px;
-    text-align: center;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.03); /* Soft dimmed drop elevation rule shadow mapping */
-}
-
-.empty-feed-text {
-    color: #60665D; /* Dark khaki muted gray/olive standard secondary text configuration */
-    font-size: 1.05rem;
-    margin: 0;
-}
-
-.load-more-action-wrapper {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    padding: 16px 0;
-}
-
-/* Minimalist primary CTA component style design rule guides definitions */
-.btn-feed-load-more {
-    background-color: #557A61; /* Deep rich sage green corporate premium action identifier button */
-    color: #FFFFFF;
-    border: none;
-    font-size: 1rem;
-    font-weight: 500;
-    padding: 14px 36px;
-    border-radius: 24px; /* Soft prominent organic curves borders properties styles */
-    cursor: pointer;
-    box-shadow: 0px 4px 12px rgba(85, 122, 97, 0.15);
-    transition: background-color 0.25s ease, transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.btn-feed-load-more:hover {
-    background-color: #44634E; /* Deep solid focus forest contrast variance */
-}
-
-.btn-feed-load-more:active {
-    transform: scale(0.97); /* Mimic structural tactile button pressing physics actions */
 }
 
 .projects-top-actions-row {
@@ -91,27 +27,31 @@
 }
 
 /* Ensure the FilterBar component inside takes up the available row space */
-.projects-top-actions-row > .filter-bar-unified-wrapper {
+.projects-top-actions-row>.filter-bar-unified-wrapper {
     flex-grow: 1;
 }
 
 /* Premium Sage Green style design matching your UI Design System */
 .btn-create-project-trigger {
-    background-color: #557A61; /* Sage Green */
+    background-color: #557A61;
+    /* Sage Green */
     color: #FFFFFF;
     border: none;
     font-size: 0.95rem;
     font-weight: 500;
     padding: 12px 24px;
-    border-radius: 24px; /* Fully rounded elegant soft badge */
+    border-radius: 24px;
+    /* Fully rounded elegant soft badge */
     cursor: pointer;
-    white-space: nowrap; /* Prevents button text wrapping */
+    white-space: nowrap;
+    /* Prevents button text wrapping */
     box-shadow: 0px 4px 12px rgba(85, 122, 97, 0.15);
     transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
 .btn-create-project-trigger:hover {
-    background-color: #44634E; /* Dark forest green contrast */
+    background-color: #44634E;
+    /* Dark forest green contrast */
 }
 
 .btn-create-project-trigger:active {
@@ -124,13 +64,12 @@
         flex-direction: column;
         align-items: stretch;
     }
-    
+
     .btn-create-project-trigger {
         width: 100%;
         text-align: center;
     }
 }
-
 
 .creators-hero-header {
     text-align: center;
@@ -142,7 +81,7 @@
 .creators-hero-header h1 {
     font-size: 2.8rem;
     font-weight: 800;
-    color: var(--text-main);
+    color: var(--secondary-color);
     margin: 0 0 12px 0;
     letter-spacing: -1px;
 }
@@ -154,14 +93,6 @@
     max-width: 600px;
     line-height: 1.5;
 }
-
-
-
-
-
-
-
-
 
 .outline-heart {
     background-color: transparent !important;

@@ -11,6 +11,8 @@ import Register from './components/Auth/Register/Register.jsx';
 
 import MainLayout from './components/Layout/MainLayout/MainLayout';
 
+import HomePage from './components/Home/HomePage.jsx'
+
 import Projects from './components/Projects/Projects.jsx'
 import ProjectsPage from './components/Projects/ProjectsPage/ProjectsPage.jsx';
 import ProjectDetails from './components/Projects/ProjectDetails/ProjectDetails.jsx';
@@ -32,6 +34,7 @@ function App() {
             <Route path="/register" element={<PublicRoute> <Register /> </PublicRoute>} />
 
             <Route path="/" element={<MainLayout />}>
+              <Route index element={<HomePage />} />
 
               {/* Projects Routes */}
               <Route path="/projects" element={<Projects />}>

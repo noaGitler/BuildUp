@@ -5,7 +5,7 @@ class projectModel {
 
     // Get projects with optional filters and sorting
     static async getProjectsFiles(filters) {
-        const { search, category_id, sort, limit, user_favorites_id } = filters;
+        const { search, category_id, sort, limit, user_favorites_id, professional_id } = filters;
         const connection = await pool.getConnection();
 
         try {
@@ -40,6 +40,12 @@ class projectModel {
             if (category_id) {
                 whereConditions.push("p.category_id = ?");
                 queryParams.push(Number(category_id));
+            }
+
+            // Dynamic filtering by user
+            if (professional_id) {
+                whereConditions.push("p.professional_id = ?");
+                queryParams.push(Number(professional_id));
             }
 
             // Dynamic Filtering by Title Search Text

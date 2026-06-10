@@ -29,6 +29,20 @@ export const ProjectProvider = ({ children }) => {
         }
     }, []);
 
+    // Retrieving projects based on selected filtering into a local state
+    const fetchProjectsRaw = useCallback(async (filters = {}) => {
+        try {
+            const result = await projectService.getProjectsFiles(filters);
+            if (result.success) {
+                return { success: true, data: result.data };
+            }
+            return { success: false, message: result.message || "Failed to fetch customized dataset." };
+        } catch (err) {
+            console.error("Error inside fetchProjectsRaw route node:", err);
+            return { success: false, message: err.response?.data?.message || "Server communication failure." };
+        }
+    }, []);
+
     // Create Project Trigger Call
     const createProject = useCallback(async (projectPayload) => {
         setLoading(true);
@@ -103,6 +117,7 @@ export const ProjectProvider = ({ children }) => {
                 loading,
                 error,
                 fetchProjects,
+                fetchProjectsRaw,
                 createProject,
                 updateProject,
                 deleteProject
