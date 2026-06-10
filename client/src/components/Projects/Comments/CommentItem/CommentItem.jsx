@@ -17,7 +17,7 @@ const CommentItem = ({ comment, projectId }) => {
     const SERVER_URL = 'http://localhost:5000';
 
     // Only allow editing/deleting if the logged-in user matches the comment owner
-    const isOwner = user && Number(user.id) === Number(comment.user_id);
+    const isOwner = user && (Number(user.id) === Number(comment.user_id) || user.role === 'admin' );
 
     const handleSave = async () => {
         await updateComment(comment.id, editText, projectId);

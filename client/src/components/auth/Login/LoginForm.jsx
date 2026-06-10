@@ -85,10 +85,6 @@ const LoginForm = () => {
                     <button type="submit" className="login-button-full">Log In</button>
                 </form>
 
-                {/* <p className="login-fields-footer">
-                    Don't have an account? <Link to="/register" className="login-fields-link">Sign up for free</Link>
-                </p> */}
-
                 <p className="login-fields-footer">
                     Don't have an account? <Link to="/register" onClick={() => clearErrors()} className="login-fields-link">Sign up for free</Link>
                 </p>

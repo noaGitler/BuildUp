@@ -30,9 +30,7 @@ const ProjectDetails = () => {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [deleteError, setDeleteError] = useState(null);
     const [isTogglingFavorite, setIsTogglingFavorite] = useState(false);
-
     const [showComments, setShowComments] = useState(false);
-    const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
     const SERVER_URL = 'http://localhost:5000';
 
@@ -115,14 +113,6 @@ const ProjectDetails = () => {
             console.error("Failed to alter favorite registration link status:", err);
         } finally {
             setIsTogglingFavorite(false);
-        }
-    };
-
-    const handleViewComments = () => {
-        if (!user) {
-            setIsAuthModalOpen(true);
-        } else {
-            setShowComments(!showComments);
         }
     };
 
@@ -263,29 +253,13 @@ const ProjectDetails = () => {
                             className="btn-details-cta secondary-comment-trigger"
                             onClick={() => setShowComments(!showComments)}
                         >
-                            {showComments ?
-                                (<><LuMessageSquareOff /> Hide Comments</>)
-                                :
-                                (<><LuMessageSquareMore /> View Comments</>)
-                            }
+                            <LuMessageSquareMore /> View Comments
                         </button>
 
-
                     </div>
-                    {showComments && user && <CommentList projectId={id} />}
+                    {showComments && <CommentList projectId={id} />}
                 </div>
             </div>
-
-            {showComments && !user &&
-                <Modal
-                    isOpen={isAuthModalOpen}
-                    title="Authentication Required"
-                    message="To view and post comments, please sign in."
-                    confirmText="Log In"
-                    cancelText="Cancel"
-                    onConfirm={() => navigate('/login')}
-                    onCancel={() => setIsAuthModalOpen(false)}
-                />}
 
             <Modal
                 isOpen={isDeleteModalOpen}

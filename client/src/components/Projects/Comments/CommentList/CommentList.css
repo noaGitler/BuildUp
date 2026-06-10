@@ -70,3 +70,10 @@
     opacity: 0.6;
     cursor: not-allowed;
 }
+
+.login-fields-link {
+    padding: 1%;
+    color: #557A61;
+    font-weight: 600;
+    text-decoration: none;
+}
