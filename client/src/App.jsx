@@ -11,6 +11,10 @@ import Register from './components/Auth/Register/Register.jsx';
 import MainLayout from './components/Layout/MainLayout/MainLayout';
 import ProjectsPage from './components/Projects/ProjectsPage/ProjectsPage.jsx';
 
+import Jobs from './components/Jobs/Jobs.jsx';
+import JobsPage from './components/Jobs/JobsPage/JobsPage.jsx';
+import JobDetails from './components/Jobs/JobDetails/JobDetails.jsx';
+
 import './App.css';
 import Logo from './components/UI/Logo.jsx';
 
@@ -32,7 +36,14 @@ function App() {
 
               {/* Core feature views routes */}
               <Route path="/projects" element={<ProjectsPage />} />
-              <Route path="/jobs" element={<></>} />
+
+              {/* jobs */}
+              <Route path="/jobs" element={<Jobs />}>
+                <Route index element={<JobsPage />} />
+                <Route path=":id" element={<JobsPage />} />
+                <Route path="edit/:id" element={<JobsPage />} />
+              </Route>
+
               <Route path="/favorites" element={<></>} />
               <Route path="/professionals" element={<></>} />
 

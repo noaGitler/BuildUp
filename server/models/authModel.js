@@ -2,13 +2,13 @@ import pool from '../config/db.js';
 
 class authModel {
     // Checks if the email exists in the users table
-    static async checkEmailExists (email) {
+    static async checkEmailExists(email) {
         const query = 'SELECT id FROM users WHERE email = ?';
         const [rows] = await pool.query(query, [email]);
         return rows[0];
     }
 
-    static async createPendingRegistration (email, password) {
+    static async createPendingRegistration(email, password) {
         const query = `
             INSERT INTO pending_registrations (email, password) 
             VALUES (?, ?) 
@@ -20,10 +20,10 @@ class authModel {
 
     static async registerFullUser(userData) {
         const { email, password, name, role, phone, profile_image_url, tag_line, bio, city, categoryIds } = userData;
-        
+
         // Establish an isolated connection from the allocation pool to manage the transaction state
         const connection = await pool.getConnection();
-        
+
         try {
             await connection.beginTransaction();
 
@@ -89,7 +89,26 @@ class authModel {
     }
 
     // Corrected to perform a JOIN with your exact 'password' table name
-    static async login (email) {
+    // static async login (email) {
+    //     const query = `
+    //         SELECT u.id, u.email, u.name, u.role, u.profile_image_url, p.password 
+    //         FROM users u
+    //         JOIN password p ON u.id = p.user_id
+    //         WHERE u.email = ?
+    //     `;
+    //     const [rows] = await pool.query(query, [email]);
+    //     return rows[0];
+    // }
+
+    // // Retrieves user details by ID
+    // static async findById (id) {
+    //     const query = 'SELECT id, email, name, role, profile_image_url FROM users WHERE id = ?';
+    //     const [rows] = await pool.query(query, [id]);
+    //     return rows[0];
+    // }
+
+    // Corrected to perform a JOIN with your exact 'password' table name and fetch categories
+    static async login(email) {
         const query = `
             SELECT u.id, u.email, u.name, u.role, u.profile_image_url, p.password 
             FROM users u
@@ -97,14 +116,62 @@ class authModel {
             WHERE u.email = ?
         `;
         const [rows] = await pool.query(query, [email]);
-        return rows[0];
+        const user = rows[0];
+
+        // אם המשתמש נמצא והוא איש מקצוע, נשלוף את הקטגוריות שלו
+        if (user && user.role === 'professional') {
+            const catQuery = 'SELECT category_id FROM professional_categories WHERE user_id = ?';
+            const [catRows] = await pool.query(catQuery, [user.id]);
+            // הפיכת מערך האובייקטים למערך מספרים פשוט: [1, 2]
+            user.categoryIds = catRows.map(row => row.category_id);
+        } else if (user) {
+            user.categoryIds = [];
+        }
+
+        return user;
     }
 
-    // Retrieves user details by ID
-    static async findById (id) {
-        const query = 'SELECT id, email, name, role, profile_image_url FROM users WHERE id = ?';
-        const [rows] = await pool.query(query, [id]);
-        return rows[0];
+    // // Retrieves user details by ID along with their assigned categories
+    // static async findById (id) {
+    //     const query = 'SELECT id, email, name, role, profile_image_url FROM users WHERE id = ?';
+    //     const [rows] = await pool.query(query, [id]);
+    //     const user = rows[0];
+
+    //     // שליפת הקטגוריות גם בעת טעינת משתמש לפי ID כדי שהסטייט יישאר מסונכרן ברענון דף
+    //     if (user && user.role === 'professional') {
+    //         const catQuery = 'SELECT category_id FROM professional_categories WHERE user_id = ?';
+    //         const [catRows] = await pool.query(catQuery, [user.id]);
+    //         user.categoryIds = catRows.map(row => row.category_id);
+    //     } else if (user) {
+    //         user.categoryIds = [];
+    //     }
+
+    //     return user;
+    // }
+    static async findById(id) {
+        try {
+            const query = `
+            SELECT id, email, name, role, profile_image_url 
+            FROM users 
+            WHERE id = ?
+        `;
+            const [rows] = await pool.query(query, [id]);
+            const user = rows[0];
+
+            if (user && user.role === 'professional') {
+                const catQuery = 'SELECT category_id FROM professional_categories WHERE user_id = ?';
+                const [catRows] = await pool.query(catQuery, [user.id]);
+
+                user.categoryIds = catRows.map(row => row.category_id);
+            } else if (user) {
+                user.categoryIds = [];
+            }
+
+            return user;
+        } catch (error) {
+            console.error("Error in findById category assembly:", error);
+            throw error;
+        }
     }
 }
 

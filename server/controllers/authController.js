@@ -86,14 +86,27 @@ class UserController {
                 });
             }
 
-            res.status(200).json({
+            // res.status(200).json({
+            //     success: true,
+            //     message: "Login verified successfully.",
+            //     user: {
+            //         id: user.id,
+            //         name: user.name,
+            //         role: user.role,
+            //         profile_image_url: user.profile_image_url
+            //     }
+            // });
+
+            // inside authController.login after password validation success
+            return res.status(200).json({
                 success: true,
                 message: "Login verified successfully.",
                 user: {
                     id: user.id,
                     name: user.name,
                     role: user.role,
-                    profile_image_url: user.profile_image_url
+                    profile_image_url: user.profile_image_url,
+                    categoryIds: user.categoryIds || [] // שולח את המערך גם בזמן התחברות ראשונית
                 }
             });
         } catch (error) {
@@ -109,20 +122,39 @@ class UserController {
         const { id } = req.params;
         try {
             const user = await authModel.findById(id);
+            // if (!user) {
+            //     return res.status(404).json({
+            //         isAuthenticated: false,
+            //         message: "User context not found."
+            //     });
+            // }
+
+            // res.status(200).json({
+            //     isAuthenticated: true,
+            //     user: {
+            //         id: user.id,
+            //         name: user.name,
+            //         role: user.role,
+            //         profile_image_url: user.profile_image_url
+            //     }
+            // });
+
             if (!user) {
-                return res.status(404).json({
+                return res.status(401).json({
                     isAuthenticated: false,
-                    message: "User context not found."
+                    message: "User session expired or invalid"
                 });
             }
 
-            res.status(200).json({
+            // 🌟 התיקון: מוסיפים את השדה categoryIds ל-JSON שחוזר ל-React
+            return res.status(200).json({
                 isAuthenticated: true,
                 user: {
                     id: user.id,
                     name: user.name,
                     role: user.role,
-                    profile_image_url: user.profile_image_url
+                    profile_image_url: user.profile_image_url,
+                    categoryIds: user.categoryIds || [] // שולח את המערך ישירות ל-Frontend!
                 }
             });
         } catch (error) {
@@ -132,6 +164,7 @@ class UserController {
             });
         }
     }
-}
+
+};
 
 export default UserController;

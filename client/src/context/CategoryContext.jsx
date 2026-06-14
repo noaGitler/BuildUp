@@ -17,10 +17,10 @@ export const CategoryProvider = ({ children }) => {
         setError(null);
         try {
             const result = await categoryService.getAllCategories();
+
             if (result.success && result.data) {
                 setCategories(result.data);
             } else {
-
                 setError(result.message || "Failed to parse categories repository");
             }
         } catch (err) {

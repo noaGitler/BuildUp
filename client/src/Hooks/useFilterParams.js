@@ -1,4 +1,4 @@
-// client/src/hooks/useFilterParams.js
+
 import { useSearchParams } from 'react-router-dom';
 
 export const useFilterParams = () => {
@@ -16,20 +16,28 @@ export const useFilterParams = () => {
       }
     });
     
-    // every change resets pages to 1.
+    // Every filter change resets pages back to 1
     if (!newFilters.page) {
       currentParams.set('page', '1');
     }
 
-    // Update the URL with the new query parameters
+    // Update the URL with the new compiled search parameters
     setSearchParams(currentParams, { replace: true });
   };
 
   return {
     search: searchParams.get('search') || '',
-    sort: searchParams.get('sortBy') || 'newest',
+    sortBy: searchParams.get('sortBy') || 'newest',
     category: searchParams.get('category') || '',
+    city: searchParams.get('city') || '', // Added city tracking explicitly from URL parameters
     page: parseInt(searchParams.get('page'), 10) || 1,
+    filters: {
+      search: searchParams.get('search') || '',
+      sortBy: searchParams.get('sortBy') || 'newest',
+      category: searchParams.get('category') || '',
+      city: searchParams.get('city') || '',
+      page: parseInt(searchParams.get('page'), 10) || 1
+    },
     updateFilters
   };
 };
