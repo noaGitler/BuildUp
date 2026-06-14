@@ -1,0 +1,256 @@
+/* src/components/Jobs/JobDetails/JobDetails.css */
+
+/* הקונטיינר הראשי - מתוח, ארוך ובעל עומק מינימליסטי */
+.job-details-view-container {
+    background-color: transparent; /* מוריד את הרקע הכפול */
+    box-shadow: none;             /* מוריד את הצל הכפול */
+    border: none;                 /* מוריד את המסגרת הכפולה */
+    padding: 0;                   /* מונע כפל ריווחים */
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.job-details-panel-inner {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+/* קומה 1: שורת הפעולות בראש העמוד */
+.job-details-header-action-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.details-category-badge {
+    background-color: #F0F4F1; /* ירוק מרווה חיוור מאוד */
+    color: #557A61; /* צבע המרווה הראשי שלכן */
+    padding: 6px 14px;
+    border-radius: 30px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+
+.details-close-btn-circle {
+    background-color: #F7F7F4;
+    color: #60665D;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.details-close-btn-circle:hover {
+    background-color: #EAEAE6;
+    color: #222222;
+    transform: scale(1.05);
+}
+
+/* כותרת המשרה המרכזית והגדולה */
+.job-details-main-title {
+    margin: 0 0 24px 0;
+    color: #222222;
+    font-size: 28px;
+    font-weight: 800;
+    line-height: 1.3;
+    letter-spacing: -0.3px;
+}
+
+/* קומה 2: כרטיס המפרסם הצף (Float Card) */
+.job-details-client-float-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    background-color: #FFFFFF;
+    border: 1px solid #EAEAE6;
+    border-radius: 16px;
+    padding: 18px;
+    margin-bottom: 32px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.job-details-client-float-card:hover {
+    border-color: #557A61;
+    box-shadow: 0px 6px 16px rgba(85, 122, 97, 0.04);
+    transform: translateY(-1px);
+}
+
+.client-avatar-wrapper {
+    flex-shrink: 0;
+}
+
+.client-float-avatar-img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid #F7F7F4;
+}
+
+.client-float-avatar-fallback {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: #557A61;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.client-float-info-box {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: flex-start;
+}
+
+.client-float-name {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 700;
+    color: #222222;
+}
+
+.client-float-meta-item {
+    font-size: 12px;
+    color: #60665D;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: 600;
+}
+
+.client-float-bio-text {
+    margin: 2px 0 0 0;
+    font-size: 13px;
+    color: #70756F;
+    line-height: 1.4;
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+}
+
+/* קומה 3: לב הרכיב - שטח התיאור המורחב */
+.job-details-description-grand-space {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 35px;
+    border-top: 1px solid #F7F7F4;
+    padding-top: 28px;
+}
+
+.description-section-heading {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: #222222;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.description-main-paragraph {
+    margin: 0;
+    color: #4A4F48;
+    font-size: 15px;
+    line-height: 1.8; /* מרווח שורות מפנק לקריאה ארוכה ונוחה */
+    white-space: pre-line;
+}
+
+/* קופסת התקציב כעוגן סיום בתחתית */
+.job-details-budget-anchor-box {
+    border-top: 1px solid #F7F7F4;
+    padding-top: 24px;
+    margin-top: auto; /* דוחף את התיבה לתחתית האלמנט הארוך */
+}
+
+.budget-anchor-inner {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background-color: #FBFBFA;
+    border-left: 4px solid #557A61; /* פס סימון בצבע המרווה */
+    border-radius: 4px 12px 12px 4px;
+    padding: 16px 20px;
+}
+
+.budget-anchor-icon-side {
+    width: 36px;
+    height: 36px;
+    background-color: #F0F4F1;
+    color: #557A61;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.budget-anchor-text-side {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    align-items: flex-start;
+}
+
+.budget-anchor-label {
+    font-size: 12px;
+    color: #60665D;
+    font-weight: 500;
+}
+
+.budget-anchor-value {
+    font-size: 18px;
+    font-weight: 800;
+    color: #222222;
+}
+
+.client-card-info {
+    text-align: left;
+}
+
+/* שורת כפתורי ההתקשרות בתוך כרטיס הפרופיל */
+.client-contact-channels-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+    width: 100%;
+}
+
+.contact-link-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background-color: #F7F7F4;
+    color: #60665D;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 8px;
+    border: 1px solid #EAEAE6;
+    transition: all 0.2s ease;
+}
+
+/* אפקט ריחוף מעל כפתור התקשרות */
+.contact-link-badge:hover {
+    background-color: #F0F4F1;
+    color: #557A61;
+    border-color: #557A61;
+}

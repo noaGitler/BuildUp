@@ -1,0 +1,145 @@
+.job-form-view-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    padding-right: 8px;
+}
+
+.form-main-heading-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: #222222;
+    margin: 0 0 24px 0;
+}
+
+.form-layout-blueprint-sheet {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-field-wrapper-label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #60665D;
+    margin-bottom: 16px;
+    text-align: left;
+}
+
+.form-field-wrapper-label input,
+.form-field-wrapper-label textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #EAEAE6;
+    border-radius: 10px;
+    font-size: 14px;
+    background-color: #FBFBFA;
+    transition: border 0.2s;
+}
+
+.form-field-wrapper-label input:focus,
+.form-field-wrapper-label textarea:focus {
+    outline: none;
+    border-color: #557A61;
+    background-color: #FFFFFF;
+}
+
+
+
+.form-submission-footer-action-block {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    border-top: 1px solid #F7F7F4;
+    padding-top: 20px;
+    margin-top: 10px;
+}
+
+.btn-form-action-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+}
+
+.cancel-gray-modifier {
+    background-color: #F7F7F4;
+    color: #60665D;
+}
+
+.cancel-gray-modifier:hover {
+    background-color: #EAEAE6;
+}
+
+.save-sage-modifier {
+    background-color: #557A61;
+    color: #FFFFFF;
+}
+
+.save-sage-modifier:hover {
+    background-color: #43614D;
+}
+
+.form-error-feedback-alert {
+    background-color: #FFF0F0;
+    color: #D93838;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 500;
+    border-left: 4px solid #D93838;
+}
+
+/* הבלוק שהיה חסר ומחזיר את הכרטיסים למסך */
+.form-category-cards-selector-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); 
+    gap: 12px;
+    margin-top: 10px;
+    min-height: 80px; /* מבטיח נפח תצוגה מינימלי */
+}
+
+
+
+
+
+
+
+/* מוסיפים לתחתית הקובץ JobForm.css */
+@media (max-width: 600px) {
+    .job-form-view-container {
+        max-height: none; /* מאפשר גלילה טבעית של כל העמוד במובייל */
+    }
+
+    .form-main-heading-title {
+        font-size: 18px;
+        margin-bottom: 16px;
+    }
+
+    /* התאמת גריד הקטגוריות למסכים צרים מאד */
+    .form-category-cards-selector-grid {
+        grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+        gap: 8px;
+    }
+
+    /* כפתורי הפוטר יעברו למבנה אנכי או יתפרסו על כל הרוחב */
+    .form-submission-footer-action-block {
+        flex-direction: column-reverse; /* ביטול יציאה למעלה, שמירה על סדר לוגי */
+        gap: 10px;
+    }
+
+    .btn-form-action-trigger {
+        width: 100%; /* כפתורים רחבים ונוחים ללחיצה עם האגודל */
+        justify-content: center;
+    }
+}

@@ -1,0 +1,268 @@
+/* src/components/Jobs/JobsPage/JobsPage.css */
+
+.jobs-page-container {
+    padding: 30px;
+    background-color: #F7F7F4;
+    /* Earthy warm off-white background */
+    min-height: 100vh;
+    direction: ltr;
+    font-family: 'Assistant', 'Heebo', 'Rubik', sans-serif;
+}
+
+/* Master list vertical flow structure */
+.jobs-master-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Jobs dynamic sub-grid view framework */
+.jobs-grid-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Status messages and fallback layers styles */
+.jobs-empty-feed,
+.jobs-feed-spinner {
+    text-align: center;
+    padding: 40px;
+    background-color: #FFFFFF;
+    border-radius: 16px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.02);
+    color: #60665D;
+    /* Charcoal olive secondary text */
+}
+
+.jobs-error-message {
+    background-color: #FFF2F2;
+    color: #D32F2F;
+    padding: 12px 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+/* Pagination load more interface trigger action button */
+.load-more-action-wrapper {
+    margin-top: 25px;
+    text-align: center;
+}
+
+.btn-feed-load-more {
+    background-color: #557A61;
+    /* Deep Sage Green primary */
+    color: #FFFFFF;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 24px;
+    /* Distinct rounded corners */
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0px 4px 10px rgba(85, 122, 97, 0.2);
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-feed-load-more:hover {
+    background-color: #43614D;
+    transform: translateY(-1px);
+    box-sizing: border-box;
+}
+
+
+
+/* 1. עדכון מנגנון ה-Grid הראשי של הפיד */
+.jobs-split-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+    margin-top: -380px;
+    /* משנים ל-stretch כדי שהאלמנטים יקבלו גמישות גובה מלאה מהאבא */
+    align-items: stretch; 
+    transition: grid-template-columns 0.3s ease-in-out;
+}
+
+/* 2. עדכון המצב שבו הפיד מפוצל (כשמשרה או טופס פתוחים) */
+.jobs-split-layout.active-layout {
+    /* נותנים לרשימה 420px ולפאנל הטופס/פרטים את שאר המקום, 
+       אך מאפשרים להם לזרום בגובה באופן עצמאי */
+    grid-template-columns: 420px 1fr;
+}
+
+/* 3. שיכתוב מוחלט של פאנל הפרטים/טופס השמאלי */
+.jobs-detail-panel {
+    background-color: #FFFFFF;
+    border-radius: 24px;
+    padding: 32px;
+    box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.03);
+    border: 1px solid #EAEAE6;
+    
+    /* הופך את הפאנל לצף ומלווה את הגולש, מבלי להגביל את גובהו הפנימי */
+    position: sticky;
+    top: 30px;
+    
+    /* 🌟 פיתרון עומק הגובה: */
+    height: fit-content;        /* משתנה בדיוק לפי גודל התוכן שבתוכו */
+    min-height: 620px;          /* מבטיח מרחב מינימלי בסיסי כך שגריד הקטגוריות ייפתח לרווחה מלכתחילה */
+    max-height: calc(100vh - 60px); /* שומר שלא יגלוש אל מחוץ לחלון הדפדפן */
+    overflow-y: auto;           /* פס הגלילה יופיע אך ורק אם הטקסטים ארוכים מהמסך הפיזי של המשתמש */
+
+    display: flex;
+    flex-direction: column;
+}
+
+/* מבטיח ששום אלמנט ילד בתוך פאנל הפרטים לא ייחסם או יוגבל בגובהו */
+.jobs-detail-panel > * {
+    height: auto !important;
+    max-height: none !important;
+}
+
+
+
+/* ננקה מרווחים מהטקסט הפנימי כדי שלא יפריעו */
+.jobs-hero-header > div:first-child {
+    flex: 1;
+}
+
+
+
+.jobs-hero-header {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 60px; /* הגדלנו את המרווח מ-40 ל-60 */
+    padding-bottom: 0;   /* אפשר לבטל את ה-padding למטה כי אין יותר קו */
+}
+
+.jobs-hero-header h1 {
+    font-size: 2.8rem;
+    font-weight: 800;
+    margin: 0 0 12px 0;
+}
+
+.jobs-hero-header p {
+    font-size: 1.1rem;
+    color: var(--secondary-color);
+    margin-bottom: 20px; /* מרווח בין הטקסט לכפתור */
+    max-width: 600px;
+}
+
+
+.jobs-actions-wrapper {
+    display: flex;
+    justify-content: flex-end; /* זה דוחף את הכפתור לקצה הימני של העמוד */
+    margin-bottom: 20px;
+    padding: 0 20px; /* קצת ריווח מהקצוות שלא יהיה צמוד מדי */
+}
+
+
+.jobs-filter-container {
+    display: flex;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto 20px auto;
+    padding: 0 20px;
+}
+
+.actions-container {
+    display: flex;
+    justify-content: flex-start; /* צמוד לשמאל */
+    max-width: 1200px;
+    margin: 0 auto 10px auto;
+    padding: 0 20px;
+}
+
+.jobs-actions-row {
+    display: flex;
+    justify-content: flex-end; /* זה יצמיד אותו לימין */
+    max-width: 1200px; /* תתאימי את זה לרוחב הכללי של האתר שלך */
+    margin: 0 auto;
+    padding: 0 20px;
+    margin-bottom: 10px; /* זה יוצר את המרווח הקטן והמדויק מעל הפילטר בר */
+}
+
+
+.filter-and-action-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* מפריד בין הפילטרים משמאל לכפתור מימין */
+    max-width: 1200px;
+    margin: 0 auto 20px auto;
+    padding: 0 30px;
+}
+
+.filter-wrapper {
+    flex: 1; /* הפילטר בר יתפוס את כל המקום שצריך */
+}
+
+.btn-create-new-job-post {
+    background-color: #4a7c59;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+    margin-left: 20px; /* מרווח מהפילטר בר */
+}
+
+/* Responsive design breakpoints rules */
+@media (max-width: 900px) {
+    .jobs-split-layout.active-layout {
+        grid-template-columns: 1fr;
+        /* Forces single column stack on smaller screens */
+    }
+
+    .jobs-split-layout.active-layout .jobs-master-list {
+        display: none;
+        /* Hide master list view when active on mobile devices */
+    }
+}
+
+
+/* מוסיפים לתחתית הקובץ JobsPage.css או מעדכנים את ה-media query הקיים */
+@media (max-width: 900px) {
+    .jobs-page-container {
+        padding: 16px; /* ריווח עדין יותר שמתאים לטלפונים */
+    }
+
+    .jobs-split-layout {
+        gap: 16px;
+        margin-top: 15px;
+        grid-template-columns: 1fr !important; /* ביטול לחלוטין של ה-420px */
+    }
+
+    .jobs-split-layout.active-layout {
+        grid-template-columns: 1fr !important;
+    }
+
+    .jobs-split-layout.active-layout .jobs-master-list {
+        display: none; /* משאיר רק את ה-Detail פתוח כשנכנסים למשרה */
+    }
+
+    .jobs-detail-panel {
+        padding: 20px; /* הקטנת הריווח הפנימי היוקרתי כדי להרוויח מקום למסך קטן */
+        min-height: calc(100vh - 120px); /* תפיסת מרחב מקסימלי נוח לגלילה */
+        border-radius: 16px; /* עיגול מעט עדין יותר במובייל */
+    }
+}
+
+@media (max-width: 768px) {
+    .jobs-hero-header h1 {
+        font-size: 2rem; /* קטן יותר מה-2.8rem המקורי כדי שלא יגלוש מהמסך */
+    }
+
+    .jobs-hero-header p {
+        font-size: 1rem;
+        padding: 0 15px; /* מוסיף קצת ריווח מהצדדים כדי שהטקסט לא יידבק לקצוות */
+    }
+}
+
+
+
