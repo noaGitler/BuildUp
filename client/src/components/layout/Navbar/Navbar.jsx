@@ -25,15 +25,9 @@ const Navbar = () => {
       <div className="navbar-container">
 
         {/* Right Zone: Logo */}
-<<<<<<< HEAD
-          <div className="navbar-logo">
-            <Link to="/"><Logo width={120} height={40} /></Link>
-          </div>
-=======
         <div className="navbar-logo">
           <Link to="/"><Logo width={120} height={40} /></Link>
         </div>
->>>>>>> upstream/main
 
 
         {/* Center Zone: Core Navigation Links */}
@@ -57,12 +51,8 @@ const Navbar = () => {
           {user ? (
             <div className="logged-in-wrapper">
 
-<<<<<<< HEAD
-              <Link to={`/profile/${user.id}`} className="user-profile-card" title="Go to Profile">
-=======
               {/* <div onClick={handleProfileNavigation}  className="user-profile-card" title="Go to Profile"> */}
               <div onClick={() => navigate(`/profile/${user.id}`)} className="user-profile-card" title="Go to Profile">
->>>>>>> upstream/main
                 {user.profile_image_url ? (
                   <img src={`${BACKEND_URL}${user.profile_image_url}`} alt={user.name} className="navbar-avatar" />
                 ) : (

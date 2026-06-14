@@ -4,19 +4,8 @@ import { useFilterParams } from '../../../../Hooks/useFilterParams.js';
 import CategoryList from '../../CategoryList/CategoryList.jsx';
 import './Sidebar.css';
 
-<<<<<<< HEAD
-const Sidebar = ({
-  isOpen,
-  onClose,
-  onSortChange, // Logic function received from the FilterBar orchestrator parent
-  selectedCategoryIds = [],
-  onCategorySelect,
-  sortOptions = []
-}) => {
-=======
 const Sidebar = ({ isOpen, onClose, onSortChange, selectedCategoryIds = [], onCategorySelect, sortOptions = []}) => {
   
->>>>>>> upstream/main
   // Extracting ONLY the dry string parameter variable configuration to serve as single source of truth
   const { sort } = useFilterParams();
 

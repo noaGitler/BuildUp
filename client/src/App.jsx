@@ -28,9 +28,6 @@ import ProfessionalsPage from './components/Profiles/ProfessionalsPage/Professio
 import ProfilePage from './components/Profiles/ProfilePage/ProfilePage.jsx';
 import ProfileEdit from './components/Profiles/ProfileEdit/ProfileEdit.jsx';
 
-import Jobs from './components/Jobs/Jobs.jsx';
-import JobsPage from './components/Jobs/JobsPage/JobsPage.jsx';
-import JobDetails from './components/Jobs/JobDetails/JobDetails.jsx';
 
 import './App.css';
 import Logo from './components/UI/Logo.jsx';

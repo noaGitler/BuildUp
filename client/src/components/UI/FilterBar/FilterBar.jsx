@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-
-=======
->>>>>>> upstream/main
 import React, { useState } from 'react';
 import { FiMenu, FiSearch, FiX, FiPlus } from 'react-icons/fi'; // ייבוא אייקון הפלוס
 import { useFilterParams } from '../../../Hooks/useFilterParams.js';
@@ -10,11 +6,6 @@ import Sidebar from '../FilterBar/Sidebar/Sidebar.jsx';
 import './FilterBar.css';
 
 const FilterBar = ({ sortOptions = [] }) => {
-<<<<<<< HEAD
-  const navigate = useNavigate(); // אתחול פונקציית הניווט עבור הטופס החדש
-  
-=======
->>>>>>> upstream/main
   // Extracting unified filter fields and orchestrator from the custom hook
   const { search, sort, category, updateFilters } = useFilterParams();
   
