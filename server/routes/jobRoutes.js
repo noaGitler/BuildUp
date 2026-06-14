@@ -1,5 +1,6 @@
 // server/routes/jobRoutes.js
 import { Router } from 'express';
+<<<<<<< HEAD
 import jobController from '../controllers/jobController.js';
 import { validateJobCreation } from '../middleware/jobValidator.js';
 
@@ -34,5 +35,17 @@ router.put('/:id', jobController.updateJob);
  * DELETE /api/jobs/:id
  */
 router.delete('/:id', jobController.deleteJob);
+=======
+import JobController from '../controllers/jobController.js';
+import JobValidation from '../middleware/jobValidator.js';
+
+const router = Router();
+
+router.get('/', JobController.getAllJobs);
+router.get('/:id', JobController.getJobById);
+router.post('/', JobValidation.create, JobController.createNewJobPost);
+router.put('/:id', JobController.updateJob);
+router.delete('/:id', JobController.deleteJob);
+>>>>>>> upstream/main
 
 export default router;

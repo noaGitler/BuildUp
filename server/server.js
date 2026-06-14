@@ -5,7 +5,12 @@ import cors from 'cors';
 import authRoutes from './routes/authRoutes.js';
 import categoryRoutes from './routes/categoryRoutes.js';
 import projectRoutes from './routes/projectRoutes.js';
+import favoriteRoutes from './routes/favoriteRoutes.js'
+import commentRouter from './routes/commentRouter.js';
 import jobRoutes from './routes/jobRoutes.js';
+import profileRoutes from './routes/profileRoutes.js';
+import professionalReviewRoutes from './routes/professionalReviewRoutes.js';
+
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -24,7 +29,11 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/api/auth', authRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/projects', projectRoutes);
-app.use('/api/jobs', jobRoutes); 
+app.use('/api/favorites', favoriteRoutes);
+app.use('/api/comments', commentRouter);
+app.use('/api/jobs', jobRoutes);
+app.use('/api/profiles', profileRoutes);
+app.use('/api/reviews', professionalReviewRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

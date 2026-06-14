@@ -1,0 +1,135 @@
+/* CommentItem.css */
+.comment-item {
+    background: #fdfdfd;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    border: 1px solid #eee;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.comment-header {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+/* Styling for the user section in the header */
+.comment-author-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.comment-avatar-img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid #e0e0e0;
+}
+
+.comment-avatar-fallback {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #557A61;
+    font-size: 1.1rem;
+}
+
+/* Ensure the header remains spaced */
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.comment-body {
+    color: #444;
+    line-height: 1.5;
+    margin-bottom: 10px;
+}
+
+.edit-container textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #557A61;
+    border-radius: 6px;
+    margin-bottom: 5px;
+}
+
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.comment-date {
+    font-size: 0.75rem;
+    color: #999;
+    font-weight: normal;
+    text-align: end;
+}
+
+.btn-details, .btn-edit-container {
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.15rem;
+    cursor: pointer;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.02);
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.1s ease;
+    flex-shrink: 0;
+}
+
+.btn-edit-container {
+    margin-left: 5%;
+}
+
+.btn-details-inline-edit-icon, .btn-edit-container-V {
+    background-color: #ffffff;
+    color: #557A61;
+}
+
+.btn-details-inline-edit-icon:hover, .btn-edit-container-V:hover {
+    background-color: #557A61;
+    color: #FFFFFF;
+}
+
+.btn-details-inline-delete-icon, .btn-edit-container-X {
+    background-color: #ffffff;
+    color: #EC5959;
+}
+
+.btn-details-inline-delete-icon:hover, .btn-edit-container-X:hover {
+    background-color: #EC5959;
+    color: #FFFFFF;
+}
+
+.btn-details:active {
+    transform: scale(0.94);
+}
+
+/* אפקט רחיפה לכפתורים */
+.comment-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 8px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* הצגת הכפתורים רק כשמרחפים מעל התגובה */
+.comment-item:hover .comment-actions {
+    opacity: 1;
+}

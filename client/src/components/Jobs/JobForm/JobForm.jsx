@@ -1,47 +1,81 @@
-
-// src/components/Jobs/JobForm/JobForm.jsx
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { FiSave, FiXCircle } from 'react-icons/fi';
 
 import { useCategories } from '../../../context/categoryContext';
 import { useAuth } from '../../../context/authContext';
+import { useJobs } from '../../../context/JobContext';
 
 import CategoryCard from '../../UI/CategoryCard/CategoryCard';
 import Modal from '../../UI/Modal/Modal';
 import './JobForm.css';
 
-const JobForm = ({ initialValues = null, onSubmitAction }) => {
+const JobForm = () => {
     const navigate = useNavigate();
+    const { id } = useParams();
+    const { user } = useAuth();
+    const { fetchJobById, handleCreateJob, handleUpdateJob, fetchJobs } = useJobs();
 
     const categoryContextData = useCategories() || {};
     const categories = categoryContextData.categories || [];
-    const { user } = useAuth();
-
-    // בדיקה בטוחה אם למשתמש יש קטגוריות משויכות באובייקט
-    const hasAssignedCategories = user?.categoryIds && user.categoryIds.length > 0;
-
-    // סינון קטגוריות בהתאם לסוג המשתמש (איש מקצוע או לקוח)
-    const allowedCategories = hasAssignedCategories
-        ? categories.filter(cat => user.categoryIds.includes(cat.id))
-        : categories;
 
     const isCategoriesLoading = categories.length === 0;
-    const isEditMode = !!initialValues;
+    const isEditMode = !!id;
 
     // Controlled Form State Declarations
-    const [title, setTitle] = useState(initialValues?.title || '');
-    const [description, setDescription] = useState(initialValues?.description || '');
-    const [budget, setBudget] = useState(initialValues?.budget || '');
-    const [categoryId, setCategoryId] = useState(initialValues?.category_id || '');
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [budget, setBudget] = useState('');
+    const [categoryId, setCategoryId] = useState('');
 
     // Mutation trackers tracking interaction states flags
     const [submissionError, setSubmissionError] = useState(null);
     const [formLoading, setFormLoading] = useState(false);
+    const [dataFetching, setDataFetching] = useState(false);
 
     // Core Interaction Confirmation Modals Active States Layout Flags
     const [showSaveModal, setShowSaveModal] = useState(false);
     const [showCancelModal, setShowCancelModal] = useState(false);
+
+    useEffect(() => {
+
+        if (!isEditMode) return;
+
+        const loadJobData = async () => {
+            try {
+                setDataFetching(true);
+
+                const jobData = await fetchJobById(id);
+
+                if (jobData) {
+                    const isOwner = Number(jobData.client_id) === Number(user?.id);
+                    const isAdmin = user?.role === 'admin';
+
+                    if (!isOwner && !isAdmin) {
+                        navigate(-1, { replace: true });
+                        return;
+                    }
+
+                    setTitle(jobData.title || '');
+                    setDescription(jobData.description || '');
+                    setBudget(jobData.budget || '');
+                    setCategoryId(jobData.category_id || jobData.categoryId || '');
+                } else {
+                    navigate('/jobs');
+                }
+            } catch (err) {
+                setSubmissionError("Failed to fetch job blueprint parameters.");
+            } finally {
+                setDataFetching(false);
+            }
+        };
+
+        loadJobData();
+    }, [id, isEditMode, fetchJobById, navigate, user]);
+
+    if (dataFetching) {
+        return <div className="details-status-msg">Loading current job specifications...</div>;
+    }
 
     const handleCategorySelect = (id) => {
         setCategoryId(id);
@@ -70,16 +104,27 @@ const JobForm = ({ initialValues = null, onSubmitAction }) => {
             client_id: user?.id,
         };
 
-        const errorFeedback = await onSubmitAction(payload);
-        if (errorFeedback) {
-            setSubmissionError(errorFeedback);
+        try {
+            let response;
+            if (isEditMode) { response = await handleUpdateJob(id, user.id, payload); }
+            else { response = await handleCreateJob(payload); }
+
+            if (response && (response.success || !response.error)) {
+                await fetchJobs();
+                navigate(-1);
+            } else {
+                setSubmissionError(response?.message || "Failed to commit changes to the server catalog.");
+                setFormLoading(false);
+            }
+        } catch (error) {
+            console.error("Failed to commit job form operation:", error);
+            setSubmissionError(error.response?.data?.message || "An error occurred while transmitting data layers. Please try again.");
             setFormLoading(false);
         }
     };
 
-
     return (
-        <div className="job-form-view-container">
+        <div className={isEditMode ? 'job-form-view-container-edit' : 'job-form-view-container-create'}>
             <h2 className="form-main-heading-title">
                 {isEditMode ? "Edit Job Specifications" : "Publish New Job Opportunity"}
             </h2>
@@ -125,20 +170,21 @@ const JobForm = ({ initialValues = null, onSubmitAction }) => {
                         <span>Workspace Category Section *</span>
                         <div className="form-category-cards-selector-grid">
                             {isCategoriesLoading ? (
-                                <p style={{ color: '#60665D', fontSize: '13px', fontStyle: 'italic', margin: '10px 0' }}>
+                                <p className="form-category-cards-selector-grid-p1">
                                     Loading categorized workspace assets...
                                 </p>
-                            ) : allowedCategories.length === 0 ? (
-                                <p style={{ color: '#D93838', fontSize: '13px', fontWeight: '500', margin: '10px 0' }}>
+                            ) : categories.length === 0 ? (
+                                <p className="form-category-cards-selector-grid-p2">
                                     No workspace categories assigned to your profile.
                                 </p>
                             ) : (
-                                allowedCategories.map(cat => (
+                                categories.map(cat => (
                                     <CategoryCard
                                         key={cat.id}
                                         categoryId={cat.id}
                                         isSelected={Number(categoryId) === Number(cat.id)}
                                         onClick={handleCategorySelect}
+                                        variant="pill"
                                     />
                                 ))
                             )}
@@ -166,31 +212,26 @@ const JobForm = ({ initialValues = null, onSubmitAction }) => {
                 </div>
             </form>
 
-            {/* מודאל אישור שמירה ופרסום המשרה */}
-            {showSaveModal && (
-                <Modal
-                    isOpen={showSaveModal}
-                    title="Confirm Database Registry"
-                    message="Are you absolutely sure you want to authorize and publish this job opportunity to the live marketplace feed?"
-                    confirmText="Yes, Publish"
-                    cancelText="Go Back"
-                    onConfirm={handleConfirmFinalSave}
-                    onCancel={() => setShowSaveModal(false)}
-                />
-            )}
+            {/* Job save and post confirmation modal */}
+            <Modal
+                isOpen={showSaveModal}
+                title="Are you sure you want to save the changes?"
+                confirmText="Yes, Publish"
+                cancelText="Go Back"
+                onConfirm={handleConfirmFinalSave}
+                onCancel={() => setShowSaveModal(false)}
+            />
 
-            {/* מודאל אישור ביטול ויציאה מהטופס */}
-            {showCancelModal && (
-                <Modal
-                    isOpen={showCancelModal}
-                    title="Discard Unsaved Changes"
-                    message="Warning: You are about to exit this active creation layout. Are you sure you want to discard all inputs?"
-                    confirmText="Yes, Discard"
-                    cancelText="Keep Editing"
-                    onConfirm={() => navigate('/jobs')}
-                    onCancel={() => setShowCancelModal(false)}
-                />
-            )}
+            {/* Cancellation confirmation modal and exit form */}
+            <Modal
+                isOpen={showCancelModal}
+                title="Are you sure you want to cancel the changes?"
+                confirmText="Yes, Discard"
+                cancelText="Keep Editing"
+                onConfirm={() => navigate('/jobs')}
+                onCancel={() => setShowCancelModal(false)}
+                danger={true}
+            />
         </div>
     );
 };

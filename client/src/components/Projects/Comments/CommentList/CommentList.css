@@ -1,0 +1,79 @@
+/* CommentList.css */
+.comments-section {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 2px solid #f0f0f0; /* קו הפרדה עדין */
+}
+
+.comments-section h3 {
+    color: #557A61;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.add-comment-area {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    margin-bottom: 2rem;
+}
+
+.add-comment-area textarea {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    resize: vertical;
+    min-height: 80px;
+    font-family: inherit;
+}
+
+.add-comment-area button {
+    background-color: #557A61;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    align-self: flex-start;
+    transition: background-color 0.2s;
+}
+
+.add-comment-area button:hover {
+    background-color: #4a6b55;
+}
+
+.load-more-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    padding-bottom: 20px;
+}
+
+.btn-load-more {
+    background: transparent;
+    border: 1px solid #557A61;
+    color: #557A61;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.9rem;
+}
+
+.btn-load-more:hover {
+    background-color: #557A61;
+    color: white;
+}
+
+.btn-load-more:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.login-fields-link {
+    padding: 1%;
+    color: #557A61;
+    font-weight: 600;
+    text-decoration: none;
+}

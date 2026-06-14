@@ -1,13 +1,9 @@
+import JobModel from '../models/jobModel.js';
 
-// server/controllers/jobController.js
-import Job from '../models/jobModel.js';
+class JobController {
 
-const jobController = {
-    /**
-     * Get jobs with dynamic server-side filtration parameters
-     * Route: GET /api/jobs?search=...&sort=...&category_id=...
-     */
-    getAllJobs: async (req, res) => {
+    // Get jobs with dynamic server-side filtration parameters
+    static async getAllJobs(req, res) {
         try {
             const filters = {
                 search: req.query.search || null,
@@ -15,7 +11,7 @@ const jobController = {
                 category_id: req.query.category_id || null
             };
 
-            const jobs = await Job.getAllJobs(filters);
+            const jobs = await JobModel.getAllJobs(filters);
             return res.status(200).json(jobs);
         } catch (error) {
             console.error('Error in getAllJobs controller:', error);
@@ -23,16 +19,13 @@ const jobController = {
                 message: 'Internal server error while fetching job posts.'
             });
         }
-    },
+    };
 
-    /**
-     * Get a single job post by ID for the detail view
-     * Route: GET /api/jobs/:id
-     */
-    getJobById: async (req, res) => {
+    // Get a single job post by ID for the detail view
+    static async getJobById(req, res) {
         try {
             const jobId = req.params.id;
-            const job = await Job.getJobById(jobId);
+            const job = await JobModel.getJobById(jobId);
 
             if (!job) {
                 return res.status(404).json({ message: 'Job post not found.' });
@@ -44,16 +37,13 @@ const jobController = {
                 message: 'Internal server error while fetching job details.'
             });
         }
-    },
+    };
 
-    /**
-     * Create a brand new job post
-     * Route: POST /api/jobs
-     */
-    createNewJobPost: async (req, res) => {
+    // Create a brand new job post
+    static async createNewJobPost(req, res) {
         try {
             const jobData = req.body;
-            const newJobId = await Job.insertJob(jobData);
+            const newJobId = await JobModel.insertJob(jobData);
 
             return res.status(201).json({
                 success: true,
@@ -67,18 +57,14 @@ const jobController = {
                 message: "Internal server registry error."
             });
         }
-    },
+    };
 
-    /**
-     * Update an existing job post with role-based access validation
-     * Route: PUT /api/jobs/:id
-     */
-    updateJob: async (req, res) => {
+    // Update an existing job post with role-based access validation
+    static async updateJob(req, res) {
         try {
             const jobId = req.params.id;
             const { userId, ...updatedData } = req.body;
 
-            // בתוך jobController.js, פונקציית updateJob:
             const cleanData = {
                 title: updatedData.title || '',
                 description: updatedData.description || '',
@@ -86,7 +72,6 @@ const jobController = {
                 category_id: updatedData.category_id // כאן אנחנו לא עושים || null!
             };
 
-            // הוספת בדיקה:
             if (!cleanData.category_id) {
                 return res.status(400).json({ success: false, message: 'Category is required.' });
             }
@@ -95,13 +80,15 @@ const jobController = {
                 return res.status(400).json({ success: false, message: 'Client verification context missing.' });
             }
 
-            const existingJob = await Job.getJobById(jobId);
+            const existingJob = await JobModel.getJobById(jobId);
 
             if (!existingJob) {
                 return res.status(404).json({ success: false, message: 'Job vacancy not found.' });
             }
 
             // Authorization Guard: Either the record creator or an authorized administrator
+            const userRole = await JobModel.getUserRole(userId);
+            const isAdmin = userRole === 'admin';
             const isOwner = Number(existingJob.client_id) === Number(userId);
 
             if (!isOwner && !isAdmin) {
@@ -112,7 +99,7 @@ const jobController = {
             }
 
 
-            await Job.updateJob(jobId, cleanData);
+            await JobModel.updateJob(jobId, cleanData);
 
             return res.status(200).json({
                 success: true,
@@ -122,13 +109,10 @@ const jobController = {
             console.error('Error in updateJob controller:', error);
             return res.status(500).json({ success: false, message: 'Internal server update error.' });
         }
-    },
+    }
 
-    /**
-     * Delete an existing job post with role-based access validation
-     * Route: DELETE /api/jobs/:id?userId=...&role=...
-     */
-    deleteJob: async (req, res) => {
+    // Delete an existing job post with role-based access validation
+    static async deleteJob(req, res) {
         try {
             const jobId = req.params.id;
             const userId = req.query.userId;
@@ -137,13 +121,16 @@ const jobController = {
                 return res.status(400).json({ success: false, message: 'Client verification context missing.' });
             }
 
-            const existingJob = await Job.getJobById(jobId);
+            const existingJob = await JobModel.getJobById(jobId);
 
             if (!existingJob) {
                 return res.status(404).json({ success: false, message: 'Job vacancy not found.' });
             }
 
             // Authorization Guard: Either the record creator or an authorized administrator
+            const userRole = await JobModel.getUserRole(userId);
+            const isAdmin = userRole === 'admin';
+
             const isOwner = Number(existingJob.client_id) === Number(userId);
 
             if (!isOwner && !isAdmin) {
@@ -153,7 +140,7 @@ const jobController = {
                 });
             }
 
-            await Job.deleteJob(jobId);
+            await JobModel.deleteJob(jobId);
 
             return res.status(200).json({
                 success: true,
@@ -166,4 +153,4 @@ const jobController = {
     }
 };
 
-export default jobController;
+export default JobController;

@@ -1,0 +1,362 @@
+/* src/components/Profiles/ProfileEdit/ProfileEdit.css */
+.profile-edit-grand-wrapper-view {
+    max-width: 800px;
+    margin: 40px auto;
+    background-color: #FFFFFF;
+    padding: 40px;
+    border-radius: 24px;
+    border: 1px solid rgba(96, 102, 93, 0.08);
+    box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.01);
+}
+
+.edit-section-header h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #222222;
+    margin: 0 0 6px 0;
+}
+
+.edit-section-header p {
+    color: #60665D;
+    font-size: 0.9rem;
+    margin: 0 0 32px 0;
+}
+
+.profiles-integrated-form-blueprint {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-input-group-row {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    text-align: left;
+}
+
+.form-input-group-row label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #222222;
+}
+
+.form-input-group-row input[type="text"],
+.form-input-group-row textarea {
+    padding: 12px 16px;
+    border-radius: 12px;
+    border: 1px solid #EAEAE6;
+    background-color: #F7F7F4;
+    font-size: 0.9rem;
+    color: #222222;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.form-input-group-row input:focus,
+.form-input-group-row textarea:focus {
+    border-color: #557A61;
+    background-color: #FFFFFF;
+    box-shadow: 0 0 0 3px rgba(85, 122, 97, 0.1);
+}
+
+.checkbox-grid-selections-layout {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+    background-color: #F7F7F4;
+    padding: 16px;
+    border-radius: 16px;
+    border: 1px solid #EAEAE6;
+}
+
+.checkbox-badge-item-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: #60665D;
+}
+
+.checkbox-badge-item-label input[type="checkbox"] {
+    accent-color: #557A61;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.edit-form-actions-footer-bar {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 12px;
+    border-top: 1px solid #F7F7F4;
+    padding-top: 24px;
+}
+
+.btn-cancel-edit-form, .btn-save-profile-form {
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: none;
+    transition: all 0.2s;
+}
+
+.btn-cancel-edit-form {
+    background-color: #F7F7F4;
+    color: #60665D;
+    border: 1px solid #EAEAE6;
+}
+
+.btn-cancel-edit-form:hover {
+    background-color: #EAEAE6;
+}
+
+.btn-save-profile-form {
+    background-color: #557A61;
+    color: #FFFFFF;
+}
+
+.btn-save-profile-form:hover {
+    opacity: 0.9;
+}
+
+.edit-loading-fallback {
+    text-align: center;
+    padding: 100px 0;
+    color: #60665D;
+}
+
+
+
+
+
+
+
+/* src/components/Profiles/ProfileEdit/ProfileEdit.css */
+
+.profile-edit-grand-wrapper-view {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 32px;
+    background-color: #FFFFFF;
+    border-radius: 24px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.04);
+    border: 1px solid rgba(96, 102, 93, 0.08);
+}
+
+.edit-section-header {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.edit-section-header h2 {
+    color: #222222;
+    margin: 0 0 8px 0;
+}
+
+.edit-section-header p {
+    color: #60665D;
+    margin: 0;
+}
+
+.form-group-section-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #222222;
+    margin: 24px 0 16px 0;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #EAEAE6;
+}
+
+.input-row-flex {
+    display: flex;
+    gap: 16px;
+}
+
+.input-row-flex .form-input-group-row {
+    flex: 1;
+}
+
+.form-input-group-row {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+}
+
+.form-input-group-row label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #444444;
+    margin-bottom: 8px;
+}
+
+.label-icon {
+    color: #557A61;
+}
+
+.form-input-group-row input, 
+.form-input-group-row textarea {
+    padding: 12px 16px;
+    border-radius: 12px;
+    border: 1px solid #EAEAE6;
+    background-color: #F7F7F4;
+    font-family: inherit;
+    font-size: 0.95rem;
+    transition: all 0.2s;
+}
+
+.form-input-group-row input:focus, 
+.form-input-group-row textarea:focus {
+    outline: none;
+    border-color: #557A61;
+    background-color: #FFFFFF;
+    box-shadow: 0 0 0 3px rgba(85, 122, 97, 0.1);
+}
+
+/* --- Upgrade CTA Banner --- */
+.upgrade-to-pro-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: rgba(229, 163, 61, 0.08);
+    border: 1px solid rgba(229, 163, 61, 0.2);
+    padding: 24px;
+    border-radius: 16px;
+    margin: 32px 0;
+}
+
+.upgrade-content h4 {
+    margin: 0 0 4px 0;
+    color: #E5A33D;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.upgrade-content p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #60665D;
+}
+
+.btn-upgrade-account {
+    background-color: #E5A33D;
+    color: #FFFFFF;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    white-space: nowrap;
+}
+
+.btn-upgrade-account:hover {
+    background-color: #d19232;
+}
+
+/* --- Category List wrapper inside form --- */
+.edit-categories-wrapper {
+    background-color: #F7F7F4;
+    padding: 16px;
+    border-radius: 12px;
+    border: 1px solid #EAEAE6;
+}
+
+/* --- Footer Buttons --- */
+.edit-form-actions-footer-bar {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid #EAEAE6;
+}
+
+.btn-cancel-edit-form, .btn-save-profile-form {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: all 0.2s;
+}
+
+.btn-cancel-edit-form {
+    background-color: transparent;
+    border: 1px solid #EAEAE6;
+    color: #60665D;
+}
+
+.btn-cancel-edit-form:hover {
+    background-color: #F7F7F4;
+    color: #222222;
+}
+
+.btn-save-profile-form {
+    background-color: #557A61;
+    border: none;
+    color: #FFFFFF;
+}
+
+.btn-save-profile-form:hover {
+    background-color: #43614D;
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+
+
+
+
+
+
+
+
+.split-image-input-container {
+    display: flex;
+    gap: 16px;
+    margin-top: 4px;
+    width: 100%;
+}
+
+.split-input-main-name {
+    flex: 3;
+}
+
+.split-input-extension {
+    flex: 1;
+}
+
+.split-input-main-name input,
+.split-input-extension input {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.split-input-helper-text {
+    font-size: 13px;
+    color: #60665D;
+    display: block;
+    margin-bottom: 6px;
+}

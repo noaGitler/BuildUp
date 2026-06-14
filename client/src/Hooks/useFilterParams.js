@@ -1,4 +1,3 @@
-
 import { useSearchParams } from 'react-router-dom';
 
 export const useFilterParams = () => {
@@ -29,7 +28,7 @@ export const useFilterParams = () => {
     search: searchParams.get('search') || '',
     sortBy: searchParams.get('sortBy') || 'newest',
     category: searchParams.get('category') || '',
-    city: searchParams.get('city') || '', // Added city tracking explicitly from URL parameters
+    city: searchParams.get('city') || '', 
     page: parseInt(searchParams.get('page'), 10) || 1,
     filters: {
       search: searchParams.get('search') || '',

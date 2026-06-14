@@ -1,0 +1,391 @@
+/* ==========================================================================
+   1. MAIN VIEW CONTAINER ADJUSTMENTS
+   ========================================================================== */
+.project-form-view-container {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 24px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-sizing: border-box;
+}
+
+.form-navigation-header {
+    width: 100%;
+}
+
+.form-main-heading-title {
+    color: #222222;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+/* ==========================================================================
+   2. CORE GRID SHEET BLUEPRINT
+   ========================================================================== */
+.form-layout-blueprint-sheet {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+    width: 100%;
+    max-width: 100%;
+    /* Prevents horizontal scale breaking on micro dimensions */
+    background-color: #FFFFFF;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.02);
+    box-sizing: border-box;
+    /* Secures pad metrics internally */
+}
+
+@media (min-width: 850px) {
+    .form-layout-blueprint-sheet {
+        grid-template-columns: 1fr 1.2fr;
+        /* Splitting inputs and media slots on desktop */
+    }
+}
+
+.form-error-feedback-alert {
+    grid-column: 1 / -1;
+    background-color: #FDF2F2;
+    color: #EC5959;
+    padding: 14px 18px;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    border-left: 4px solid #EC5959;
+}
+
+/* ==========================================================================
+   3. FORM INPUT FIELDS GROUP & WRAPPERS
+   ========================================================================== */
+.form-input-fields-group {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-width: 0;
+    /* Anti-overflow core layout insurance flag */
+}
+
+.form-field-wrapper-label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    text-align: left;
+    width: 100%;
+    min-width: 0;
+}
+
+.form-field-wrapper-label span {
+    color: #222222;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.form-field-wrapper-label input,
+.form-field-wrapper-label select,
+.form-field-wrapper-label textarea {
+    background-color: #F7F7F4;
+    border: 1px solid rgba(0, 0, 0, 0.02);
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    color: #222222;
+    outline: none;
+    transition: border-color 0.2s ease;
+    width: 90%;
+    box-sizing: border-box;
+}
+
+.form-field-wrapper-label input:focus,
+.form-field-wrapper-label select:focus,
+.form-field-wrapper-label textarea:focus {
+    border-color: #557A61;
+    /* Green focus borders */
+}
+
+/* ==========================================================================
+   4. FIXED COMPACT CATEGORY CARDS SELECTOR HORIZONTAL SCROLLBAR
+   ========================================================================== */
+ .form-category-cards-selector-grid {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 12px;
+    box-sizing: border-box;
+    width: 100%;
+    background-color: #F7F7F4;
+    border-radius: 14px;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+}
+
+.form-category-cards-selector-grid::-webkit-scrollbar {
+    height: 6px;
+}
+
+.form-category-cards-selector-grid::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.form-category-cards-selector-grid::-webkit-scrollbar-thumb {
+    background-color: rgba(85, 122, 97, 0.15);
+    border-radius: 10px;
+}
+
+/* Desktop behavior adaptation: unwrap matrix items blocks smoothly */
+@media (min-width: 768px) {
+    .form-category-cards-selector-grid {
+        flex-wrap: wrap;
+        overflow-x: visible;
+        white-space: normal;
+    }
+}
+
+/* ==========================================================================
+   5. MEDIA ASSETS MANAGER PANEL
+   ========================================================================== */
+.form-media-assets-manager-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    text-align: left;
+}
+
+.media-panel-section-title {
+    color: #222222;
+    font-size: 1.15rem;
+    margin: 0;
+}
+
+.media-panel-section-subtitle {
+    color: #60665D;
+    font-size: 0.85rem;
+    margin: 0 0 12px 0;
+}
+
+.media-fields-vertical-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    max-height: 400px;
+    width: 90%;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.media-input-row-card {
+    background-color: #FFFFFF;
+    border: 1px solid #F7F7F4;
+    border-radius: 14px;
+    padding: 14px;
+    position: relative;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.01);
+    box-sizing: border-box;
+}
+
+.primary-cover-slot {
+    border: 1px dashed #557A61;
+    background-color: rgba(85, 122, 97, 0.02);
+}
+
+.row-badge-indicator {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #60665D;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.row-inputs-grid-layout {
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+}
+
+.grid-input-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.grid-input-cell span {
+    font-size: 0.8rem;
+    color: #60665D;
+}
+
+.grid-input-cell input {
+    background-color: #F7F7F4;
+    border: 1px solid transparent;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    outline: none;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.flex-grow-three {
+    flex: 3;
+}
+
+.analyzer-preview-badge {
+    flex: 1;
+    min-width: 75px;
+}
+
+.type-badge-preview-tag {
+    padding: 10px 0;
+    text-align: center;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border-radius: 8px;
+    text-transform: uppercase;
+    background-color: #EEEEEE;
+    color: #555555;
+}
+
+.type-badge-preview-tag.image {
+    background-color: #EAF2EC;
+    color: #3B6649;
+}
+
+.type-badge-preview-tag.video {
+    background-color: #EBF3F5;
+    color: #395B64;
+}
+
+.type-badge-preview-tag.audio {
+    background-color: #F5EFEB;
+    color: #764A31;
+}
+
+.btn-row-action-delete-trigger {
+    background-color: transparent;
+    border: none;
+    color: #EC5959;
+    font-size: 1.15rem;
+    cursor: pointer;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.1s ease;
+}
+
+.btn-row-action-delete-trigger:hover {
+    transform: scale(1.1);
+}
+
+.btn-add-media-element-action {
+    background-color: transparent;
+    border: 1px dashed #60665D;
+    color: #222222;
+    padding: 12px;
+    width: 90%;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 8px;
+    transition: background-color 0.2s ease;
+}
+
+.btn-add-media-element-action:hover {
+    background-color: #F7F7F4;
+}
+
+/* ==========================================================================
+   6. FORM ACTIONS FOOTER ROW CONTROLS
+   ========================================================================== */
+.form-submission-footer-action-block {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 14px;
+    margin-top: 12px;
+    border-top: 1px solid #F7F7F4;
+    padding-top: 20px;
+}
+
+.btn-form-action-trigger {
+    padding: 12px 28px;
+    border-radius: 24px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.1s ease;
+    box-sizing: border-box;
+}
+
+.save-sage-modifier {
+    background-color: #557A61;
+    /* Sage green primary save trigger button style */
+    color: #FFFFFF;
+    border: none;
+    box-shadow: 0px 4px 12px rgba(85, 122, 97, 0.15);
+}
+
+.save-sage-modifier:hover {
+    background-color: #44634E;
+}
+
+.cancel-gray-modifier {
+    background-color: #FFFFFF;
+    color: #60665D;
+    border: 1px solid #EEEEEE;
+}
+
+.cancel-gray-modifier:hover {
+    background-color: #FDF2F2;
+    /* Soft responsive coral hint overlay red tint indicating delete alert clicks */
+    color: #EC5959;
+    border-color: #FDF2F2;
+}
+
+.btn-form-action-trigger:active {
+    transform: scale(0.97);
+}
+
+.btn-form-action-trigger:disabled {
+    background-color: #A3B8AA;
+    cursor: not-allowed;
+}
+
+/* ==========================================================================
+   7. BASE KEYFRAME ANIMATIONS TRIGGERS
+   ========================================================================== */
+@keyframes fadeInAnimationEffect {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUpModalAnimation {
+    from {
+        transform: translateY(20px) scale(0.98);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}

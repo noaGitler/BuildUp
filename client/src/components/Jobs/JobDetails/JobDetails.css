@@ -1,14 +1,12 @@
-/* src/components/Jobs/JobDetails/JobDetails.css */
-
-/* הקונטיינר הראשי - מתוח, ארוך ובעל עומק מינימליסטי */
 .job-details-view-container {
-    background-color: transparent; /* מוריד את הרקע הכפול */
-    box-shadow: none;             /* מוריד את הצל הכפול */
-    border: none;                 /* מוריד את המסגרת הכפולה */
-    padding: 0;                   /* מונע כפל ריווחים */
+    background-color: transparent;
+    box-shadow: none;
+    border: none;
+    padding: 0;
     width: 100%;
     display: flex;
     flex-direction: column;
+    margin-bottom: 10%;
 }
 
 .job-details-panel-inner {
@@ -17,7 +15,6 @@
     width: 100%;
 }
 
-/* קומה 1: שורת הפעולות בראש העמוד */
 .job-details-header-action-row {
     display: flex;
     justify-content: space-between;
@@ -26,14 +23,20 @@
 }
 
 .details-category-badge {
-    background-color: #F0F4F1; /* ירוק מרווה חיוור מאוד */
-    color: #557A61; /* צבע המרווה הראשי שלכן */
+    display: flex;
+    align-items: center;
+    background-color: #F0F4F1;
+    color: #557A61;
     padding: 6px 14px;
     border-radius: 30px;
     font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.8px;
+}
+
+.details-category-icon {
+    margin-right: 10px;
 }
 
 .details-close-btn-circle {
@@ -56,7 +59,6 @@
     transform: scale(1.05);
 }
 
-/* כותרת המשרה המרכזית והגדולה */
 .job-details-main-title {
     margin: 0 0 24px 0;
     color: #222222;
@@ -66,7 +68,6 @@
     letter-spacing: -0.3px;
 }
 
-/* קומה 2: כרטיס המפרסם הצף (Float Card) */
 .job-details-client-float-card {
     display: flex;
     align-items: flex-start;
@@ -87,12 +88,14 @@
 }
 
 .client-avatar-wrapper {
+    display: flex;
+    align-items: center;
     flex-shrink: 0;
 }
 
 .client-float-avatar-img {
-    width: 48px;
-    height: 48px;
+    width: 35px;
+    height: 35px;
     border-radius: 50%;
     object-fit: cover;
     border: 1px solid #F7F7F4;
@@ -121,7 +124,8 @@
 
 .client-float-name {
     margin: 0;
-    font-size: 15px;
+    margin-left: 10px;
+    font-size: 18px;
     font-weight: 700;
     color: #222222;
 }
@@ -143,9 +147,9 @@
     display: flex;
     align-items: flex-start;
     gap: 6px;
+    flex-shrink: 0;
 }
 
-/* קומה 3: לב הרכיב - שטח התיאור המורחב */
 .job-details-description-grand-space {
     display: flex;
     flex-direction: column;
@@ -168,15 +172,14 @@
     margin: 0;
     color: #4A4F48;
     font-size: 15px;
-    line-height: 1.8; /* מרווח שורות מפנק לקריאה ארוכה ונוחה */
+    line-height: 1.8;
     white-space: pre-line;
 }
 
-/* קופסת התקציב כעוגן סיום בתחתית */
 .job-details-budget-anchor-box {
     border-top: 1px solid #F7F7F4;
     padding-top: 24px;
-    margin-top: auto; /* דוחף את התיבה לתחתית האלמנט הארוך */
+    margin-top: auto;
 }
 
 .budget-anchor-inner {
@@ -184,7 +187,7 @@
     align-items: center;
     gap: 14px;
     background-color: #FBFBFA;
-    border-left: 4px solid #557A61; /* פס סימון בצבע המרווה */
+    border-left: 4px solid #557A61;
     border-radius: 4px 12px 12px 4px;
     padding: 16px 20px;
 }
@@ -224,7 +227,6 @@
     text-align: left;
 }
 
-/* שורת כפתורי ההתקשרות בתוך כרטיס הפרופיל */
 .client-contact-channels-row {
     display: flex;
     flex-wrap: wrap;
@@ -248,9 +250,58 @@
     transition: all 0.2s ease;
 }
 
-/* אפקט ריחוף מעל כפתור התקשרות */
 .contact-link-badge:hover {
     background-color: #F0F4F1;
     color: #557A61;
     border-color: #557A61;
+}
+
+.default-avatar-icon {
+    color: #60665D;
+}
+
+.details-management-actions-inline {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    width: 100%; 
+}
+
+.btn-details {
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.15rem;
+    cursor: pointer;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.02);
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.1s ease;
+    flex-shrink: 0;
+}
+
+.btn-details-inline-edit-icon {
+    background-color: #ffffff;
+    color: #557A61;
+}
+
+.btn-details-inline-edit-icon:hover {
+    background-color: #557A61;
+    color: #FFFFFF;
+}
+
+.btn-details-inline-delete-icon {
+    background-color: #ffffff;
+    color: #EC5959;
+}
+
+.btn-details-inline-delete-icon:hover {
+    background-color: #EC5959;
+    color: #FFFFFF;
+}
+
+.btn-details:active {
+    transform: scale(0.94);
 }

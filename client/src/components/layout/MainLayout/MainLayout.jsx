@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import Navbar from '../Navbar/Navbar.jsx';
-import Sidebar from '../Sidebar/Sidebar.jsx';
 import Modal from '../../UI/Modal/Modal.jsx';
 import './MainLayout.css';
 

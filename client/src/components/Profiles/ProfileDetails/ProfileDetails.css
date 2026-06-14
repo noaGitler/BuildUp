@@ -1,0 +1,152 @@
+.profile-sidebar-card {
+    background-color: #FFFFFF;
+    border-radius: 24px;
+    padding: 36px 24px;
+    border: 1px solid rgba(96, 102, 93, 0.08);
+    box-shadow: 0px 4px 16px rgba(96, 102, 93, 0.02);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.profile-avatar-container {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: #F7F7F4;
+    border: 1px solid #EAEAE6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.profile-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.default-avatar-icon {
+    color: rgba(96, 102, 93, 0.4);
+}
+
+.profile-identity h1 {
+    margin: 0 0 6px 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #222222;
+}
+
+.profile-identity .tagline {
+    margin: 0 0 24px 0;
+    font-size: 0.9rem;
+    color: #60665D;
+    font-style: italic;
+}
+
+.profile-contact-info {
+    width: 100%;
+    border-top: 1px solid #F7F7F4;
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.info-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: #60665D;
+}
+
+.profile-bio-summary-box {
+    margin-top: 12px;
+    padding: 14px;
+    background-color: #F7F7F4;
+    border-radius: 12px;
+    text-align: left;
+    font-size: 0.85rem;
+    line-height: 1.6;
+}
+
+.edit-profile-btn {
+    margin-top: 24px;
+    width: 100%;
+    padding: 12px;
+    border-radius: 12px;
+    background-color: #557A61;
+    color: #FFFFFF;
+    border: none;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    box-shadow: 0px 4px 12px rgba(85, 122, 97, 0.15);
+    transition: background-color 0.2s;
+}
+
+.edit-profile-btn:hover {
+    background-color: #43614D;
+}
+
+
+
+
+
+
+
+.profile-rating-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background-color: rgba(85, 122, 97, 0.08);
+    color: #557A61;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin-top: 8px;
+}
+
+.profile-rating-badge .star-icon {
+    fill: #557A61;
+}
+
+.profile-bio-summary-box strong,
+.profile-categories-section strong {
+    display: block;
+    font-size: 0.95rem;
+    color: #222222;
+    margin-bottom: 8px;
+}
+
+.profile-categories-section {
+    margin-top: 16px;
+    text-align: left;
+}
+
+.profile-categories-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.category-pill-tag {
+    background-color: #FFFFFF;
+    border: 1px solid #EAEAE6;
+    color: #60665D;
+    font-size: 0.8rem;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-weight: 500;
+}

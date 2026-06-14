@@ -1,8 +1,6 @@
-
-// src/components/Jobs/JobsPage/JobsPage.jsx
 import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams, Outlet } from 'react-router-dom';
 import { FiClock, FiTrendingUp, FiCheck, FiPlus } from 'react-icons/fi';
-import { useNavigate, useParams } from 'react-router-dom';
 
 import { useFilterParams } from '../../../Hooks/useFilterParams.js';
 import { useAuth } from '../../../context/authContext.jsx';
@@ -10,18 +8,16 @@ import { useJobs } from '../../../context/JobContext.jsx';
 
 import FilterBar from '../../UI/FilterBar/FilterBar.jsx';
 import JobCard from '../JobCard/JobCard.jsx';
-import JobDetails from '../JobDetails/JobDetails.jsx';
-import jobService from '../../../services/jobService.js';
 import JobForm from '../JobForm/JobForm.jsx';
 import './JobsPage.css';
 
 const JobsPage = () => {
     const navigate = useNavigate();
     const { id } = useParams();
-
+    const { user } = useAuth();
+    const { jobs, fetchJobs, fetchJobById, handleUpdateJob, handleCreateJob } = useJobs();
     const { search, sortBy, category, updateFilters } = useFilterParams();
 
-    const [jobs, setJobs] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [limit, setLimit] = useState(12);
@@ -29,8 +25,6 @@ const JobsPage = () => {
     const [selectedJob, setSelectedJob] = useState(null);
     const [detailsLoading, setDetailsLoading] = useState(false);
 
-    const { user } = useAuth();
-    const { handleUpdateJob } = useJobs();
 
     const currentFilters = { search, sortBy, category };
 
@@ -51,9 +45,7 @@ const JobsPage = () => {
                 category_id: category || null
             };
 
-            const result = await jobService.getAllJobs(activeCompiledQuery);
-            const dataPayload = Array.isArray(result) ? result : result.data || [];
-            setJobs(dataPayload);
+            await fetchJobs(activeCompiledQuery);
         } catch (err) {
             console.error("Database connection failed:", err);
             setError("Failed to sync marketplace elements array.");
@@ -68,7 +60,7 @@ const JobsPage = () => {
 
             if (result.success || !result.error) {
                 await fetchMarketplaceJobs();
-                const updatedJobData = await jobService.getJobById(id);
+                const updatedJobData = await fetchJobById(id);
                 setSelectedJob(updatedJobData);
                 navigate(`/jobs/${id}`);
                 return null;
@@ -83,11 +75,6 @@ const JobsPage = () => {
         fetchMarketplaceJobs();
     }, [search, sortBy, category]);
 
-
-    /**
-     * אפקט ייעודי ומאובטח לשליפת הנתונים המלאים מהשרת
-     * 
-     */
     useEffect(() => {
         if (!id || id === 'new') {
             setSelectedJob(null);
@@ -99,11 +86,9 @@ const JobsPage = () => {
         const fetchSingleJobDetails = async () => {
             try {
                 setDetailsLoading(true);
-
-                const data = await jobService.getJobById(id);
+                const data = await fetchJobById(id);
 
                 if (!isMounted) return;
-
                 if (!data) {
                     navigate('/jobs', { replace: true });
                     return;
@@ -111,9 +96,9 @@ const JobsPage = () => {
 
                 const isEditPath = window.location.pathname.includes('/edit/');
                 const isOwner = user?.id && data?.client_id && Number(data.client_id) === Number(user.id);
+                const isAdmin = user?.role === 'admin';
 
-                // בדיקת הרשאת עריכה לבעלים
-                if (isEditPath && !isOwner) {
+                if (isEditPath && !isOwner && !isAdmin) {
                     navigate('/jobs', { replace: true });
                     return;
                 }
@@ -133,11 +118,8 @@ const JobsPage = () => {
 
         fetchSingleJobDetails();
 
-        return () => {
-            isMounted = false;
-        };
-    }, [id, navigate, user]);
-
+        return () => { isMounted = false; };
+    }, [id, navigate, user, fetchJobById]);
 
     useEffect(() => {
         setLimit(12);
@@ -149,9 +131,9 @@ const JobsPage = () => {
 
     const displayedJobs = jobs.slice(0, limit);
 
-    const handleCreateJob = async (payload) => {
+    const handleCreateJobWrapper = async (payload) => {
         try {
-            const response = await jobService.createJob(payload);
+            const response = await handleCreateJob(payload);
 
             if (response.success) {
                 await fetchMarketplaceJobs();
@@ -160,7 +142,7 @@ const JobsPage = () => {
             }
         } catch (error) {
             console.error("Failed to commit job registry:", error);
-            return error.response?.data?.message || "Network layout verification exception. Please try again.";
+            return error.response?.data?.message || "Network error. Please try again.";
         }
     };
 
@@ -172,7 +154,6 @@ const JobsPage = () => {
                     <p>Browse current structural projects and architectural opportunities.</p>
                 </div>
 
-                {/* הנה המקום החדש והמסודר */}
                 <div className="filter-and-action-row">
                     <div className="filter-wrapper">
                         <FilterBar currentFilters={currentFilters} onFilterChange={updateFilters} sortOptions={sortOptions} />
@@ -204,7 +185,6 @@ const JobsPage = () => {
                                     key={job.id}
                                     {...job}
                                     isActive={String(id) === String(job.id)}
-                                    onRefresh={fetchMarketplaceJobs}
                                 />
                             ))}
                         </div>
@@ -227,32 +207,7 @@ const JobsPage = () => {
 
                 {id && (
                     <div className="jobs-detail-panel">
-                        {id === 'new' ? (
-                            <JobForm onSubmitAction={handleCreateJob} />
-                        ) : window.location.pathname.includes('/edit/') ? (
-                            selectedJob ? (
-                                <JobForm
-                                    isEditMode={true}
-                                    initialValues={selectedJob}
-                                    onSubmitAction={handleEditJobSubmit}
-                                />
-                            ) : (
-                                <div className="details-status-msg">Loading job data for editing...</div>
-                            )
-                        ) : detailsLoading ? (
-                            <div className="details-status-msg">Fetching complete profile verification map...</div>
-                        ) : selectedJob ? (
-                            <JobDetails
-                                job={selectedJob}
-                                onClose={() => navigate('/jobs')}
-                            />
-                        ) : (
-                            !loading && (
-                                <div className="details-status-msg">
-                                    Tracking designated item validation indexes...
-                                </div>
-                            )
-                        )}
+                        <Outlet />
                     </div>
                 )}
             </div>

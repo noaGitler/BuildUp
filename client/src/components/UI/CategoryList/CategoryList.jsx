@@ -3,7 +3,7 @@ import { useCategories } from '../../../context/categoryContext';
 import CategoryCard from '../CategoryCard/CategoryCard';
 import './CategoryList.css';
 
-const CategoryList = ({ selectedIds = [], onCategorySelect, none = false }) => {
+const CategoryList = ({ selectedIds = [], onCategorySelect, none = false, variant = 'card' }) => {
     const { categories, loading, error } = useCategories();
 
     if (loading) return <div className="categories-status-msg">Loading design categories...</div>;
@@ -21,6 +21,7 @@ const CategoryList = ({ selectedIds = [], onCategorySelect, none = false }) => {
                         categoryId={category.id}
                         isSelected={isSelected}
                         onClick={onCategorySelect}
+                        variant={variant}
                     />
                 );
             })}

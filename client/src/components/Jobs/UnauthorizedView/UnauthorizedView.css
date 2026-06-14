@@ -1,0 +1,87 @@
+/* src/components/UI/UnauthorizedView/UnauthorizedView.css */
+
+.unauthorized-page-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    width: 100%;
+}
+
+.unauthorized-card-panel {
+    background-color: #FFFFFF;
+    padding: 40px;
+    border-radius: 24px;
+    box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.02);
+    border: 1px solid #EAEAE6;
+    text-align: center;
+    max-width: 500px;
+    width: 100%;
+}
+
+.unauthorized-icon-badge {
+    width: 56px;
+    height: 56px;
+    background-color: #F0F4F1;
+    color: #557A61; /* צבע המרווה שלכן */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px auto;
+    font-size: 24px;
+}
+
+.unauthorized-card-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: #222222;
+    margin-bottom: 12px;
+}
+
+.unauthorized-card-text {
+    font-size: 14px;
+    color: #60665D;
+    line-height: 1.6;
+    margin-bottom: 28px;
+}
+
+.unauthorized-action-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.unauthorized-btn-primary {
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #557A61;
+    color: #FFFFFF;
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+}
+
+.unauthorized-btn-primary:hover {
+    background-color: #43614D;
+}
+
+.unauthorized-btn-secondary {
+    text-decoration: none;
+    background-color: #F7F7F4;
+    color: #60665D;
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    border: 1px solid #EAEAE6;
+    transition: background-color 0.2s ease;
+}
+
+.unauthorized-btn-secondary:hover {
+    background-color: #EAEAE6;
+}

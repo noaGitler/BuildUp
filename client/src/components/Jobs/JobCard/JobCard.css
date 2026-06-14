@@ -2,9 +2,8 @@
    Sage Green Workspace - Fixed JobCard Layout
    ========================================================================== */
 
-/* המעטפת הכללית של כרטיס המשרה */
 .job-feed-card {
-    position: relative; /* מאפשר מיקום מוחלט פנימי של אלמנטים */
+    position: relative;
     background-color: #ffffff;
     border: 1px solid #E2E8F0 !important;
     border-radius: 16px;
@@ -14,7 +13,6 @@
     overflow: hidden;
 }
 
-/* אפקט ריחוף ומצב בחירה אקטיבי - ירוק מרווה */
 .job-feed-card:hover,
 .job-feed-card.active-job-card-selected {
     border-color: #5F7A61 !important;
@@ -22,10 +20,10 @@
 }
 
 .job-feed-card.active-job-card-selected {
+    position: relative;
     background-color: #FCFDFB;
 }
 
-/* פנים הכרטיס */
 .card-body-wrapper {
     padding: 20px;
     display: flex;
@@ -33,7 +31,6 @@
     gap: 14px;
 }
 
-/* שורת קטגוריה וזמן */
 .card-category-badge-row {
     display: flex;
     justify-content: space-between;
@@ -52,21 +49,24 @@
 }
 
 .card-time-posted {
+    display: flex; 
+    align-items: center; 
+    gap: 4px; 
+    font-size: 12px;
+    color: #60665D;
     font-size: 12px;
     color: #60665D;
 }
 
-/* כותרת */
 .card-display-title {
     margin: 0;
     color: #222222;
     font-size: 18px;
     font-weight: 700;
     line-height: 1.4;
-    padding-right: 20px; /* מונע מהטקסט לגעת בקצה */
+    padding-right: 20px;
 }
 
-/* פוטר הכרטיס */
 .card-creator-profile-footer {
     display: flex;
     justify-content: space-between;
@@ -109,7 +109,6 @@
     color: #333333;
 }
 
-/* תקציב */
 .card-budget-display-tag {
     display: flex;
     flex-direction: column;
@@ -127,18 +126,6 @@
     color: #5F7A61;
 }
 
-/* ==========================================================================
-   🛠️ מיקום מעוצב מחדש לכפתורי הניהול (מימין למעלה בצורה בטוחה)
-   ========================================================================== */
-.job-card-actions-wrapper {
-    position: absolute;
-    top: 45px; /* יורד קצת מתחת לשורת הזמן והקטגוריה */
-    right: 20px;
-    display: flex;
-    gap: 6px;
-    z-index: 20;
-}
-
 .btn-card-action {
     background-color: #F8FAFC !important;
     border: 1px solid #E2E8F0 !important;
@@ -154,7 +141,6 @@
     transition: all 0.2s ease-in-out;
 }
 
-/* אפקט ריחוף לעריכה - ירוק מרווה */
 .btn-card-action.edit-blue-modifier:hover {
     color: #5F7A61 !important;
     background-color: #F0F4F1 !important;
@@ -162,7 +148,6 @@
     transform: translateY(-1px);
 }
 
-/* אפקט ריחוף למחיקה - אדום רך */
 .btn-card-action.delete-red-modifier:hover {
     color: #D93838 !important;
     background-color: #FEE2E2 !important;
@@ -175,8 +160,6 @@
 
 
 
-
-/* מוסיפים לתחתית הקובץ JobCard.css */
 @media (max-width: 600px) {
     .card-body-wrapper {
         padding: 16px;
@@ -184,28 +167,21 @@
     }
 
     .card-display-title {
-        font-size: 16px; /* הקטנה קלה של הפונט שלא יתפוס חצי מסך */
-        padding-right: 0; /* ביטול הריווח הישן של הכפתורים */
+        font-size: 16px;
+        padding-right: 0;
         margin-top: 4px;
     }
-
-    /* הפיכת שורת הפעולות לזורמת בצורה נקייה מעל הכותרת או מתחתיה */
-    .job-card-actions-wrapper {
-        position: static; /* ביטול ה-absolute שמחרב את המובייל */
-        margin-top: 8px;
-        justify-content: flex-end; /* הצמדה לימין */
-    }
-
+    
     .card-creator-profile-footer {
-        flex-direction: column; /* פיצול הפוטר ל-2 שורות במובייל כדי שלא יימחץ */
+        flex-direction: column;
         align-items: flex-start;
         gap: 12px;
     }
 
     .card-budget-display-tag {
-        align-items: flex-start; /* הצמדת התקציב לשמאל בהתאם לזרימת הטקסט */
+        align-items: flex-start;
         width: 100%;
-        border-top: 1px dashed #E2E8F0; /* קו הפרדה קטן פנימי */
+        border-top: 1px dashed #E2E8F0;
         padding-top: 8px;
     }
 }

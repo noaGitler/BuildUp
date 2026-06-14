@@ -1,11 +1,8 @@
-// server/models/jobModel.js
 import pool from '../config/db.js';
 
-const Job = {
-    /**
-     * Fetch jobs with dynamic query filtration and sorting.
-     */
-    getAllJobs: async (filters) => {
+class JobModel {
+    // Fetch jobs with dynamic query filtration and sorting.
+    static async getAllJobs(filters) {
         const { search, sort, category_id } = filters;
 
         let query = `
@@ -16,6 +13,7 @@ const Job = {
                 jp.description,
                 jp.budget,
                 jp.created_at,
+                jp.category_id,
                 u.name AS client_name,
                 u.profile_image_url AS client_image,
                 c.name AS category_name,
@@ -47,7 +45,7 @@ const Job = {
         } else if (sort === 'title') {
             query += ` ORDER BY jp.title ASC `;
         } else {
-            query += ` ORDER BY jp.created_at DESC `; // Default 'newest' state
+            query += ` ORDER BY jp.created_at DESC `;
         }
 
         try {
@@ -57,12 +55,10 @@ const Job = {
             console.error('Database error in getAllJobs model:', error);
             throw error;
         }
-    },
+    };
 
-    /**
-     * Fetch a single job post by its primary key ID
-     */
-    getJobById: async (id) => {
+    // Fetch a single job post by its primary key ID
+    static async getJobById(id) {
         const query = `
             SELECT 
                 jp.id,
@@ -70,13 +66,10 @@ const Job = {
                 jp.description,
                 jp.budget,
                 jp.created_at,
+                jp.category_id,
                 u.id AS client_id,
                 u.name AS client_name,
-                u.email AS client_email,
-                u.phone AS client_phone,
                 u.profile_image_url AS client_image,
-                p.bio AS client_description,
-                p.city AS client_location,
                 c.name AS category_name,
                 c.icon_url AS category_icon
             FROM job_posts jp
@@ -92,23 +85,15 @@ const Job = {
             console.error('Database error in getJobById model:', error);
             throw error;
         }
-    },
+    };
 
-    /**
-     * Insert a new job opportunity into the database registry
-     */
-    insertJob: async (jobData) => {
+    // Insert a new job opportunity into the database registry
+    static async insertJob(jobData) {
         const query = `
             INSERT INTO job_posts (title, description, budget, category_id, client_id, created_at)
             VALUES (?, ?, ?, ?, ?, NOW());
         `;
-        const values = [
-            jobData.title,
-            jobData.description,
-            jobData.budget || null, // Inserts NULL if budget is unassigned (Open Budget)
-            jobData.category_id,
-            jobData.client_id
-        ];
+        const values = [jobData.title, jobData.description, jobData.budget || null, jobData.category_id, jobData.client_id];
 
         try {
             const [result] = await pool.execute(query, values);
@@ -117,12 +102,10 @@ const Job = {
             console.error("Database compilation error inside insertJob model:", error);
             throw error;
         }
-    },
+    };
 
-    /**
-     * Delete a job post from the database registry by its primary key ID
-     */
-    deleteJob: async (id) => {
+    // Delete a job post from the database registry by its primary key ID
+    static async deleteJob(id) {
         try {
             const query = `DELETE FROM job_posts WHERE id = ?`;
             const [result] = await pool.execute(query, [id]);
@@ -131,25 +114,17 @@ const Job = {
             console.error(`Database error inside Job.deleteJob for ID ${id}:`, error);
             throw error;
         }
-    },
+    };
 
-    /**
-     * Update an existing job registry row by its primary key ID
-     */
-    updateJob: async (id, jobData) => {
+    // Update an existing job registry row by its primary key ID
+    static async updateJob(id, jobData) {
         try {
             const query = `
                 UPDATE job_posts 
                 SET title = ?, description = ?, budget = ?, category_id = ?
                 WHERE id = ?
             `;
-            const values = [
-                jobData.title,
-                jobData.description,
-                jobData.budget || null,
-                jobData.category_id || null,
-                id
-            ];
+            const values = [jobData.title, jobData.description, jobData.budget || null, jobData.category_id || null, id];
 
             const [result] = await pool.execute(query, values);
             return result;
@@ -157,7 +132,18 @@ const Job = {
             console.error(`Database error inside Job.updateJob for ID ${id}:`, error);
             throw error;
         }
+    };
+
+    static async getUserRole(userId) {
+        try {
+            const query = `SELECT role FROM users WHERE id = ?`;
+            const [rows] = await pool.execute(query, [userId]);
+            return rows.length > 0 ? rows[0].role : null;
+        } catch (error) {
+            console.error(`Database error inside Job.getUserRole for user ${userId}:`, error);
+            throw error;
+        }
     }
 };
 
-export default Job;
+export default JobModel;

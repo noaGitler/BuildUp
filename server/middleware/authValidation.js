@@ -1,24 +1,24 @@
-    // --- PRIVATE HELPER VALIDATION FUNCTIONS ---
+// --- PRIVATE HELPER VALIDATION FUNCTIONS ---
 
-    // Checks if the email matches a standard format structure
-    const isEmailFormatValid = (email) => {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(email);
-    };
+// Checks if the email matches a standard format structure
+const isEmailFormatValid = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+};
 
-    // Checks password strength (e.g., minimum 6 characters)
-    const isPasswordStrong = (password) => {
-        return password && password.length >= 6;
-    };
+// Checks password strength (e.g., minimum 6 characters)
+const isPasswordStrong = (password) => {
+    return password && password.length >= 6;
+};
 
-    // Checks if the role provided is allowed in the system
-    const isRoleValid = (role) => {
-        const validRoles = ['client', 'professional', 'admin'];
-        return validRoles.includes(role);
-    };
+// Checks if the role provided is allowed in the system
+const isRoleValid = (role) => {
+    const validRoles = ['client', 'professional', 'admin'];
+    return validRoles.includes(role);
+};
 
 
-class UserValidation {
+class AuthValidation {
     // ---   PUBLIC MIDDLEWARE FUNCTIONS      ---
 
     // Validation for Register Step 1
@@ -77,4 +77,4 @@ class UserValidation {
     };
 };
 
-export { UserValidation };
+export default AuthValidation;

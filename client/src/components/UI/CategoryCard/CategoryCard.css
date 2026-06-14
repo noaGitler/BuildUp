@@ -1,3 +1,4 @@
+/* --- Card Variant Styling (Large Circular Version) --- */
 .category-card-wrapper {
     display: flex;
     flex-direction: column;
@@ -15,7 +16,7 @@
 .category-circle-avatar {
     width: 64px;
     height: 64px;
-    border-radius: 50%; /* Renders a flawless circular layout aspect */
+    border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -24,14 +25,78 @@
     border: 2px solid transparent;
     transition: all 0.2s ease;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.02);
-}
-
-.category-selected-active .category-circle-avatar {
-    box-shadow: 0px 4px 12px rgba(85, 122, 97, 0.25); /* Brand shadow depth glow */
+    color: var(--cat-color, #60665D);
+    background-color: #ffffff;
 }
 
 .category-display-label {
     font-size: 0.85rem;
     line-height: 1.3;
     transition: color 0.2s ease, font-weight 0.2s ease;
+    color: var(--cat-color, #60665D);
+    font-weight: 500;
+}
+
+.category-selected-active .category-circle-avatar {
+    background-color: var(--cat-color, #557A61);
+    color: #FFFFFF;
+    border-color: var(--cat-color, #557A61);
+}
+
+.category-selected-active .category-display-label {
+    color: var(--cat-color, #557A61);
+    font-weight: 700;
+}
+
+
+/* --- Pill Variant Styling (Small Tag Version) --- */ 
+.category-pill-variant {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #FFFFFF;
+    border: 1px solid #EAEAE6;
+    padding: 6px 14px;
+    border-radius: 20px;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.02);
+    transition: all 0.2s ease;
+    width: max-content !important;
+    white-space: nowrap !important;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.category-pill-variant:hover {
+    background-color: #F7F7F4;
+    border-color: rgba(96, 102, 93, 0.2);
+}
+
+.category-pill-variant .pill-icon {
+    display: flex;
+    align-items: center;
+    font-size: 1.1rem;
+    color: var(--cat-color, #60665D);
+}
+
+.category-pill-variant .pill-text {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #444444;
+}
+
+.category-pill-variant.default-fallback {
+    background-color: #F7F7F4;
+    color: #60665D;
+    font-weight: 500;
+}
+
+.category-pill-variant.pill-selected-active {
+    background-color: var(--cat-color, #557A61);
+    color: #FFFFFF;
+    border-color: var(--cat-color, #557A61);
+}
+
+.category-pill-variant.pill-selected-active .pill-icon,
+.category-pill-variant.pill-selected-active .pill-text {
+    color: #FFFFFF;
 }

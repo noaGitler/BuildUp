@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { FiMenu, FiHome, FiFolder, FiHeart, FiUsers, FiBriefcase, FiLogOut, FiUser } from 'react-icons/fi';
 
 import { useAuth } from '../../../context/authContext.jsx';
@@ -11,9 +11,10 @@ import './Navbar.css';
 const BACKEND_URL = 'http://localhost:5000';
 
 const Navbar = () => {
+  const navigate = useNavigate();
   const { user, logoutUser } = useAuth();
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
-  
+
   const handleConfirmLogout = () => {
     logoutUser();
     setIsLogoutModalOpen(false);
@@ -22,11 +23,17 @@ const Navbar = () => {
   return (
     <nav className="main-navbar">
       <div className="navbar-container">
-        
+
         {/* Right Zone: Logo */}
+<<<<<<< HEAD
           <div className="navbar-logo">
             <Link to="/"><Logo width={120} height={40} /></Link>
           </div>
+=======
+        <div className="navbar-logo">
+          <Link to="/"><Logo width={120} height={40} /></Link>
+        </div>
+>>>>>>> upstream/main
 
 
         {/* Center Zone: Core Navigation Links */}
@@ -40,9 +47,6 @@ const Navbar = () => {
           <NavLink to="/jobs" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
             <FiBriefcase size={18} /> <span>Jobs</span>
           </NavLink>
-          <NavLink to="/favorites" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
-            <FiHeart size={18} /> <span>Favorites</span>
-          </NavLink>
           <NavLink to="/professionals" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
             <FiUsers size={18} /> <span>Professionals</span>
           </NavLink>
@@ -53,19 +57,24 @@ const Navbar = () => {
           {user ? (
             <div className="logged-in-wrapper">
 
+<<<<<<< HEAD
               <Link to={`/profile/${user.id}`} className="user-profile-card" title="Go to Profile">
+=======
+              {/* <div onClick={handleProfileNavigation}  className="user-profile-card" title="Go to Profile"> */}
+              <div onClick={() => navigate(`/profile/${user.id}`)} className="user-profile-card" title="Go to Profile">
+>>>>>>> upstream/main
                 {user.profile_image_url ? (
                   <img src={`${BACKEND_URL}${user.profile_image_url}`} alt={user.name} className="navbar-avatar" />
                 ) : (
                   <FiUser size={18} className="default-avatar-icon" />
                 )}
                 <span className="navbar-username">{user.name}</span>
-              </Link>
-              
-              <button 
-                type="button" 
-                onClick={() => setIsLogoutModalOpen(true)} 
-                className="btn-logout-isolated" 
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setIsLogoutModalOpen(true)}
+                className="btn-logout-isolated"
                 title="Logout"
               >
                 <FiLogOut size={18} />

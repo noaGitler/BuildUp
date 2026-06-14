@@ -68,3 +68,17 @@
 .modal-btn-cancel:hover {
     background-color: #e5e7eb;
 }
+
+
+
+
+
+
+.modal-btn-danger {
+    background-color: #EC5959;
+    color: #FFFFFF;
+}
+
+.modal-btn-danger:hover {
+    background-color: #D43F3F;
+}

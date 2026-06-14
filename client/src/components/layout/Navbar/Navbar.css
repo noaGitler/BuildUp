@@ -10,6 +10,7 @@
   display: flex;
   align-items: center;
   border-bottom: 1px solid rgba(96, 102, 93, 0.08);
+  cursor: pointer;
 }
 
 .navbar-container {
@@ -103,10 +104,6 @@
   border-radius: 50%;
   object-fit: cover;
   border: 1px solid #557A61;
-}
-
-.default-avatar-icon {
-  color: #60665D;
 }
 
 .navbar-username {

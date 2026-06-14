@@ -1,11 +1,10 @@
-
 import pool from '../config/db.js';
 
-class projectModel {
+class ProjectModel {
 
     // Get projects with optional filters and sorting
     static async getProjectsFiles(filters) {
-        const { search, category_id, sort, limit } = filters;
+        const { search, category_id, sort, limit, user_favorites_id, professional_id } = filters;
         const connection = await pool.getConnection();
 
         try {
@@ -13,6 +12,7 @@ class projectModel {
             let query = `SELECT 
                     p.id, 
                     p.category_id, 
+                    p.professional_id,
                     p.title, 
                     p.created_at,
                     m.media_url AS cover_image_url,
@@ -28,10 +28,23 @@ class projectModel {
             const queryParams = [];
             const whereConditions = [];
 
+            // Dynamic Join: If user_favorites_id is present, filter by favorite_projects table
+            if (user_favorites_id) {
+                query += ` INNER JOIN favorite_projects fp 
+                       ON p.id = fp.project_id AND fp.user_id = ? `;
+                queryParams.push(Number(user_favorites_id));
+            }
+
             // Dynamic Filtering by Category ID
             if (category_id) {
                 whereConditions.push("p.category_id = ?");
                 queryParams.push(Number(category_id));
+            }
+
+            // Dynamic filtering by user
+            if (professional_id) {
+                whereConditions.push("p.professional_id = ?");
+                queryParams.push(Number(professional_id));
             }
 
             // Dynamic Filtering by Title Search Text
@@ -75,9 +88,15 @@ class projectModel {
         try {
             // Fetch main project metadata details
             const projectQuery = `
-                SELECT id, professional_id, category_id, title, description, cover_image_id, created_at 
-                FROM projects 
-                WHERE id = ?
+            SELECT 
+                p.*,
+                u.name AS professional_name,
+                u.profile_image_url AS professional_image,
+                pp.tagline AS professional_tagline
+            FROM projects p
+            LEFT JOIN users u ON p.professional_id = u.id
+            LEFT JOIN professional_profiles pp ON u.id = pp.user_id
+            WHERE p.id = ?
             `;
             const [projectRows] = await connection.query(projectQuery, [projectId]);
 
@@ -109,66 +128,7 @@ class projectModel {
     }
 
     // Create a new project with media assets
-    // static async createProjectWithMedia(projectData, mediaFiles) {
-    //     const { professional_id, category_id, title, description } = projectData;
-    //     const connection = await pool.getConnection();
-
-    //     try {
-    //         await connection.beginTransaction();
-
-    //         // Insert initial project records into the projects table
-    //         const projectQuery = `
-    //             INSERT INTO projects (professional_id, category_id, title, description, cover_image_id, created_at) 
-    //             VALUES (?, ?, ?, ?, NULL, NOW())
-    //         `;
-    //         const [projectResult] = await connection.query(projectQuery, [
-    //             professional_id, category_id, title, description || null
-    //         ]);
-    //         const projectId = projectResult.insertId;
-
-    //         let coverImageId = null;
-    //         const folderMap = { image: 'images', video: 'videos', audio: 'audio', document: 'documents' };
-
-    //         for (let i = 0; i < mediaFiles.length; i++) {
-    //             const file = mediaFiles[i];
-
-    //             let mediaType = 'document';
-    //             if (file.mimetype.startsWith('image/')) mediaType = 'image';
-    //             else if (file.mimetype.startsWith('video/')) mediaType = 'video';
-    //             else if (file.mimetype.startsWith('audio/')) mediaType = 'audio';
-
-    //             const targetFolder = folderMap[mediaType];
-
-    //             // Construct the clean relative URL exactly as it rests on the server
-    //             const relativePath = `/uploads/projects/${targetFolder}/${file.originalName}`;
-
-    //             const mediaQuery = `
-    //                 INSERT INTO project_media (project_id, media_type, media_url) 
-    //                 VALUES (?, ?, ?)
-    //             `;
-    //             const [mediaResult] = await connection.query(mediaQuery, [projectId, mediaType, relativePath]);
-
-    //             // Assign the first inserted record ID as the cover image ID
-    //             if (i === 0) {
-    //                 coverImageId = mediaResult.insertId;
-    //             }
-    //         }
-
-    //         // Finalize transaction by linking the compiled cover image ID back to the project
-    //         const updateCoverQuery = 'UPDATE projects SET cover_image_id = ? WHERE id = ?';
-    //         await connection.query(updateCoverQuery, [coverImageId, projectId]);
-
-    //         await connection.commit();
-    //         return projectId;
-
-    //     } catch (error) {
-    //         await connection.rollback();
-    //         throw error;
-    //     } finally {
-    //         connection.release();
-    //     }
-    // }
-    static async createProjectWithMedia(projectData, processedMedia) {
+    static async createProject(projectData, processedMedia) {
         const { professional_id, category_id, title, description } = projectData;
         const connection = await pool.getConnection();
 
@@ -181,7 +141,19 @@ class projectModel {
 
             // If no match is found, reject the operation immediately to preserve database integrity
             if (categoryRows.length === 0) {
-                throw new Error(`Unauthorized operation: Professional ID ${professional_id} is not mapped to Category ID ${category_id}.`);
+                // throw new Error(`Unauthorized operation: Professional ID ${professional_id} is not mapped to Category ID ${category_id}.`);
+                const adminCheckQuery = `
+                SELECT role FROM users 
+                WHERE id = ?
+            `;
+                const [userRows] = await connection.query(adminCheckQuery, [professional_id]);
+
+                const userRole = userRows[0]?.role;
+
+                // אם המשתמש לא קיים בכלל, או שהוא קיים אבל הוא לא admin - נחסום את הפעולה
+                if (userRole !== 'admin') {
+                    throw new Error(`Unauthorized operation: User ID ${professional_id} is neither mapped to Category ID ${category_id} nor an admin.`);
+                }
             }
 
             await connection.beginTransaction();
@@ -228,26 +200,12 @@ class projectModel {
         }
     }
 
-    // Update the text part of the project + cover image
-    static async updateProjectText(projectId, textData) {
-        const { title, description, category_id, cover_image_id, cover_url, cover_type } = textData;
+    // Updating basic project details
+    static async updateBasicProjectDetails(projectId, title, description) {
         const connection = await pool.getConnection();
         try {
-            const updateProjectQuery = `
-                UPDATE projects 
-                SET title = ?, description = ?, category_id = ?, cover_image_id = ?
-                WHERE id = ?
-            `;
-            await connection.query(updateProjectQuery, [title, description || null, category_id, cover_image_id, projectId]);
-
-            if (cover_image_id && cover_url) {
-                const updateMediaQuery = `
-                    UPDATE project_media 
-                    SET media_url = ?, media_type = ? 
-                    WHERE id = ? AND project_id = ?
-                `;
-                await connection.query(updateMediaQuery, [cover_url, cover_type, cover_image_id, projectId]);
-            }
+            const query = 'UPDATE projects SET title = ?, description = ? WHERE id = ?';
+            await connection.query(query, [title, description, projectId]);
             return true;
         } catch (error) {
             throw error;
@@ -256,23 +214,33 @@ class projectModel {
         }
     }
 
-    // Update the media part of the project
-    static async updateProjectMedia(projectId, processedMedia) {
+    // Update the cover image URL
+    static async updateCoverImageUrl(coverImageId, mediaUrl) {
+        const connection = await pool.getConnection();
+        try {
+            const query = 'UPDATE project_media SET media_url = ? WHERE id = ?';
+            await connection.query(query, [mediaUrl, coverImageId]);
+            return true;
+        } catch (error) {
+            throw error;
+        } finally {
+            connection.release();
+        }
+    }
+
+    // General project media update
+    static async replaceSecondaryMedia(projectId, coverImageId, processedMedia) {
         const connection = await pool.getConnection();
         try {
             await connection.beginTransaction();
 
-            const clearMediaQuery = "DELETE FROM project_media WHERE project_id = ?";
-            await connection.query(clearMediaQuery, [projectId]);
+            const deleteQuery = 'DELETE FROM project_media WHERE project_id = ? AND id != ?';
+            await connection.query(deleteQuery, [projectId, coverImageId]);
 
-            for (let i = 0; i < processedMedia.length; i++) {
-                const file = processedMedia[i];
-
-                const insertMediaQuery = `
-                    INSERT INTO project_media (project_id, media_type, media_url) 
-                    VALUES (?, ?, ?)
-                `;
-                await connection.query(insertMediaQuery, [projectId, file.media_type, file.media_url]);
+            if (processedMedia && processedMedia.length > 0) {
+                const insertQuery = 'INSERT INTO project_media (project_id, media_type, media_url) VALUES ?';
+                const values = processedMedia.map(file => [projectId, file.media_type, file.media_url]);
+                await connection.query(insertQuery, [values]);
             }
 
             await connection.commit();
@@ -291,11 +259,11 @@ class projectModel {
         try {
             await connection.beginTransaction();
 
-            // Delete all attached media pieces first
+            await connection.query("UPDATE projects SET cover_image_id = NULL WHERE id = ?", [projectId]);
+
             const deleteMediaQuery = "DELETE FROM project_media WHERE project_id = ?";
             await connection.query(deleteMediaQuery, [projectId]);
 
-            // Delete the primary project record
             const deleteProjectQuery = "DELETE FROM projects WHERE id = ?";
             const [result] = await connection.query(deleteProjectQuery, [projectId]);
 
@@ -311,4 +279,4 @@ class projectModel {
     }
 }
 
-export default projectModel;
+export default ProjectModel;

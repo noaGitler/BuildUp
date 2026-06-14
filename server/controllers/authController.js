@@ -1,12 +1,12 @@
-import authModel from '../models/authModel.js';
+import AuthModel from '../models/authModel.js';
 
-class UserController {
+class AuthController {
 
     // Check if email is available
     static async registerStep1(req, res) {
         const { email, password } = req.body;
         try {
-            const existingUser = await authModel.checkEmailExists(email);
+            const existingUser = await AuthModel.checkEmailExists(email);
             if (existingUser) {
                 return res.status(400).json({
                     success: false,
@@ -14,7 +14,7 @@ class UserController {
                 });
             }
 
-            await authModel.createPendingRegistration(email, password);
+            await AuthModel.createPendingRegistration(email, password);
 
             // Success response without database insertion
             res.status(200).json({
@@ -35,7 +35,7 @@ class UserController {
             const { email, password, name, role, phone, profile_image_url, tag_line, bio, city, categoryIds } = req.body;
 
             // Ensure the email wasn't taken while the user was typing
-            const isEmailTaken = await authModel.checkEmailExists(email);
+            const isEmailTaken = await AuthModel.checkEmailExists(email);
             if (isEmailTaken) {
                 return res.status(400).json({
                     success: false,
@@ -49,7 +49,7 @@ class UserController {
             }
 
             // Execute the atomic multi-table transaction in the model layer
-            const userId = await authModel.registerFullUser({
+            const userId = await AuthModel.registerFullUser({
                 email, password, name, role, phone, profile_image_url: finalProfileImageUrl, tag_line, bio, city, categoryIds
             });
 
@@ -77,7 +77,7 @@ class UserController {
     static async login(req, res) {
         const { email, password } = req.body;
         try {
-            const user = await authModel.login(email);
+            const user = await AuthModel.login(email);
 
             if (!user || user.password !== password) {
                 return res.status(401).json({
@@ -106,7 +106,7 @@ class UserController {
                     name: user.name,
                     role: user.role,
                     profile_image_url: user.profile_image_url,
-                    categoryIds: user.categoryIds || [] // שולח את המערך גם בזמן התחברות ראשונית
+                    categoryIds: user.categoryIds
                 }
             });
         } catch (error) {
@@ -121,24 +121,7 @@ class UserController {
     static async checkAuthStatus(req, res) {
         const { id } = req.params;
         try {
-            const user = await authModel.findById(id);
-            // if (!user) {
-            //     return res.status(404).json({
-            //         isAuthenticated: false,
-            //         message: "User context not found."
-            //     });
-            // }
-
-            // res.status(200).json({
-            //     isAuthenticated: true,
-            //     user: {
-            //         id: user.id,
-            //         name: user.name,
-            //         role: user.role,
-            //         profile_image_url: user.profile_image_url
-            //     }
-            // });
-
+            const user = await AuthModel.findById(id);
             if (!user) {
                 return res.status(401).json({
                     isAuthenticated: false,
@@ -154,7 +137,7 @@ class UserController {
                     name: user.name,
                     role: user.role,
                     profile_image_url: user.profile_image_url,
-                    categoryIds: user.categoryIds || [] // שולח את המערך ישירות ל-Frontend!
+                    categoryIds: user.categoryIds
                 }
             });
         } catch (error) {
@@ -167,4 +150,4 @@ class UserController {
 
 };
 
-export default UserController;
+export default AuthController;

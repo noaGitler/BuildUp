@@ -1,67 +1,113 @@
-/* src/components/Projects/ProjectsPage.css */
-
 .projects-page-container {
-  padding: 24px;
-  max-width: 1200px;
-  margin: 0 auto;
-  box-sizing: border-box;
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 24px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
 }
 
-.projects-page-title {
-  font-family: 'Assistant', 'Heebo', sans-serif;
-  font-size: 32px;
-  font-weight: 700;
-  color: #222222; /* Charcoal */
-  margin: 0 0 8px 0;
+.secondary-action-btn {
+    background-color: transparent !important;
+    border: 1px solid #557A61 !important;
+    color: #557A61 !important;
 }
 
-.projects-page-subtitle {
-  font-family: 'Assistant', 'Heebo', sans-serif;
-  font-size: 14px;
-  color: #60665D; /* Muted olive gray */
-  margin: 0 0 24px 0;
+.secondary-action-btn:hover {
+    background-color: #F7F7F4 !important;
 }
 
-.projects-empty-feed {
-  margin: 40px 0;
-  padding: 48px;
-  text-align: center;
-  background-color: #F7F7F4; /* Soft earthy background fill */
-  border-radius: 16px;
-  border: 1px dashed rgba(96, 102, 93, 0.3);
-  font-family: 'Assistant', 'Heebo', sans-serif;
+.projects-top-actions-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
 }
 
-.empty-feed-text {
-  color: #60665D;
-  font-size: 16px;
-  margin: 0 0 12px 0;
+/* Ensure the FilterBar component inside takes up the available row space */
+.projects-top-actions-row>.filter-bar-unified-wrapper {
+    flex-grow: 1;
 }
 
-.active-query-debug {
-  font-size: 13px;
-  color: #888888;
-  font-weight: 500;
+/* Premium Sage Green style design matching your UI Design System */
+.btn-create-project-trigger {
+    background-color: #557A61;
+    /* Sage Green */
+    color: #FFFFFF;
+    border: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    padding: 12px 24px;
+    border-radius: 24px;
+    /* Fully rounded elegant soft badge */
+    cursor: pointer;
+    white-space: nowrap;
+    /* Prevents button text wrapping */
+    box-shadow: 0px 4px 12px rgba(85, 122, 97, 0.15);
+    transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
-.actions-wrapper {
-  text-align: center;
-  margin-top: 24px;
+.btn-create-project-trigger:hover {
+    background-color: #44634E;
+    /* Dark forest green contrast */
 }
 
-.btn-load-more-test {
-  font-family: 'Assistant', 'Heebo', sans-serif;
-  background-color: #557A61; /* Sage Green action element */
-  color: #FFFFFF;
-  border: none;
-  padding: 10px 24px;
-  border-radius: 12px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 600;
-  transition: background-color 0.2s ease-in-out;
+.btn-create-project-trigger:active {
+    transform: scale(0.97);
 }
 
-.btn-load-more-test:hover {
-  background-color: #43614D; /* Darker green on hover state */
+/* Responsive adjustment for small mobile view screen setups */
+@media (max-width: 600px) {
+    .projects-top-actions-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .btn-create-project-trigger {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+.creators-hero-header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid rgba(96, 102, 93, 0.1);
+}
+
+.creators-hero-header h1 {
+    font-size: 2.8rem;
+    font-weight: 800;
+    color: var(--secondary-color);
+    margin: 0 0 12px 0;
+    letter-spacing: -1px;
+}
+
+.creators-hero-header p {
+    font-size: 1.1rem;
+    color: var(--secondary-color);
+    margin: 0 auto;
+    max-width: 600px;
+    line-height: 1.5;
+}
+
+.outline-heart {
+    background-color: transparent !important;
+    border: 1px solid #557A61 !important;
+    color: #557A61 !important;
+}
+
+.active-heart {
+    background-color: #557A61 !important;
+    color: #FFFFFF !important;
+    border: 1px solid #557A61 !important;
+}
+
+.btn-create-project-trigger {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
 }

@@ -1,10 +1,23 @@
-.job-form-view-container {
+.job-form-view-container-create {
+    background-color: #FFFFFF;
+    width: 70%;
+    margin-left: 15%;
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    padding-right: 8px;
+    margin-bottom: 10%;
+}
+
+.job-form-view-container-edit {
     width: 100%;
     display: flex;
     flex-direction: column;
     height: auto;
     padding-right: 8px;
+    margin-bottom: 10%;
 }
+
 
 .form-main-heading-title {
     font-size: 22px;
@@ -100,25 +113,37 @@
     border-left: 4px solid #D93838;
 }
 
-/* הבלוק שהיה חסר ומחזיר את הכרטיסים למסך */
 .form-category-cards-selector-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); 
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
     gap: 12px;
     margin-top: 10px;
-    min-height: 80px; /* מבטיח נפח תצוגה מינימלי */
+    min-height: 80px;
+}
+
+.form-category-cards-selector-grid-p1 {
+    color: #60665D;
+    font-size: 13px;
+    font-style: italic;
+    margin: 10px 0;
+}
+
+.form-category-cards-selector-grid-p2 {
+    color: #D93838;
+    font-size: 13px;
+    font-weight: 500;
+    margin: 10px 0;
 }
 
 
 
 
 
-
-
-/* מוסיפים לתחתית הקובץ JobForm.css */
 @media (max-width: 600px) {
     .job-form-view-container {
-        max-height: none; /* מאפשר גלילה טבעית של כל העמוד במובייל */
+        width: 100%;
+        margin-left: 2%;
+        max-height: none;
     }
 
     .form-main-heading-title {
@@ -126,20 +151,18 @@
         margin-bottom: 16px;
     }
 
-    /* התאמת גריד הקטגוריות למסכים צרים מאד */
     .form-category-cards-selector-grid {
         grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
         gap: 8px;
     }
 
-    /* כפתורי הפוטר יעברו למבנה אנכי או יתפרסו על כל הרוחב */
     .form-submission-footer-action-block {
-        flex-direction: column-reverse; /* ביטול יציאה למעלה, שמירה על סדר לוגי */
+        flex-direction: column-reverse;
         gap: 10px;
     }
 
     .btn-form-action-trigger {
-        width: 100%; /* כפתורים רחבים ונוחים ללחיצה עם האגודל */
+        width: 100%;
         justify-content: center;
     }
 }
