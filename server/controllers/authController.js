@@ -1,3 +1,4 @@
+import bcrypt from 'bcrypt';
 import AuthModel from '../models/authModel.js';
 
 class AuthController {
@@ -34,15 +35,7 @@ class AuthController {
         try {
             const { email, password, name, role, phone, profile_image_url, tag_line, bio, city, categoryIds } = req.body;
 
-            // Ensure the email wasn't taken while the user was typing
-            const isEmailTaken = await AuthModel.checkEmailExists(email);
-            if (isEmailTaken) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Security alert: This email address was captured by another account."
-                });
-            }
-
+            // Preparing the data for sending to the model
             let finalProfileImageUrl = profile_image_url || null;
             if (finalProfileImageUrl && !finalProfileImageUrl.startsWith('/uploads/')) {
                 finalProfileImageUrl = `/uploads/profiles/${finalProfileImageUrl}`;
@@ -64,7 +57,15 @@ class AuthController {
                 }
             });
         } catch (error) {
-            console.error("Error inside registerStep2 controller node:", error);
+            // Catching an error that is thrown if the email is already registered
+            if (error.message === "Temporary registration record missing or expired.") {
+                return res.status(400).json({
+                    success: false,
+                    message: "Security alert: This email address was captured by another account."
+                });
+            }
+
+            console.error("Error inside registerStep2 controller node:", error)
             return res.status(500).json({
                 success: false,
                 message: "Profile compilation and user creation failed.",
@@ -79,7 +80,7 @@ class AuthController {
         try {
             const user = await AuthModel.login(email);
 
-            if (!user || user.password !== password) {
+            if (!user || !(await bcrypt.compare(password, user.password))) {
                 return res.status(401).json({
                     success: false,
                     message: "Invalid email or password credentials."

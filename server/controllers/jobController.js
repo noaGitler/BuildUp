@@ -40,10 +40,10 @@ class JobController {
     };
 
     // Create a brand new job post
-    static async createNewJobPost(req, res) {
+    static async createJob(req, res) {
         try {
             const jobData = req.body;
-            const newJobId = await JobModel.insertJob(jobData);
+            const newJobId = await JobModel.createJob(jobData);
 
             return res.status(201).json({
                 success: true,
@@ -51,7 +51,7 @@ class JobController {
                 jobId: newJobId
             });
         } catch (error) {
-            console.error("Error inside createNewJobPost controller:", error);
+            console.error("Error inside createJob controller:", error);
             return res.status(500).json({
                 success: false,
                 message: "Internal server registry error."

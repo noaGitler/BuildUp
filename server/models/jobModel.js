@@ -88,7 +88,7 @@ class JobModel {
     };
 
     // Insert a new job opportunity into the database registry
-    static async insertJob(jobData) {
+    static async createJob(jobData) {
         const query = `
             INSERT INTO job_posts (title, description, budget, category_id, client_id, created_at)
             VALUES (?, ?, ?, ?, ?, NOW());

@@ -62,8 +62,10 @@ export const JobProvider = ({ children }) => {
     const handleUpdateJob = useCallback(async (id, userId, updatedData) => {
         try {
             setError(null);
-            const result = await jobService.updateJob(id, userId, updatedData);
 
+            const payload = { userId, ...updatedData };
+            const result = await jobService.updateJob(id, payload);
+            
             if (result) {
                 setJobs(prevJobs =>
                     prevJobs.map(job => job.id === id ? { ...job, ...updatedData } : job)

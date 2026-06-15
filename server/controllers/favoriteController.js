@@ -3,7 +3,7 @@ import FavoriteModel from '../models/favoriteModel.js'
 
 class FavoriteController {
     // Fetch favorited projects for a specific user using raw IDs
-    static async getFavoriteProjects (req, res) {
+    static async getFavoriteProjects(req, res) {
         try {
             // Destructure parameters sent from React client url/filters
             const { search, category_id, sort, limit, userId } = req.query;
@@ -38,15 +38,15 @@ class FavoriteController {
         try {
             const { userId, projectId } = req.body; // Guaranteed to be valid positive numbers by middleware
 
-            // Verify if the link already exists to avoid database duplicate errors
-            const isAlreadyFavorited = await FavoriteModel.checkExists(Number(userId), Number(projectId));
+            // // Verify if the link already exists to avoid database duplicate errors
+            // const isAlreadyFavorited = await FavoriteModel.checkExists(Number(userId), Number(projectId));
 
-            if (isAlreadyFavorited) {
-                return res.status(409).json({
-                    success: false,
-                    message: "This specific project configuration is already stored inside user favorites collection."
-                });
-            }
+            // if (isAlreadyFavorited) {
+            //     return res.status(409).json({
+            //         success: false,
+            //         message: "This specific project configuration is already stored inside user favorites collection."
+            //     });
+            // }
 
             await FavoriteModel.addFavorite(Number(userId), Number(projectId));
 
@@ -56,6 +56,13 @@ class FavoriteController {
             });
 
         } catch (error) {
+            if (error.code === 'ER_DUP_ENTRY') {
+                return res.status(409).json({
+                    success: false,
+                    message: "This specific project configuration is already stored inside user favorites collection."
+                });
+            }
+
             console.error("Error encountered within addFavoriteProject controller module:", error);
             return res.status(500).json({
                 success: false,

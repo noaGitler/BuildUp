@@ -19,7 +19,7 @@ export const FavoriteProvider = ({ children }) => {
             return;
         }
         try {
-            const response = await favoriteService.getFavoriteProjectsList(user.id);
+            const response = await favoriteService.getFavoriteProjects(user.id);
             if (response.success && response.data) {
                 const idsOnly = response.data.map(project => project.id);
                 setFavoritedProjectIds(idsOnly);
@@ -66,7 +66,7 @@ export const FavoriteProvider = ({ children }) => {
     const addFavorite = useCallback(async (projectId) => {
         if (!user || !user.id) return { success: false, message: "Authentication parameter missing." };
         try {
-            const response = await favoriteService.addProjectToFavorites(user.id, projectId);
+            const response = await favoriteService.addFavorite(user.id, projectId);
             if (response.success) {
                 setFavoritedProjectIds(prev => [...prev, projectId]);
                 return { success: true };
@@ -84,7 +84,7 @@ export const FavoriteProvider = ({ children }) => {
     const removeFavorite = useCallback(async (projectId) => {
         if (!user || !user.id) return { success: false, message: "Authentication parameter missing." };
         try {
-            const response = await favoriteService.removeProjectFromFavorites(user.id, projectId);
+            const response = await favoriteService.removeFavorite(user.id, projectId);
             if (response.success) {
                 setFavoritedProjectIds(prev => prev.filter(id => id !== projectId));
                 setFavoriteProjects(prev => prev.filter(p => p.id !== projectId));

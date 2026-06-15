@@ -1,3 +1,4 @@
+import bcrypt from 'bcrypt';
 import pool from '../config/db.js';
 
 class AuthModel {
@@ -51,8 +52,9 @@ class AuthModel {
             const userId = userResult.insertId;
 
             // Insert the raw plain-text password directly into the secure isolation table 'password'
+            const hashedPassword = await bcrypt.hash(finalPassword, 10);
             const passwordQuery = 'INSERT INTO password (user_id, password) VALUES (?, ?)';
-            await connection.query(passwordQuery, [userId, finalPassword]);
+            await connection.query(passwordQuery, [userId, hashedPassword]);
 
             // Conditional profile generation logic for specialized professional roles
             if (role === 'professional') {
@@ -88,7 +90,7 @@ class AuthModel {
         }
     }
 
-    // Corrected to perform a JOIN with your exact 'password' table name
+    // Login via email and encrypted password
     static async login(email) {
         const query = `
             SELECT u.id, u.email, u.name, u.role, u.profile_image_url, p.password 
@@ -99,15 +101,16 @@ class AuthModel {
         const [rows] = await pool.query(query, [email]);
         const user = rows[0];
 
-        // If the user is a professional, retrieve the categories
-        if (user && user.role === 'professional') {
-            user.categoryIds = await this.getProfessionalCategories(user.id);
-        } else {
-            user.categoryIds = [];
+        if (user) {
+            // If the user is a professional, retrieve the categories
+            if (user && user.role === 'professional') {
+                user.categoryIds = await this.getProfessionalCategories(user.id);
+            } else {
+                user.categoryIds = [];
+            }
         }
 
         return user;
-
     }
 
     // Retrieves user details by ID

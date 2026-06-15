@@ -40,7 +40,7 @@ export const AuthProvider = ({ children }) => {
             const savedUserId = localStorage.getItem('loggedUserId');
             if (savedUserId) {
                 try {
-                    const data = await authService.checkAuth(savedUserId);
+                    const data = await authService.checkAuthStatus(savedUserId);
                     if (data.isAuthenticated && data.user) {
                         dispatch({ type: 'LOGIN_SUCCESS', payload: data.user });
                     } else {
@@ -59,7 +59,7 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
 
-    const loginUser = async (email, password) => {
+    const login = async (email, password) => {
         try {
             const data = await authService.login(email, password);
             if (data.success && data.user) {
@@ -140,7 +140,7 @@ export const AuthProvider = ({ children }) => {
                 tempRegistration: state.tempRegistration,
                 loading: state.loading,
                 error: state.error,
-                loginUser,
+                login,
                 checkDraftEmail,
                 confirmRestore,
                 cancelRestore,

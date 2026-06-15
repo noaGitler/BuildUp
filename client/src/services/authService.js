@@ -18,7 +18,7 @@ class authService {
         return response.data;
     };
 
-    static async checkAuth(id) {
+    static async checkAuthStatus(id) {
         const response = await api.get(`/auth/check-auth/${id}`);
         return response.data;
     };

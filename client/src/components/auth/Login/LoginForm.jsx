@@ -9,7 +9,7 @@ import Logo from '../../UI/Logo.jsx'
 import './LoginForm.css';
 
 const LoginForm = () => {
-    const { loginUser, error: globalError, clearErrors } = useAuth();
+    const { login, error: globalError, clearErrors } = useAuth();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [localError, setLocalError] = useState('');
@@ -20,7 +20,7 @@ const LoginForm = () => {
         setLocalError('');
 
         try {
-            const result = await loginUser(email, password);
+            const result = await login(email, password);
             if (result.success) {
                 sessionStorage.setItem('welcomeConfig',
                     JSON.stringify({
