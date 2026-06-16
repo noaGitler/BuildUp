@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import AuthController from '../controllers/authController.js';
 import AuthValidation from '../middleware/authValidation.js';
+import authMiddleware from '../middleware/authMiddleware.js';
 
 const router = Router();
 
@@ -10,6 +11,6 @@ router.put('/register-step2', AuthValidation.registerStep2, AuthController.regis
 
 // login
 router.post('/login', AuthValidation.login, AuthController.login);
-router.get('/check-auth/:id', AuthController.checkAuthStatus);
+router.get('/check-auth', authMiddleware, AuthController.checkAuthStatus);
 
 export default router;

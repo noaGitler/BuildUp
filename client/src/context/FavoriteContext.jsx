@@ -19,7 +19,7 @@ export const FavoriteProvider = ({ children }) => {
             return;
         }
         try {
-            const response = await favoriteService.getFavoriteProjectsList(user.id);
+            const response = await favoriteService.getFavoriteProjects();
             if (response.success && response.data) {
                 const idsOnly = response.data.map(project => project.id);
                 setFavoritedProjectIds(idsOnly);
@@ -46,7 +46,7 @@ export const FavoriteProvider = ({ children }) => {
         setLoadingFavorites(true);
         setFavoritesError(null);
         try {
-            const response = await favoriteService.getFavoriteProjectsList(user.id, filters);
+            const response = await favoriteService.getFavoriteProjects(filters);
             if (response.success) {
                 setFavoriteProjects(response.data);
             } else {
@@ -60,13 +60,11 @@ export const FavoriteProvider = ({ children }) => {
         }
     }, [user?.id]);
 
-    /**
-     * Appends a project reference row inside the remote database instance.
-     */
+    // Appends a project reference row inside the remote database instance.
     const addFavorite = useCallback(async (projectId) => {
         if (!user || !user.id) return { success: false, message: "Authentication parameter missing." };
         try {
-            const response = await favoriteService.addProjectToFavorites(user.id, projectId);
+            const response = await favoriteService.addFavorite(projectId);
             if (response.success) {
                 setFavoritedProjectIds(prev => [...prev, projectId]);
                 return { success: true };
@@ -78,13 +76,11 @@ export const FavoriteProvider = ({ children }) => {
         }
     }, [user?.id]);
 
-    /**
-     * Clears a project reference row from the remote database instance.
-     */
+    // Clears a project reference row from the remote database instance.
     const removeFavorite = useCallback(async (projectId) => {
         if (!user || !user.id) return { success: false, message: "Authentication parameter missing." };
         try {
-            const response = await favoriteService.removeProjectFromFavorites(user.id, projectId);
+            const response = await favoriteService.removeFavorite(projectId);
             if (response.success) {
                 setFavoritedProjectIds(prev => prev.filter(id => id !== projectId));
                 setFavoriteProjects(prev => prev.filter(p => p.id !== projectId));
@@ -97,9 +93,7 @@ export const FavoriteProvider = ({ children }) => {
         }
     }, [user?.id]);
 
-    /**
-     * Synchronous boolean utility method to let card nodes resolve their heart fill state instantly.
-     */
+    // Synchronous boolean utility method to let card nodes resolve their heart fill state instantly.
     const isProjectFavorited = useCallback((projectId) => {
         return favoritedProjectIds.includes(projectId);
     }, [favoritedProjectIds]);

@@ -7,8 +7,8 @@ class commentService {
         return response.data;
     }
 
-    static async addComment(projectId, userId, commentText) {
-        const response = await api.post('/comments/add', { projectId, userId, commentText });
+    static async addComment(projectId, commentText) {
+        const response = await api.post('/comments/add', { projectId, commentText });
         return response.data;
     }
 

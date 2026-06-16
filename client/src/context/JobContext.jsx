@@ -62,8 +62,10 @@ export const JobProvider = ({ children }) => {
     const handleUpdateJob = useCallback(async (id, userId, updatedData) => {
         try {
             setError(null);
-            const result = await jobService.updateJob(id, userId, updatedData);
 
+            const payload = { userId, ...updatedData };
+            const result = await jobService.updateJob(id, payload);
+            
             if (result) {
                 setJobs(prevJobs =>
                     prevJobs.map(job => job.id === id ? { ...job, ...updatedData } : job)
@@ -77,10 +79,10 @@ export const JobProvider = ({ children }) => {
     }, []);
 
     // Completely purge a designated job posting record from persistent database catalogs
-    const handleDeleteJob = useCallback(async (id, userId) => {
+    const handleDeleteJob = useCallback(async (id) => {
         try {
             setError(null);
-            const result = await jobService.deleteJob(id, userId);
+            const result = await jobService.deleteJob(id);
             setJobs(prevJobs => prevJobs.filter(job => job.id !== id));
             return result;
         } catch (err) {

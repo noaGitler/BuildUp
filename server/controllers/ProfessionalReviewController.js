@@ -24,9 +24,17 @@ class ProfessionalReviewController {
         try {
             const { professionalId } = req.params;
             const { user_id, rating, review_text } = req.body;
+            const userFromToken = req.user; 
+
+            if (Number(professionalId) === Number(userFromToken.id)) {
+                return res.status(403).json({ 
+                    success: false, 
+                    message: "You cannot write a review for your own profile." 
+                });
+            }
 
             await professionalReviewModel.createReview({
-                user_id,
+                user_id: userFromToken.id,
                 professional_id: professionalId,
                 rating,
                 review_text
@@ -48,6 +56,21 @@ class ProfessionalReviewController {
             const { reviewId } = req.params;
             const { rating, review_text } = req.body;
 
+            const userFromToken = req.user;
+
+            const review = await professionalReviewModel.getReviewById(reviewId);
+            if (!review) return res.status(404).json({ success: false, message: "Review not found." });
+
+            const isOwner = Number(review.user_id) === Number(userFromToken.id);
+            const isAdmin = userFromToken.role === 'admin';
+
+            if (!isOwner && !isAdmin) {
+                return res.status(403).json({
+                    success: false,
+                    message: "Unauthorized: You can only edit your own reviews."
+                });
+            }
+
             const success = await professionalReviewModel.updateReview(reviewId, rating, review_text);
 
             if (!success) {
@@ -65,6 +88,21 @@ class ProfessionalReviewController {
     static async deleteReview(req, res) {
         try {
             const { reviewId } = req.params;
+            const userFromToken = req.user;
+
+            const review = await professionalReviewModel.getReviewById(reviewId);
+            if (!review) return res.status(404).json({ success: false, message: "Review not found." });
+
+            const isOwner = Number(review.user_id) === Number(userFromToken.id);
+            const isAdmin = userFromToken.role === 'admin';
+
+            if (!isOwner && !isAdmin) {
+                return res.status(403).json({
+                    success: false,
+                    message: "Unauthorized: You can only delete your own reviews."
+                });
+            }
+
             const success = await professionalReviewModel.deleteReview(reviewId);
 
             if (!success) {

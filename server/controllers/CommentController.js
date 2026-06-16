@@ -25,11 +25,12 @@ class CommentController {
     // Appends a text entry reference linked to a unique user and target project index.
     static async addComment(req, res) {
         try {
-            const { projectId, userId, commentText } = req.body;
+            const { projectId, commentText } = req.body;
+            const userFromToken = req.user;
 
             const result = await CommentModel.create(
                 Number(projectId),
-                Number(userId),
+                Number(userFromToken.id),
                 commentText.trim()
             );
 
@@ -55,6 +56,26 @@ class CommentController {
         try {
             const { commentId } = req.params;
             const { commentText } = req.body;
+            const userFromToken = req.user;
+
+            const ownerId = await CommentModel.getCommentOwnerId(Number(commentId));
+
+            if (!ownerId) { 
+                return res.status(404).json({
+                    success: false, 
+                    message: "Comment not found" 
+                }); 
+            }
+
+            const isOwner = Number(ownerId) === Number(userFromToken.id);
+            const isAdmin = userFromToken.role === 'admin';
+
+            if (!isOwner && !isAdmin) {
+                return res.status(403).json({
+                    success: false,
+                    message: "Unauthorized: You can only edit your own comments."
+                });
+            }
 
             const result = await CommentModel.update(Number(commentId), commentText.trim());
 
@@ -82,6 +103,25 @@ class CommentController {
     static async deleteComment(req, res) {
         try {
             const { commentId } = req.params;
+            const userFromToken = req.user;
+
+            const ownerId = await CommentModel.getCommentOwnerId(Number(commentId));
+
+            if (!ownerId) {
+                return res.status(404).json({ success: false,
+                    message: "Comment not found"
+                });
+            }
+
+            const isOwner = Number(ownerId) === Number(userFromToken.id);
+            const isAdmin = userFromToken.role === 'admin';
+
+            if (!isOwner && !isAdmin) {
+                return res.status(403).json({
+                    success: false,
+                    message: "Unauthorized: You can only delete your own comments."
+                });
+            }
 
             const result = await CommentModel.delete(Number(commentId));
 

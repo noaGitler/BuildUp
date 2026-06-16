@@ -49,6 +49,14 @@ class ProfileController {
     static async updateProfile(req, res) {
         try {
             const userId = req.params.id;
+            const userFromToken = req.user
+
+            if (Number(userId) !== Number(userFromToken.id)) {
+                return res.status(403).json({
+                    success: false,
+                    message: "Unauthorized: You can only update your own profile."
+                });
+            }
 
             const payloadData = { ...req.body };
 

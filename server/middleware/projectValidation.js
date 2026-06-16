@@ -4,7 +4,6 @@ const isTextValid = (text) => {
 };
 
 // check if an ID is valid (a positive number)
-
 const isIdValid = (id) => {
     const num = Number(id);
     return !isNaN(num) && num > 0;
@@ -73,7 +72,7 @@ class ProjectValidation {
     static update(req, res, next) {
         const { title } = req.body;
 
-        // בדיקת תקינות כותרת (רק אם המשתמש ניסה לעדכן אותה)
+        // Title Validation Check
         if (title !== undefined && !isTextValid(title)) {
             return res.status(400).json({
                 success: false,

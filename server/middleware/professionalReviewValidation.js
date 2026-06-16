@@ -19,9 +19,9 @@ class ProfessionalReviewValidation {
 
     // Validation middleware for creating a new review (POST)
     static create(req, res, next) {
-        const { user_id, rating, review_text } = req.body;
+        const { rating, review_text } = req.body;
 
-        if (!isIdValid(user_id) || !isRatingValid(rating) || !isTextValid(review_text)) {
+        if (!isRatingValid(rating) || !isTextValid(review_text)) {
             return res.status(400).json({
                 success: false,
                 message: "Validation failed: A valid user_id, a rating (1-5), and non-empty review_text are required."

@@ -1,3 +1,5 @@
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import AuthModel from '../models/authModel.js';
 
 class AuthController {
@@ -14,7 +16,7 @@ class AuthController {
                 });
             }
 
-            await AuthModel.createPendingRegistration(email, password);
+            await AuthModel.registerStep1(email, password);
 
             // Success response without database insertion
             res.status(200).json({
@@ -34,28 +36,27 @@ class AuthController {
         try {
             const { email, password, name, role, phone, profile_image_url, tag_line, bio, city, categoryIds } = req.body;
 
-            // Ensure the email wasn't taken while the user was typing
-            const isEmailTaken = await AuthModel.checkEmailExists(email);
-            if (isEmailTaken) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Security alert: This email address was captured by another account."
-                });
-            }
-
+            // Preparing the data for sending to the model
             let finalProfileImageUrl = profile_image_url || null;
             if (finalProfileImageUrl && !finalProfileImageUrl.startsWith('/uploads/')) {
                 finalProfileImageUrl = `/uploads/profiles/${finalProfileImageUrl}`;
             }
 
             // Execute the atomic multi-table transaction in the model layer
-            const userId = await AuthModel.registerFullUser({
+            const userId = await AuthModel.registerStep2({
                 email, password, name, role, phone, profile_image_url: finalProfileImageUrl, tag_line, bio, city, categoryIds
             });
+
+            const token = jwt.sign(
+                { id: userId, role: role },
+                process.env.JWT_SECRET,
+                { expiresIn: process.env.JWT_EXPIRES_IN }
+            );
 
             return res.status(201).json({
                 success: true,
                 message: "Registration completed and profile created successfully.",
+                token: token,
                 user: {
                     id: userId,
                     name,
@@ -64,7 +65,15 @@ class AuthController {
                 }
             });
         } catch (error) {
-            console.error("Error inside registerStep2 controller node:", error);
+            // Catching an error that is thrown if the email is already registered
+            if (error.message === "Temporary registration record missing or expired.") {
+                return res.status(400).json({
+                    success: false,
+                    message: "Security alert: This email address was captured by another account."
+                });
+            }
+
+            console.error("Error inside registerStep2 controller node:", error)
             return res.status(500).json({
                 success: false,
                 message: "Profile compilation and user creation failed.",
@@ -79,28 +88,24 @@ class AuthController {
         try {
             const user = await AuthModel.login(email);
 
-            if (!user || user.password !== password) {
+            if (!user || !(await bcrypt.compare(password, user.password))) {
+
                 return res.status(401).json({
                     success: false,
                     message: "Invalid email or password credentials."
                 });
             }
 
-            // res.status(200).json({
-            //     success: true,
-            //     message: "Login verified successfully.",
-            //     user: {
-            //         id: user.id,
-            //         name: user.name,
-            //         role: user.role,
-            //         profile_image_url: user.profile_image_url
-            //     }
-            // });
+            const token = jwt.sign(
+                { id: user.id, role: user.role },
+                process.env.JWT_SECRET,
+                { expiresIn: process.env.JWT_EXPIRES_IN }
+            );
 
-            // inside authController.login after password validation success
-            return res.status(200).json({
+            res.status(200).json({
                 success: true,
                 message: "Login verified successfully.",
+                token: token,
                 user: {
                     id: user.id,
                     name: user.name,
@@ -118,10 +123,39 @@ class AuthController {
     }
 
     // Check Authentication Status
+    // static async checkAuthStatus(req, res) {
+    //     const { id } = req.params;
+    //     try {
+    //         const user = await AuthModel.findById(id);
+    //         if (!user) {
+    //             return res.status(404).json({
+    //                 isAuthenticated: false,
+    //                 message: "User context not found."
+    //             });
+    //         }
+
+    //         res.status(200).json({
+    //             isAuthenticated: true,
+    //             user: {
+    //                 id: user.id,
+    //                 name: user.name,
+    //                 role: user.role,
+    //                 profile_image_url: user.profile_image_url,
+    //                 categoryIds: user.categoryIds
+    //             }
+    //         });
+    //     } catch (error) {
+    //         res.status(500).json({
+    //             isAuthenticated: false,
+    //             message: "Failed to establish secure auth state check sync."
+    //         });
+    //     }
+    // }
     static async checkAuthStatus(req, res) {
-        const { id } = req.params;
         try {
-            const user = await AuthModel.findById(id);
+            const userIdFromToken = req.user.id;
+
+            const user = await AuthModel.findById(userIdFromToken);
             if (!user) {
                 return res.status(401).json({
                     isAuthenticated: false,

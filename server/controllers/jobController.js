@@ -40,10 +40,17 @@ class JobController {
     };
 
     // Create a brand new job post
-    static async createNewJobPost(req, res) {
+    static async createJob(req, res) {
         try {
             const jobData = req.body;
-            const newJobId = await JobModel.insertJob(jobData);
+            const userFromToken = req.user;
+
+            const newData = {
+                ...req.body,
+                client_id: userFromToken.id
+            };
+
+            const newJobId = await JobModel.createJob(newData);
 
             return res.status(201).json({
                 success: true,
@@ -51,7 +58,7 @@ class JobController {
                 jobId: newJobId
             });
         } catch (error) {
-            console.error("Error inside createNewJobPost controller:", error);
+            console.error("Error inside createJob controller:", error);
             return res.status(500).json({
                 success: false,
                 message: "Internal server registry error."
@@ -63,43 +70,26 @@ class JobController {
     static async updateJob(req, res) {
         try {
             const jobId = req.params.id;
-            const { userId, ...updatedData } = req.body;
+            const updatedData = req.body;
+            const userFromToken = req.user;
 
-            const cleanData = {
-                title: updatedData.title || '',
-                description: updatedData.description || '',
-                budget: (updatedData.budget !== undefined && updatedData.budget !== '') ? Number(updatedData.budget) : null,
-                category_id: updatedData.category_id // כאן אנחנו לא עושים || null!
-            };
+            const dbJob = await JobModel.getJobOwnerId(jobId);
 
-            if (!cleanData.category_id) {
-                return res.status(400).json({ success: false, message: 'Category is required.' });
-            }
-
-            if (!userId) {
-                return res.status(400).json({ success: false, message: 'Client verification context missing.' });
-            }
-
-            const existingJob = await JobModel.getJobById(jobId);
-
-            if (!existingJob) {
+            if (!dbJob) {
                 return res.status(404).json({ success: false, message: 'Job vacancy not found.' });
             }
 
-            // Authorization Guard: Either the record creator or an authorized administrator
-            const userRole = await JobModel.getUserRole(userId);
-            const isAdmin = userRole === 'admin';
-            const isOwner = Number(existingJob.client_id) === Number(userId);
+            const isOwner = Number(dbJob.client_id) === Number(userFromToken.id);
+            const isAdmin = userFromToken.role === 'admin';
 
             if (!isOwner && !isAdmin) {
                 return res.status(403).json({
                     success: false,
-                    message: 'Unauthorized action. You do not have management privileges for this post.'
+                    message: 'Unauthorized action. You can only update your own job posts.'
                 });
             }
 
-
-            await JobModel.updateJob(jobId, cleanData);
+            await JobModel.updateJob(jobId, updatedData);
 
             return res.status(200).json({
                 success: true,
@@ -115,28 +105,21 @@ class JobController {
     static async deleteJob(req, res) {
         try {
             const jobId = req.params.id;
-            const userId = req.query.userId;
+            const userFromToken = req.user;
 
-            if (!userId) {
-                return res.status(400).json({ success: false, message: 'Client verification context missing.' });
-            }
+            const dbJob = await JobModel.getJobOwnerId(jobId);
 
-            const existingJob = await JobModel.getJobById(jobId);
-
-            if (!existingJob) {
+            if (!dbJob) {
                 return res.status(404).json({ success: false, message: 'Job vacancy not found.' });
             }
 
-            // Authorization Guard: Either the record creator or an authorized administrator
-            const userRole = await JobModel.getUserRole(userId);
-            const isAdmin = userRole === 'admin';
-
-            const isOwner = Number(existingJob.client_id) === Number(userId);
+            const isOwner = Number(dbJob.client_id) === Number(userFromToken.id);
+            const isAdmin = userFromToken.role === 'admin';
 
             if (!isOwner && !isAdmin) {
                 return res.status(403).json({
                     success: false,
-                    message: 'Unauthorized action. You do not have management privileges for this post.'
+                    message: 'Unauthorized action. You can only update your own job posts.'
                 });
             }
 

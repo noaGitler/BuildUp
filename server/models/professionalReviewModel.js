@@ -38,6 +38,13 @@ class ProfessionalReviewModel {
         const [result] = await db.query(query, [reviewId]);
         return result.affectedRows > 0;
     }
+
+    // Get a single review by its ID
+    static async getReviewById(reviewId) {
+        const query = `SELECT * FROM professional_reviews WHERE id = ?`;
+        const [rows] = await db.query(query, [reviewId]);
+        return rows.length > 0 ? rows[0] : null;
+    }
 }
 
 export default ProfessionalReviewModel;

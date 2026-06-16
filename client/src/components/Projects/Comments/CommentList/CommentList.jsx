@@ -17,7 +17,7 @@ const CommentList = ({ projectId }) => {
 
     const handlePost = async () => {
         if (!newComment.trim()) return;
-        await addComment(projectId, user.id, newComment);
+        await addComment(projectId, newComment);
         setNewComment('');
         setPage(1);
         setHasMore(true);

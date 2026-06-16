@@ -3,10 +3,11 @@ import FavoriteModel from '../models/favoriteModel.js'
 
 class FavoriteController {
     // Fetch favorited projects for a specific user using raw IDs
-    static async getFavoriteProjects (req, res) {
+    static async getFavoriteProjects(req, res) {
         try {
             // Destructure parameters sent from React client url/filters
-            const { search, category_id, sort, limit, userId } = req.query;
+            const { search, category_id, sort, limit } = req.query;
+            const userFromToken = req.user;
 
             // Execute the optimized project model catalog join using the provided user ID
             const favoriteProjects = await ProjectModel.getProjectsFiles({
@@ -14,7 +15,7 @@ class FavoriteController {
                 category_id: category_id || null,
                 sort: sort || 'newest',
                 limit: limit || 12,
-                user_favorites_id: userId
+                user_favorites_id: userFromToken.id
             });
 
             return res.status(200).json({
@@ -36,19 +37,10 @@ class FavoriteController {
 
     static async addFavorite(req, res) {
         try {
-            const { userId, projectId } = req.body; // Guaranteed to be valid positive numbers by middleware
+            const { projectId } = req.body;
+            const userFromToken = req.user;
 
-            // Verify if the link already exists to avoid database duplicate errors
-            const isAlreadyFavorited = await FavoriteModel.checkExists(Number(userId), Number(projectId));
-
-            if (isAlreadyFavorited) {
-                return res.status(409).json({
-                    success: false,
-                    message: "This specific project configuration is already stored inside user favorites collection."
-                });
-            }
-
-            await FavoriteModel.addFavorite(Number(userId), Number(projectId));
+            await FavoriteModel.addFavorite(Number(userFromToken.id), Number(projectId));
 
             return res.status(201).json({
                 success: true,
@@ -56,6 +48,13 @@ class FavoriteController {
             });
 
         } catch (error) {
+            if (error.code === 'ER_DUP_ENTRY') {
+                return res.status(409).json({
+                    success: false,
+                    message: "This specific project configuration is already stored inside user favorites collection."
+                });
+            }
+
             console.error("Error encountered within addFavoriteProject controller module:", error);
             return res.status(500).json({
                 success: false,
@@ -67,16 +66,10 @@ class FavoriteController {
 
     static async removeFavorite(req, res) {
         try {
-            const { userId, projectId } = req.body;
+            const { projectId } = req.body;
+            const userFromToken = req.user;
 
-            if (!userId || !projectId) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Required parameters 'userId' and 'projectId' are missing."
-                });
-            }
-
-            await FavoriteModel.removeFavorite(Number(userId), Number(projectId));
+            await FavoriteModel.removeFavorite(Number(userFromToken.id), Number(projectId));
 
             return res.status(200).json({
                 success: true,

@@ -13,7 +13,6 @@ export const CommentProvider = ({ children }) => {
         try {
             const result = await commentService.getCommentsByProject(projectId, page, limit);
             if (result.success && result.data) {
-                // שימוש ב-Functional Update:
                 setComments(prev => isNewLoad ? result.data : [...prev, ...result.data]);
             }
         } catch (err) {
@@ -23,9 +22,9 @@ export const CommentProvider = ({ children }) => {
         }
     }, []);
 
-    const addComment = async (projectId, userId, commentText) => {
+    const addComment = async (projectId, commentText) => {
         try {
-            const result = await commentService.addComment(projectId, userId, commentText);
+            const result = await commentService.addComment(projectId, commentText);
             if (result.success) {
                 // Refreshing the first page to see the new comment at the top
                 await fetchCommentsData(projectId, 1, 5, true);

@@ -37,19 +37,17 @@ export const AuthProvider = ({ children }) => {
     // Initial session recovery check on application mount
     useEffect(() => {
         const checkLoggedUser = async () => {
-            const savedUserId = localStorage.getItem('loggedUserId');
-            if (savedUserId) {
+            const token = localStorage.getItem('token');
+            if (token) {
                 try {
-                    const data = await authService.checkAuth(savedUserId);
+                    const data = await authService.checkAuthStatus();
                     if (data.isAuthenticated && data.user) {
                         dispatch({ type: 'LOGIN_SUCCESS', payload: data.user });
                     } else {
-                        localStorage.removeItem('loggedUserId');
-                        dispatch({ type: 'LOGIN_FAILURE', payload: 'Session expired' });
+                        logoutUser();
                     }
                 } catch (err) {
-                    localStorage.removeItem('loggedUserId');
-                    dispatch({ type: 'LOGIN_FAILURE', payload: 'Sync failed' });
+                    logoutUser();
                 }
             } else {
                 dispatch({ type: 'SET_LOADING', payload: false });
@@ -58,12 +56,26 @@ export const AuthProvider = ({ children }) => {
         checkLoggedUser();
     }, []);
 
+    // Global Event Listeners
+    useEffect(() => {
+        const handleUnauthorized = () => {
+            console.log("Token expired or unauthorized access detected. Logging out...");
+            logoutUser();
+        };
+        window.addEventListener('auth-unauthorized', handleUnauthorized);
+        
+        // Clean up the listener when the component unmounts
+        return () => {
+            window.removeEventListener('auth-unauthorized', handleUnauthorized);
+        };
+    }, []);
 
-    const loginUser = async (email, password) => {
+
+    const login = async (email, password) => {
         try {
             const data = await authService.login(email, password);
             if (data.success && data.user) {
-                localStorage.setItem('loggedUserId', data.user.id);
+                localStorage.setItem('token', data.token);
                 dispatch({ type: 'LOGIN_SUCCESS', payload: data.user });
                 return { success: true };
             }
@@ -112,7 +124,7 @@ export const AuthProvider = ({ children }) => {
         try {
             const data = await authService.registerStep2(userData);
             if (data.success && data.user) {
-                localStorage.setItem('loggedUserId', data.user.id);
+                localStorage.setItem('token', data.token);
                 localStorage.removeItem('draft_email');
                 dispatch({ type: 'LOGIN_SUCCESS', payload: data.user });
                 return { success: true };
@@ -125,7 +137,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     const logoutUser = () => {
-        localStorage.removeItem('loggedUserId');
+        localStorage.removeItem('token');
         dispatch({ type: 'LOGOUT' });
     };
 
@@ -140,7 +152,7 @@ export const AuthProvider = ({ children }) => {
                 tempRegistration: state.tempRegistration,
                 loading: state.loading,
                 error: state.error,
-                loginUser,
+                login,
                 checkDraftEmail,
                 confirmRestore,
                 cancelRestore,

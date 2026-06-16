@@ -4,7 +4,7 @@ import { FiCheck, FiX, FiUser, FiPhone, FiMapPin, FiInfo, FiBriefcase, FiStar, F
 
 import { useProfiles } from '../../../context/ProfilesContext.jsx';
 import CategoryList from '../../UI/CategoryList/CategoryList.jsx';
-import Modal from '../../UI/Modal/Modal.jsx'; 
+import Modal from '../../UI/Modal/Modal.jsx';
 import './ProfileEdit.css';
 
 const ProfileEdit = () => {
@@ -18,7 +18,6 @@ const ProfileEdit = () => {
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState('');
 
-    // 🌟 2. סטייטים לשליטה על המודלים של האישור והביטול
     const [showSaveModal, setShowSaveModal] = useState(false);
     const [showCancelModal, setShowCancelModal] = useState(false);
 
@@ -55,7 +54,7 @@ const ProfileEdit = () => {
 
                         if (lastDotIndex !== -1) {
                             extractedName = imageNameFull.substring(0, lastDotIndex);
-                            extractedExt = imageNameFull.substring(lastDotIndex + 1); 
+                            extractedExt = imageNameFull.substring(lastDotIndex + 1);
                         } else {
                             extractedName = imageNameFull;
                         }
@@ -68,7 +67,7 @@ const ProfileEdit = () => {
                         tagline: profileData.tagline || '',
                         bio: profileData.bio || '',
                         profile_image_name: extractedName,
-                        profile_image_ext: extractedExt 
+                        profile_image_ext: extractedExt
                     });
 
                     setCurrentRole(profileData.role || 'client');
@@ -168,10 +167,9 @@ const ProfileEdit = () => {
 
             {error && <div className="edit-error-alert">{error}</div>}
 
-            {/* 🌟 5. שינינו את ה-onSubmit ל-triggerSaveValidationCheck במקום השמירה הישירה */}
             <form onSubmit={triggerSaveValidationCheck} className="profiles-integrated-form-blueprint">
 
-                {/* --- BASIC INFO (For everyone) --- */}
+                {/* --- BASIC INFO --- */}
                 <div className="form-group-section-title">General Information</div>
 
                 <div className="form-input-group-row">
@@ -271,16 +269,18 @@ const ProfileEdit = () => {
                             />
                         </div>
 
-                        <div className="form-input-group-row categories-selection-area">
-                            <label>Expertise Categories (Select all that apply)</label>
-                            <div className="edit-categories-wrapper">
-                                <CategoryList
-                                    selectedIds={selectedCategories}
-                                    onCategorySelect={handleCategoryToggle}
-                                    variant="pill"
-                                />
+                        {currentRole !== 'admin' && (
+                            <div className="form-input-group-row categories-selection-area">
+                                <label>Expertise Categories (Select all that apply)</label>
+                                <div className="edit-categories-wrapper">
+                                    <CategoryList
+                                        selectedIds={selectedCategories}
+                                        onCategorySelect={handleCategoryToggle}
+                                        variant="pill"
+                                    />
+                                </div>
                             </div>
-                        </div>
+                        )}
                     </div>
                 )}
                 {/* --- SUBMIT ACTIONS --- */}

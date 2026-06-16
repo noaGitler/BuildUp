@@ -5,7 +5,6 @@ const isTextValid = (text) => {
 
 // check if a phone number is valid (at least 9 characters)
 const isPhoneValid = (phone) => {
-    // ממירים לסטרינג למקרה שהגיע כמספר כדי שנוכל לבדוק אורך
     const phoneStr = String(phone || '');
     return phoneStr.trim().length >= 9;
 };

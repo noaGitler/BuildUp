@@ -13,9 +13,9 @@ class CommentValidation {
 
     // Validation for adding a new comment (POST)
     static create(req, res, next) {
-        const { projectId, userId, commentText } = req.body;
+        const { projectId, commentText } = req.body;
 
-        if (!isIdValid(projectId) || !isIdValid(userId) || !isTextValid(commentText)) {
+        if (!isIdValid(projectId) || !isTextValid(commentText)) {
             return res.status(400).json({
                 success: false,
                 message: "Validation failed: projectId, userId, and commentText are mandatory fields."

@@ -226,7 +226,7 @@ const ProjectDetails = () => {
                     </p>
 
                     {/* New Section: Professional Identity Business Profile Context Display Block */}
-                    <div className="details-professional-author-card" onClick={() => navigate(`/professionals/${professional_id}`)}>
+                    <div className="details-professional-author-card" onClick={() => navigate(`/profile/${professional_id}`)}>
                         <h4 className="professional-section-mini-label">Designed By</h4>
                         <div className="professional-card-identity-wrapper">
                             {finalAvatarImg ? (

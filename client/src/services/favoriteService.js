@@ -2,20 +2,20 @@ import api from './api';
 
 class favoriteService {
 
-    static async addProjectToFavorites(userId, projectId) {
-        const response = await api.post('/favorites/add', { userId, projectId });
-        return response.data;
-    };
-
-    static async removeProjectFromFavorites(userId, projectId) {
-        const response = await api.delete('/favorites/remove', { data: { userId, projectId } });
-        return response.data;
-    };
-
-    static async getFavoriteProjectsList(userId, params = {}) {
+    static async getFavoriteProjects(params = {}) {
         const response = await api.get('/favorites', {
-            params: { ...params, userId }
+            params: { ...params }
         });
+        return response.data;
+    };
+
+    static async addFavorite(projectId) {
+        const response = await api.post('/favorites/add', { projectId });
+        return response.data;
+    };
+
+    static async removeFavorite(projectId) {
+        const response = await api.delete('/favorites/remove', { data: { projectId } });
         return response.data;
     };
 }

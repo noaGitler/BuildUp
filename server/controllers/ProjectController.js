@@ -1,4 +1,5 @@
 import projectModel from '../models/projectModel.js';
+import AuthModel from '../models/authModel.js';
 
 class ProjectController {
 
@@ -67,6 +68,24 @@ class ProjectController {
     static async createProject(req, res) {
         try {
             const { professional_id, category_id, title, description, mediaFiles } = req.body;
+            const userFromToken = req.user;
+
+            if ((userFromToken.role === 'client' && userFromToken.role !== 'admin') || Number(professional_id) !== Number(userFromToken.id)) {
+                return res.status(403).json({
+                    success: false,
+                    message: "Unauthorized: You are not authorized to add a project to this user.."
+                });
+            }
+
+            if (userFromToken.role === 'professional') {
+                const userCategories = await AuthModel.getProfessionalCategories(userFromToken.id);
+                if (!userCategories.includes(Number(category_id))) {
+                    return res.status(403).json({
+                        success: false,
+                        message: "Unauthorized: You are not assigned to this category."
+                    });
+                }
+            }
 
             const processedMedia = ProjectController._prepareMediaFiles(mediaFiles || []);
 
@@ -96,7 +115,7 @@ class ProjectController {
     static async updateProject(req, res) {
         try {
             const projectId = req.params.id;
-            const { title, description, mediaFiles } = req.body;
+            const userFromToken = req.user;
 
             const dbProject = await projectModel.getProjectById(projectId);
             if (!dbProject) {
@@ -106,7 +125,19 @@ class ProjectController {
                 });
             }
 
+            // Permissions check
+            const isOwner = Number(dbProject.professional_id) === Number(userFromToken.id);
+            const isAdmin = userFromToken.role === 'admin';
+
+            if (!isOwner && !isAdmin) {
+                return res.status(403).json({
+                    success: false,
+                    message: "Unauthorized: You are not the owner of this project."
+                });
+            }
+
             // Basic text update (title, description) - only if title is provided
+            const { title, description, mediaFiles } = req.body;
             await projectModel.updateBasicProjectDetails(projectId, title, description);
 
             if (mediaFiles) {
@@ -149,6 +180,32 @@ class ProjectController {
     static async deleteProject(req, res) {
         try {
             const projectId = req.params.id;
+            const userFromToken = req.user;
+
+            // // Permissions check
+            // const isOwner = Number(dbProject.professional_id) === Number(userFromToken.id);
+            // const isAdmin = userFromToken.role === 'admin';
+
+            // if (!isOwner && !isAdmin) {
+            //     return res.status(403).json({
+            //         success: false,
+            //         message: "Unauthorized: You are not the owner of this project."
+            //     });
+            // }
+
+            const dbProject = await projectModel.getProjectById(projectId);
+            if (!dbProject) return res.status(404).json({ success: false, message: "Project not found." });
+
+            const isOwner = Number(dbProject.professional_id) === Number(userFromToken.id);
+            const isAdmin = userFromToken.role === 'admin';
+
+            if (!isOwner && !isAdmin) {
+                return res.status(403).json({
+                    success: false,
+                    message: "Unauthorized: You are not the owner of this project."
+                });
+            }
+
             const success = await projectModel.deleteProject(projectId);
 
             if (!success) {

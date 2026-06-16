@@ -15,18 +15,20 @@ const ReviewCard = ({ review, user, onEditReview, onDeleteReview }) => {
     const formatDate = (dateString) => {
         if (!dateString) return '';
         const options = { year: 'numeric', month: 'short', day: 'numeric' };
-        return new Date(dateString).toLocaleString([], { 
-            year: 'numeric', 
-            month: 'numeric', 
-            day: 'numeric', 
-            hour: '2-digit', 
-            minute: '2-digit' 
+        return new Date(dateString).toLocaleString([], {
+            year: 'numeric',
+            month: 'numeric',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
         });
     };
 
     const getDisplayRole = () => {
         const rawRole = review.reviewer_role || review.role || 'client';
-        return rawRole.toLowerCase() === 'professional' ? 'Professional' : 'Client';
+        return rawRole.toLowerCase() === 'professional' 
+        ? 'Professional' 
+        : (rawRole.toLowerCase() === 'admin' ? 'Admin' : 'Client');
     };
 
     const getPermissions = () => {
@@ -56,13 +58,13 @@ const ReviewCard = ({ review, user, onEditReview, onDeleteReview }) => {
     const handleEditSubmit = async (e) => {
         e.preventDefault();
         if (!editReviewText.trim()) return;
-        
+
         setIsEditSubmitting(true);
         setEditError('');
 
         const payload = { review_text: editReviewText.trim(), rating: Number(editRating) };
         const res = await onEditReview(review.id, payload);
-        
+
         if (res && res.success) {
             setIsEditing(false);
         } else {
@@ -114,11 +116,11 @@ const ReviewCard = ({ review, user, onEditReview, onDeleteReview }) => {
                         <span className="rating-label">Update Rating:</span>
                         {renderInteractiveStars()}
                     </div>
-                    <textarea 
+                    <textarea
                         className="review-text-input edit-mode-input"
-                        value={editReviewText} 
-                        onChange={(e) => setEditReviewText(e.target.value)} 
-                        rows={3} required 
+                        value={editReviewText}
+                        onChange={(e) => setEditReviewText(e.target.value)}
+                        rows={3} required
                     />
                     <div className="inline-edit-actions">
                         <button type="button" onClick={handleEditSubmit} className="btn-save-inline" disabled={isEditSubmitting}>
@@ -132,7 +134,7 @@ const ReviewCard = ({ review, user, onEditReview, onDeleteReview }) => {
             ) : (
                 <>
                     <p className="review-card-body-text">{review.review_text}</p>
-                    
+
                     {(canEdit || canDelete) && (
                         <div className="review-card-footer">
                             {canEdit && (

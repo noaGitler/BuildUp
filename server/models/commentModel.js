@@ -2,17 +2,7 @@ import pool from '../config/db.js';
 
 class CommentModel {
 
-    // Inserts a new comment row link inside the persistent project_comments table layout.
-    static async create(projectId, userId, commentText) {
-        const query = `
-            INSERT INTO project_comments (project_id, user_id, comment_text)
-            VALUES (?, ?, ?);
-        `;
-        const [result] = await pool.query(query, [projectId, userId, commentText]);
-        return result;
-    }
-
-    // Retrieves a single compiled comment instance by its primary auto-increment key.
+        // Retrieves a single compiled comment instance by its primary auto-increment key.
     static async getSingleCommentById(commentId) {
         const query = `
             SELECT 
@@ -40,6 +30,23 @@ class CommentModel {
         `;
         const [rows] = await pool.query(query, [projectId, Number(limit), Number(offset)]);
         return rows;
+    }
+
+    // Fetch ONLY the user_id to verify ownership before updates/deletions
+    static async getCommentOwnerId(commentId) {
+        const query = `SELECT user_id FROM project_comments WHERE id = ?`;
+        const [rows] = await pool.query(query, [commentId]);
+        return rows.length > 0 ? rows[0].user_id : null;
+    }
+
+    // Inserts a new comment row link inside the persistent project_comments table layout.
+    static async create(projectId, userId, commentText) {
+        const query = `
+            INSERT INTO project_comments (project_id, user_id, comment_text)
+            VALUES (?, ?, ?);
+        `;
+        const [result] = await pool.query(query, [projectId, userId, commentText]);
+        return result;
     }
 
     // Alters the structural text block content description property inside a persistent table row.

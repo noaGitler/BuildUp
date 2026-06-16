@@ -72,7 +72,7 @@ const JobDetails = ({ onClose }) => {
     const handleConfirmDelete = async () => {
         setIsDeleteModalOpen(false);
         try {
-            await handleDeleteJob(id, user.id);
+            await handleDeleteJob(id);
             if (onClose) onClose();
             navigate('/jobs');
         } catch (err) {

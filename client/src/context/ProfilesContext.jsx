@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, useCallback } from 'react';
-import profilesService from '../services/profilesService.js';
+import profileService from '../services/profileService.js';
 
 const ProfilesContext = createContext(null);
 
@@ -20,7 +20,7 @@ export const ProfilesProvider = ({ children }) => {
             // Inject pagination tracking parameters dynamically
             const compiledQuery = { ...filters, page: currentPage, limit: 6 };
 
-            const result = await profilesService.getAllProfessionals(compiledQuery);
+            const result = await profileService.getAllProfessionals(compiledQuery);
 
             if (result.success) {
                 if (isLoadMore) {
@@ -57,27 +57,27 @@ export const ProfilesProvider = ({ children }) => {
 
     // Exposing raw API methods directly to local components
     const getProfileData = useCallback(async (id) => {
-        return await profilesService.getProfile(id);
+        return await profileService.getProfile(id);
     }, []);
 
     const getReviewsData = useCallback(async (id) => {
-        return await profilesService.getProfessionalReviews(id);
+        return await profileService.getProfessionalReviews(id);
     }, []);
 
     const submitReviewData = useCallback(async (id, reviewData) => {
-        return await profilesService.addReview(id, reviewData);
+        return await profileService.addReview(id, reviewData);
     }, []);
 
     const updateProfileData = useCallback(async (id, payload) => {
-        return await profilesService.updateProfile(id, payload);
+        return await profileService.updateProfile(id, payload);
     }, []);
 
     const editReviewData = useCallback(async (reviewId, payload) => {
-        return await profilesService.editReview(reviewId, payload);
+        return await profileService.editReview(reviewId, payload);
     }, []);
 
     const deleteReviewData = useCallback(async (reviewId) => {
-        return await profilesService.deleteReview(reviewId);
+        return await profileService.deleteReview(reviewId);
     }, []);
 
     return (
