@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { FiCheck, FiX, FiUser, FiPhone, FiMapPin, FiInfo, FiBriefcase, FiStar, FiImage } from 'react-icons/fi';
 
 import { useProfiles } from '../../../context/ProfilesContext.jsx';
+
 import CategoryList from '../../UI/CategoryList/CategoryList.jsx';
 import Modal from '../../UI/Modal/Modal.jsx';
 import './ProfileEdit.css';

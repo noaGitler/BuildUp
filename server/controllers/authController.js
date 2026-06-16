@@ -123,34 +123,6 @@ class AuthController {
     }
 
     // Check Authentication Status
-    // static async checkAuthStatus(req, res) {
-    //     const { id } = req.params;
-    //     try {
-    //         const user = await AuthModel.findById(id);
-    //         if (!user) {
-    //             return res.status(404).json({
-    //                 isAuthenticated: false,
-    //                 message: "User context not found."
-    //             });
-    //         }
-
-    //         res.status(200).json({
-    //             isAuthenticated: true,
-    //             user: {
-    //                 id: user.id,
-    //                 name: user.name,
-    //                 role: user.role,
-    //                 profile_image_url: user.profile_image_url,
-    //                 categoryIds: user.categoryIds
-    //             }
-    //         });
-    //     } catch (error) {
-    //         res.status(500).json({
-    //             isAuthenticated: false,
-    //             message: "Failed to establish secure auth state check sync."
-    //         });
-    //     }
-    // }
     static async checkAuthStatus(req, res) {
         try {
             const userIdFromToken = req.user.id;

@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { FiArrowLeft, FiMessageSquare, FiPackage, FiUser } from 'react-icons/fi';
+
 import { useAuth } from '../../../context/authContext.jsx';
 import { useProfiles } from '../../../context/ProfilesContext.jsx';
+
 import ProfileDetails from '../ProfileDetails/ProfileDetails.jsx';
 import ReviewsBoard from '../ReviewsBoard/ReviewsBoard.jsx';
 import ProjectBoard from '../ProjectBoard/ProjectBoard.jsx';

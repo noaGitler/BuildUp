@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiExternalLink, FiUser } from 'react-icons/fi';
+
 import CategoryCard from '../../UI/CategoryCard/CategoryCard';
 import './ProjectCard.css';
 
@@ -14,7 +15,7 @@ const ProjectCard = ({ id, title, cover_image_url, professional_id, professional
     const finalAvatarImg = professional_image ? `${SERVER_URL}${professional_image}` : null;
 
     return (
-        <div className="project-feed-card">
+        <div className="project-feed-card"  onClick={() => navigate(`/projects/${id}`)}>
             {/* Visual Media Header Section Area */}
             <div className="card-media-box">
                 <img
@@ -23,7 +24,7 @@ const ProjectCard = ({ id, title, cover_image_url, professional_id, professional
                     className="card-cover-asset-img"
                     loading="lazy"
                 />
-                <div className="card-media-hover-mask" onClick={() => navigate(`/projects/${id}`)}>
+                <div className="card-media-hover-mask">
                     <span className="mask-action-trigger-badge">
                         <FiExternalLink /> View Details
                     </span>

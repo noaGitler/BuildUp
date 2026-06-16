@@ -55,7 +55,7 @@ function App() {
                   <Route path=":id/edit" element={<EditProjectPage />} />
                 </Route>
 
-                {/* jobs Routes */}
+                {/* Jobs Routes */}
                 <Route path="/jobs" element={<Jobs />}>
                   <Route path="" element={<JobsPage />}>
                     <Route path=":id" element={<JobDetails />} />
@@ -64,6 +64,7 @@ function App() {
                   <Route path="new" element={<JobForm />} />
                 </Route>
 
+                {/* Professionals Routes */}
                 <Route path="/" element={<Professionals />}>
                   <Route path="professionals" element={<ProfessionalsPage />} />
                   <Route path="profile/:id" element={<ProfilePage />} />
