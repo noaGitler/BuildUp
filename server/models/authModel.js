@@ -9,7 +9,7 @@ class AuthModel {
         return rows[0];
     }
 
-    static async createPendingRegistration(email, password) {
+    static async registerStep1(email, password) {
         const query = `
             INSERT INTO pending_registrations (email, password) 
             VALUES (?, ?) 
@@ -19,7 +19,7 @@ class AuthModel {
         return rows;
     }
 
-    static async registerFullUser(userData) {
+    static async registerStep2(userData) {
         const { email, password, name, role, phone, profile_image_url, tag_line, bio, city, categoryIds } = userData;
 
         // Establish an isolated connection from the allocation pool to manage the transaction state

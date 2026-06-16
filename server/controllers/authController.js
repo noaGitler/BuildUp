@@ -16,7 +16,7 @@ class AuthController {
                 });
             }
 
-            await AuthModel.createPendingRegistration(email, password);
+            await AuthModel.registerStep1(email, password);
 
             // Success response without database insertion
             res.status(200).json({
@@ -43,12 +43,12 @@ class AuthController {
             }
 
             // Execute the atomic multi-table transaction in the model layer
-            const userId = await AuthModel.registerFullUser({
+            const userId = await AuthModel.registerStep2({
                 email, password, name, role, phone, profile_image_url: finalProfileImageUrl, tag_line, bio, city, categoryIds
             });
 
             const token = jwt.sign(
-                { id: user.id, role: user.role },
+                { id: userId, role: role },
                 process.env.JWT_SECRET,
                 { expiresIn: process.env.JWT_EXPIRES_IN }
             );
