@@ -99,12 +99,6 @@
     background-color: #43614D;
 }
 
-
-
-
-
-
-
 .profile-rating-badge {
     display: inline-flex;
     align-items: center;
@@ -115,7 +109,7 @@
     border-radius: 20px;
     font-size: 0.9rem;
     font-weight: 700;
-    margin-top: 8px;
+    margin-bottom: 5px;
 }
 
 .profile-rating-badge .star-icon {

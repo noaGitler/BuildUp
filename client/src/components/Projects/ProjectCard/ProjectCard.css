@@ -108,18 +108,20 @@
     display: flex;
     flex-direction: column;
     gap: 2px;
+    flex: 1;
+    min-width: 0;
 }
 
 .creator-display-profile-name {
     color: #222222;
     font-size: 0.95rem;
-    font-weight: 500; /* Medium weight identifier setup profile titles names fields */
+    font-weight: 500;
     margin: 0;
 }
 
 .creator-display-profile-tagline {
-    color: #60665D; /* Olive-gray text configurations parameters */
+    color: #60665D;
     font-size: 0.8rem;
-    font-weight: 400; /* Standard regular weight value mapping variables tracking systems description layout fields */
+    font-weight: 400;
     margin: 0;
 }

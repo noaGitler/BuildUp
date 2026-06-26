@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiEdit2, FiPhone, FiMail, FiUser, FiStar } from 'react-icons/fi';
+
 import CategoryCard from '../../UI/CategoryCard/CategoryCard.jsx';
 import './ProfileDetails.css';
 

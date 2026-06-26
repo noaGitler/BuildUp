@@ -170,19 +170,34 @@
     transform: scale(1.05);
 }
 
+.professional-avatar-fallback {
+    width: 100%;
+    height: 100%;
+    background-color: #F2F5F3;
+    color: #678771;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.professional-avatar-fallback svg {
+    width: 40%;
+    height: 40%;
+}
+
 
 @media (max-width: 768px) {
     .professional-grid-card {
         flex-direction: column;
         height: auto;
     }
+
     .card-image-wrapper {
         width: 100%;
         height: 200px;
     }
+
     .professional-card-content {
         padding: 16px;
     }
 }
-
-

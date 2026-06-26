@@ -49,7 +49,7 @@
     z-index: 0;
 }
 
-.dashboard-section > * {
+.dashboard-section>* {
     position: relative;
     z-index: 1;
 }
@@ -176,5 +176,9 @@
     .btn-explore-more {
         width: 100%;
         justify-content: center;
+    }
+
+    .dashboard-jobs-grid {
+        grid-template-columns: repeat(1, 1fr);
     }
 }

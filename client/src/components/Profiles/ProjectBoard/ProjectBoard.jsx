@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
+
 import { useProjects } from '../../../context/ProjectContext.jsx';
+
 import ProjectsGrid from '../../Projects/ProjectsGrid/ProjectsGrid.jsx';
 import './ProjectBoard.css';
 

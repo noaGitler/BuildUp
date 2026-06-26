@@ -3,6 +3,7 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { FiMenu, FiHome, FiFolder, FiHeart, FiUsers, FiBriefcase, FiLogOut, FiUser } from 'react-icons/fi';
 
 import { useAuth } from '../../../context/authContext.jsx';
+
 import Logo from '../../UI/Logo.jsx';
 import Modal from '../../UI/Modal/Modal.jsx';
 

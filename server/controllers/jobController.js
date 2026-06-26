@@ -73,13 +73,13 @@ class JobController {
             const updatedData = req.body;
             const userFromToken = req.user;
 
-            const dbJob = await JobModel.getJobOwnerId(jobId);
+            const ownerId = await JobModel.getJobOwnerId(jobId);
 
-            if (!dbJob) {
+            if (!ownerId) {
                 return res.status(404).json({ success: false, message: 'Job vacancy not found.' });
             }
 
-            const isOwner = Number(dbJob.client_id) === Number(userFromToken.id);
+            const isOwner = Number(ownerId) === Number(userFromToken.id);
             const isAdmin = userFromToken.role === 'admin';
 
             if (!isOwner && !isAdmin) {
@@ -107,13 +107,13 @@ class JobController {
             const jobId = req.params.id;
             const userFromToken = req.user;
 
-            const dbJob = await JobModel.getJobOwnerId(jobId);
+            const ownerId = await JobModel.getJobOwnerId(jobId);
 
-            if (!dbJob) {
+            if (!ownerId) {
                 return res.status(404).json({ success: false, message: 'Job vacancy not found.' });
             }
 
-            const isOwner = Number(dbJob.client_id) === Number(userFromToken.id);
+            const isOwner = Number(ownerId) === Number(userFromToken.id);
             const isAdmin = userFromToken.role === 'admin';
 
             if (!isOwner && !isAdmin) {

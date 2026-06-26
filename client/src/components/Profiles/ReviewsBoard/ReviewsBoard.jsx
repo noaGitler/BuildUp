@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { FiStar, FiMessageSquare, FiSend } from 'react-icons/fi';
+
 import ReviewCard from '../ReviewCard/ReviewCard.jsx';
 import './ReviewsBoard.css';
 
